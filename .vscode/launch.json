@@ -11,7 +11,7 @@
             "type": "reactnative",
             "request": "launch",
             "platform": "android"
-        }
+        },
         {
             "name": "Attach to packager",
             "cwd": "${workspaceFolder}",
