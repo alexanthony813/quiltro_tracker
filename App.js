@@ -1,51 +1,35 @@
-import {
-  Alert,
-  Button,
-  Image,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native'
+import { TailwindProvider } from "tailwindcss-react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { FlatList, Platform, SafeAreaView, StyleSheet } from 'react-native'
+import HomeScreen from "./screens/HomeScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const handlePress = (e) => {
     console.log(e)
   }
+  const dataList = [
+    { key: 'Devin' },
+    { key: 'Dan' },
+    { key: 'Dominic' },
+    { key: 'Jackson' },
+    { key: 'James' },
+    { key: 'Joel' },
+    { key: 'John' },
+    { key: 'Jillian' },
+    { key: 'Jimmy' },
+    { key: 'Julie' },
+  ]
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Button
-        title="Do you like this picture?"
-        color="orange"
-        onPress={() =>
-          Alert.prompt(
-            'What do you see?',
-            'Please type your response below',
-            (text) => console.log(text)
-          )
-        }
-      />
-      <TouchableOpacity>
-        <Image
-          blurRadius={1}
-          source={{
-            uri: 'https://picsum.photos/200/300',
-            height: 300,
-            width: 200,
-          }}
-        />
-      </TouchableOpacity>
-    </SafeAreaView>
+    <NavigationContainer>
+      <TailwindProvider>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={HomeScreen} />
+        </Stack.Navigator>
+      </TailwindProvider>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: Platform.OS === 'android' ? 20 : 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
