@@ -10,18 +10,6 @@ export default function App() {
   const handlePress = (e) => {
     console.log(e)
   }
-  const dataList = [
-    { key: 'Devin' },
-    { key: 'Dan' },
-    { key: 'Dominic' },
-    { key: 'Jackson' },
-    { key: 'James' },
-    { key: 'Joel' },
-    { key: 'John' },
-    { key: 'Jillian' },
-    { key: 'Jimmy' },
-    { key: 'Julie' },
-  ]
 
   return (
     <NavigationContainer>
