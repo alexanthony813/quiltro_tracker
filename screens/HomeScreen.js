@@ -20,82 +20,65 @@ import {
 } from 'react-native-heroicons/outline'
 import AnimalList from '../components/AnimalList'
 
+/* UI notes
+Crop photos? how to center on faces? should be ok when people can upload own photo but will need to center
+*/
+
+/* data model notes:
+multiple owner ids? could be primary in the front end but need support on back end
+multiple owner numbers
+*/
 const animals = [
   {
     id: 1,
     species: 'dog',
-    last_seen_address: 'Plaza Ñuñoa',
-    home_address: 'Juan Moya Morales 22',
-    name: 'Maggie',
-    description: 'Shih Tzu mix, brown/white',
-    estimated_date_of_birth: Date.now(),
-    message: "I have all of my vaccines and I'm very friendly.",
-    photo_url: 'https://images.pexels.com/photos/69372/pexels-photo-69372.jpeg', // S3 link,
+    last_seen_address: 'Ñuñoa, y visto en Grecia/Quilin',
+    name: 'Chester',
+    description: 'Mestizo, con collar',
+    message: "2,000,000 de recompensa!",
+    photo_url: `https://amigosperdidos.s3.sa-east-1.amazonaws.com/chester_perro_2.jpg`,
     owner_id: 1,
+    owner_number: '+56965832621',
     stray: false,
     outdoor_dog: false,
     details: {
-      tags: {},
-      events: {},
+      additional_photos: [],
     },
   },
   {
     id: 2,
     species: 'dog',
-    last_seen_address: 'Plaza Ñuñoa',
-    home_address: 'Juan Moya Morales 22',
-    name: 'Sunile',
-    description: 'Staffordshire, brown/white',
-    estimated_date_of_birth: Date.now(),
-    message: "I have all of my vaccines and I'm very friendly.",
+    last_seen_address: 'Av. Las Condes con Padre Hurta',
+    name: 'Kali',
+    description: 'Chihuahua adoptada, esterilizada y con chip',
+    message: "Instagram @buscamosakali",
     photo_url:
-      'https://www.thesprucepets.com/thmb/-mrnsYDgFcB0eoMmxPaFq9vbBfc=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/pitbull-dog-breeds-4843994-hero-db6922b6c8294b45b19c07aff5865790.jpg', // S3 link,
-    owner_id: 1,
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/kali_perro.jpg',
+    owner_id: 2,
+    owner_number: '+56961912271',
     stray: false,
     outdoor_dog: false,
     details: {
-      tags: {},
-      events: {},
+      additional_photos: [],
     },
   },
   {
     id: 3,
     species: 'dog',
-    last_seen_address: 'Plaza Ñuñoa',
-    home_address: 'Juan Moya Morales 22',
-    name: 'Kumar',
-    description: 'Pitbull mix, brown/white',
-    estimated_date_of_birth: Date.now(),
-    message: "I have all of my vaccines and I'm very friendly.",
+    last_seen_address: 'Ñuñoa',
+    name: 'Maximo',
+    description: 'Perro mediano color dorado y blanco raza mix',
+    message: "Se ofrece recompensa",
     photo_url:
-      'https://www.thesprucepets.com/thmb/XsQOmrJIpSHNhuKykkcp5Wpr-Uk=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AmericanStaffordshireTerrier-GettyImages-930740994-7d8a39011d0b41958d7bb02a44e899e5.jpg', // S3 link,
-    owner_id: 1,
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/maximo_perro.jpg',
+    owner_id: 3,
+    owner_number: '+56972739243',
     stray: false,
     outdoor_dog: false,
     details: {
-      tags: {},
-      events: {},
+      additional_photos: [],
     },
-  },
-  {
-    id: 4,
-    species: 'dog',
-    last_seen_address: 'Walmart',
-    home_address: 'Juan Moya Morales 22',
-    name: 'Pitbull',
-    description: 'Mr. 305!',
-    estimated_date_of_birth: Date.now(),
-    message: "I have all of my vaccines and I'm very friendly.",
-    photo_url:
-      'https://pbs.twimg.com/profile_images/1599878352222969869/1gVMpXnL_400x400.jpg', // S3 link,
-    owner_id: 1,
-    stray: false,
-    outdoor_dog: false,
-    details: {
-      tags: {},
-      events: {},
-    },
-  },
+  }
 ]
 
 const displayNameMap = {
@@ -185,13 +168,13 @@ const HomeScreen = () => {
                       //animal card
                       <TouchableOpacity className="bg-white shadow rounded-lg overflow-hidden m-2 ">
                         <Image
-                          source={{ uri: item.photo_url}}
+                          source={{ uri: item.photo_url }}
                           style={{ width: '100%', aspectRatio: 1 }}
                           className="w-36 h-36"
                         />
 
                         <View className="p-4">
-                          <Text className="font-bold text-lg mb-1">
+                          <Text className="font-bold text-lg pt-2 mb-1">
                             {item.name}
                           </Text>
                           <Text className="text-sm mb-2">
