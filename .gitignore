@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 .vscode/.react/debuggerWorker.js
+yarn-error.log
 
 # macOS
 .DS_Store
