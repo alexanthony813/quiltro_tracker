@@ -1,7 +1,6 @@
 import { TailwindProvider } from "tailwindcss-react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FlatList, Platform, SafeAreaView, StyleSheet } from 'react-native'
 import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
