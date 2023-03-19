@@ -40,7 +40,7 @@ const animals = [
     owner_id: 1,
     owner_number: '+56965832621',
     stray: false,
-    outdoor_dog: false,
+    outdoor_pet: false,
     details: {
       additional_photos: [],
     },
@@ -57,7 +57,7 @@ const animals = [
     owner_id: 2,
     owner_number: '+56961912271',
     stray: false,
-    outdoor_dog: false,
+    outdoor_pet: false,
     details: {
       additional_photos: [],
     },
@@ -74,11 +74,79 @@ const animals = [
     owner_id: 3,
     owner_number: '+56972739243',
     stray: false,
-    outdoor_dog: false,
+    outdoor_pet: false,
     details: {
       additional_photos: [],
     },
-  }
+  },
+  {
+    id: 4,
+    species: 'parrot',
+    last_seen_address: 'Plaza Egaña',
+    name: 'Pingüin',
+    description: 'Cata, color celeste con marca en su nariz, puntos en el cuello',
+    message: "Recompensa! Ayuda para encontrar a nuestra catita australiana",
+    photo_url:
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
+    owner_id: 4,
+    owner_number: '+56986967889',
+    stray: false,
+    outdoor_pet: false,
+    details: {
+      additional_photos: [],
+    },
+  },
+  {
+    id: 5,
+    species: 'cat',
+    last_seen_address: 'Carrera Pinto #1942',
+    name: 'Nombre no es disponible',
+    description: 'No tiene collar pero si tiene vacunas, es timida y cariñosa',
+    message: "Necesitamos encontrarla, por favor cualquier noticia que vuela a casa",
+    photo_url:
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_1.jpg',
+    owner_id: 5,
+    owner_number: '+56930945963',
+    stray: false,
+    outdoor_pet: false,
+    details: {
+      additional_photos: [],
+    },
+  },
+  {
+    id: 6,
+    species: 'cat',
+    last_seen_address: 'Ñuñoa',
+    name: 'Nombre no es disponible',
+    description: 'Gatita perdida!',
+    message: "Gracias!!",
+    photo_url:
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_2.jpg',
+    owner_id: 6,
+    owner_number: '+56965178500',
+    stray: false,
+    outdoor_pet: false,
+    details: {
+      additional_photos: [],
+    },
+  },
+  {
+    id: 7,
+    species: 'parrot',
+    last_seen_address: 'Plaza Egaña',
+    name: 'Pingüin',
+    description: 'Cata, color celeste con marca en su nariz, puntos en el cuello',
+    message: "Recompensa! Ayuda para encontrar a nuestra catita australiana",
+    photo_url:
+      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
+    owner_id: 7,
+    owner_number: '+56986967889',
+    stray: false,
+    outdoor_pet: false,
+    details: {
+      additional_photos: [],
+    },
+  },
 ]
 
 const displayNameMap = {
@@ -105,7 +173,7 @@ const HomeScreen = () => {
       dog: [],
       cat: [],
       miscellaneous: [],
-      unidentified: [], // this will be used until the map-centric quiltro view is ready
+      // unidentified: [], // non MVP, tracking animals without posts
     }
   )
 
