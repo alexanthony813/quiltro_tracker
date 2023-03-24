@@ -1,6 +1,4 @@
 // tailwind.config.js
 module.exports = {
-  content: [
-    "./screens/**/*.{js,ts,jsx,tsx}",
-  ],
-};
+  content: ['./components/**/*.{js,jsx}',  './screens/**/*.{js,jsx}'],
+}
