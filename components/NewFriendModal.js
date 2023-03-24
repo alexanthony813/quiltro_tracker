@@ -21,7 +21,14 @@ const NewFriendModal = (props) => {
   }
 
   return (
-    <View className="flex-1 justify-center items-center">
+    <View
+      style={{
+        color: 'red',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Modal
         animationType="slide"
         transparent={true}
@@ -30,65 +37,147 @@ const NewFriendModal = (props) => {
           setModalVisible(false)
         }}
       >
-        <View className="flex-1 justify-center items-center">
-          <View className="bg-white rounded-lg px-6 py-4">
-            <Text className="text-lg font-bold mb-2">Add a New Pet</Text>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 8,
+              paddingHorizontal: 24,
+              paddingVertical: 16,
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
+              Add a New Pet
+            </Text>
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Species"
               value={species}
               onChangeText={setSpecies}
             />
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Last Seen Address"
               value={lastSeenAddress}
               onChangeText={setLastSeenAddress}
             />
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Name"
               value={name}
               onChangeText={setName}
             />
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Description"
               value={description}
               onChangeText={setDescription}
             />
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Message"
               value={message}
               onChangeText={setMessage}
             />
             <TextInput
-              className="w-full p-2 border-b-2 border-gray-300 mb-2"
+              style={{
+                width: '100%',
+                padding: 8,
+                borderBottomWidth: 2,
+                borderBottomColor: 'gray',
+              }}
               placeholder="Owner Number"
               value={ownerNumber}
               onChangeText={setOwnerNumber}
             />
             <Pressable
-              className="w-36 py-2 rounded-lg bg-blue-500"
+              style={{
+                width: 100,
+                paddingVertical: 8,
+                borderRadius: 4,
+                backgroundColor: 'blue',
+                marginTop: 16,
+              }}
               onPress={handleImageUpload}
             >
-              <Text className="text-white font-bold text-center">
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}
+              >
                 Upload Image
               </Text>
             </Pressable>
             {image && <Text>Image Uploaded</Text>}
             <Pressable
-              className="w-36 py-2 rounded-lg bg-gray-300 mt-4 mr-4"
+              style={{
+                width: 100,
+                paddingVertical: 8,
+                borderRadius: 4,
+                backgroundColor: 'gray',
+                marginTop: 16,
+                marginRight: 8,
+              }}
               onPress={() => setModalVisible(false)}
             >
-              <Text className="text-white font-bold text-center">Cancel</Text>
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}
+              >
+                Cancel
+              </Text>
             </Pressable>
             <Pressable
-              className="w-36 py-2 rounded-lg bg-blue-500 mt-4"
+              style={{
+                width: 100,
+                paddingVertical: 8,
+                borderRadius: 4,
+                backgroundColor: 'blue',
+                marginTop: 16,
+              }}
               onPress={handleSave}
             >
-              <Text className="text-white font-bold text-center">Save</Text>
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}
+              >
+                Save
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -97,4 +186,4 @@ const NewFriendModal = (props) => {
   )
 }
 
-export default NewFriendModal;
+export default NewFriendModal
