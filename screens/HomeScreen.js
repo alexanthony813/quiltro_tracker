@@ -1,13 +1,9 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import {
   Text,
-  TextInput,
   View,
   SafeAreaView,
-  ScrollView,
-  FlatList,
-  Image,
-  TouchableOpacity,
+  Pressable
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import {
@@ -17,8 +13,10 @@ import {
   MapPinIcon,
   MapIcon,
   ArrowRightIcon,
+  MagnifyingGlassPlusIcon,
 } from 'react-native-heroicons/outline'
 import AnimalList from '../components/AnimalList'
+import NewFriendModal from '../components/NewFriendModal'
 
 /* UI notes
 Crop photos? how to center on faces? should be ok when people can upload own photo but will need to center
@@ -35,7 +33,7 @@ const animals = [
     last_seen_address: 'Ñuñoa, y visto en Grecia/Quilin',
     name: 'Chester',
     description: 'Mestizo, con collar',
-    message: "2,000,000 de recompensa!",
+    message: '2,000,000 de recompensa!',
     photo_url: `https://amigosperdidos.s3.sa-east-1.amazonaws.com/chester_perro_2.jpg`,
     owner_id: 1,
     owner_number: '+56965832621',
@@ -51,7 +49,7 @@ const animals = [
     last_seen_address: 'Av. Las Condes con Padre Hurta',
     name: 'Kali',
     description: 'Chihuahua adoptada, esterilizada y con chip',
-    message: "Instagram @buscamosakali",
+    message: 'Instagram @buscamosakali',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/kali_perro.jpg',
     owner_id: 2,
@@ -68,7 +66,7 @@ const animals = [
     last_seen_address: 'Ñuñoa',
     name: 'Maximo',
     description: 'Perro mediano color dorado y blanco raza mix',
-    message: "Se ofrece recompensa",
+    message: 'Se ofrece recompensa',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/maximo_perro.jpg',
     owner_id: 3,
@@ -84,8 +82,9 @@ const animals = [
     species: 'parrot',
     last_seen_address: 'Plaza Egaña',
     name: 'Pingüin',
-    description: 'Cata, color celeste con marca en su nariz, puntos en el cuello',
-    message: "Recompensa! Ayuda para encontrar a nuestra catita australiana",
+    description:
+      'Cata, color celeste con marca en su nariz, puntos en el cuello',
+    message: 'Recompensa! Ayuda para encontrar a nuestra catita australiana',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
     owner_id: 4,
@@ -102,7 +101,8 @@ const animals = [
     last_seen_address: 'Carrera Pinto #1942',
     name: 'Nombre no es disponible',
     description: 'No tiene collar pero si tiene vacunas, es timida y cariñosa',
-    message: "Necesitamos encontrarla, por favor cualquier noticia que vuela a casa",
+    message:
+      'Necesitamos encontrarla, por favor cualquier noticia que vuela a casa',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_1.jpg',
     owner_id: 5,
@@ -119,7 +119,7 @@ const animals = [
     last_seen_address: 'Ñuñoa',
     name: 'Nombre no es disponible',
     description: 'Gatita perdida!',
-    message: "Gracias!!",
+    message: 'Gracias!!',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_2.jpg',
     owner_id: 6,
@@ -135,8 +135,9 @@ const animals = [
     species: 'parrot',
     last_seen_address: 'Plaza Egaña',
     name: 'Pingüin',
-    description: 'Cata, color celeste con marca en su nariz, puntos en el cuello',
-    message: "Recompensa! Ayuda para encontrar a nuestra catita australiana",
+    description:
+      'Cata, color celeste con marca en su nariz, puntos en el cuello',
+    message: 'Recompensa! Ayuda para encontrar a nuestra catita australiana',
     photo_url:
       'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
     owner_id: 7,
@@ -158,7 +159,11 @@ const displayNameMap = {
 
 const HomeScreen = () => {
   const navigation = useNavigation()
-  const isLoading = false
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const handleAddFriendClick = () => {
+    setIsModalVisible(true)
+  }
+
   const categorizedAnimalsObject = animals.reduce(
     (acc, curr) => {
       if (acc.hasOwnProperty(curr.species)) {
@@ -202,8 +207,15 @@ const HomeScreen = () => {
           <Text>Puedes buscar en el mapa tambien:</Text>
           <MapIcon color="#00CCBB" />
         </View>
+        <View className="flex-row flex-1 space-x-2 p-3">
+          <Text>Puedes agregar nuevo amigo:</Text>
+          <Pressable onPress={handleAddFriendClick}>
+            <MagnifyingGlassPlusIcon color="#00CCBB" />
+          </Pressable>
+        </View>
         {/* <AdjustmentsVerticalIcon color="#00CCBB" /> */}
       </View>
+      <NewFriendModal isModalVisible={isModalVisible} closeModalHandler={setIsModalVisible} />
 
       {/* Category by species */}
       <View className="bg-gray-100">
@@ -220,51 +232,7 @@ const HomeScreen = () => {
                 <ArrowRightIcon color="#00CCBB" />
               </View>
 
-              <FlatList
-                data={categorizedAnimalsObject[animalCategory]}
-                horizontal={true}
-                contentContainerStyle={{
-                  paddingHorizontal: 15,
-                  paddingTop: 10,
-                }}
-                showsHorizontalScrollIndicator={false}
-                className="flex-row pt-4"
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item }) => {
-                  if (item && item.name) {
-                    return (
-                      //animal card
-                      <TouchableOpacity className="bg-white shadow rounded-lg overflow-hidden m-2 ">
-                        <Image
-                          source={{ uri: item.photo_url }}
-                          style={{ width: '100%', aspectRatio: 1 }}
-                          className="w-36 h-36"
-                        />
-
-                        <View className="p-4">
-                          <Text className="font-bold text-lg pt-2 mb-1">
-                            {item.name}
-                          </Text>
-                          <Text className="text-sm mb-2">
-                            {item.description}
-                          </Text>
-                          <Text className="text-xs text-gray-500 mb-2">
-                            {item.message}
-                          </Text>
-
-                          <View className="flex items-center space-x-2">
-                            <MapPinIcon color="gray" opacity={0.4} size={24} />
-                            <Text className="text-xs text-gray-500">
-                              Visto por ultimo vez en{' '}
-                              <Text>{item.last_seen_address}</Text>
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    )
-                  }
-                }}
-              />
+              <AnimalList animals={categorizedAnimalsObject[animalCategory]} />
             </View>
           )
         })}
