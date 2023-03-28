@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Pressable, Text, TextInput, View } from 'react-native'
+import AWS from 'aws-sdk'
 
 const NewFriendModal = (props) => {
   const { closeModalHandler, isModalVisible } = props
@@ -9,15 +10,54 @@ const NewFriendModal = (props) => {
   const [description, setDescription] = useState('')
   const [message, setMessage] = useState('')
   const [ownerNumber, setOwnerNumber] = useState('')
-  const [image, setImage] = useState(null)
-
-  const handleImageUpload = async () => {
-    // Implement image upload logic here
-  }
+  const [imageUpload, setImageUpload] = useState(null);
 
   const handleSave = () => {
     // Implement save logic here using the input field values
+    saveImageUpload(imageUpload)
     closeModalHandler(false)
+  }
+
+  const handleImageUpload = (event) => {
+    event.preventDefault();
+    const reader = new FileReader();
+    const file = event.target.files[0];
+  
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+    };
+  
+    if (file) {
+      reader.readAsDataURL(file);
+      setImageUpload(file);
+    }
+  }
+
+  const saveImageUpload = (imageUpload) => {
+    if (!imageUpload) {
+      return;
+    }
+
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.AWS_REGION,
+    });
+  
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: imageUpload.name,
+      Body: imageUpload,
+      ContentType: imageUpload.type,
+    };
+  
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(data.Location);
+    });
   }
 
   return (
@@ -49,7 +89,7 @@ const NewFriendModal = (props) => {
             }}
           >
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-              Add a New Pet
+              Add a New Friend
             </Text>
             <TextInput
               style={{
@@ -137,7 +177,7 @@ const NewFriendModal = (props) => {
                 Upload Image
               </Text>
             </Pressable>
-            {image && <Text>Image Uploaded</Text>}
+            {imageUpload && <Text>Image Uploaded</Text>}
             <Pressable
               style={{
                 width: 100,
