@@ -1,22 +1,15 @@
-import React, { useLayoutEffect, useState } from 'react'
-import {
-  Text,
-  View,
-  SafeAreaView,
-  Pressable
-} from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { Text, View, SafeAreaView, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import {
   UserIcon,
-  LocationMarkerIcon,
   ChevronDownIcon,
-  MapPinIcon,
   MapIcon,
   ArrowRightIcon,
   MagnifyingGlassPlusIcon,
 } from 'react-native-heroicons/outline'
-import AnimalList from '../components/AnimalList'
-import NewFriendModal from '../components/NewFriendModal'
+import AmigoList from '../components/AmigoList'
+import NewAmigoModal from '../components/NewAmigoModal'
 
 /* UI notes
 Crop photos? how to center on faces? should be ok when people can upload own photo but will need to center
@@ -26,129 +19,6 @@ Crop photos? how to center on faces? should be ok when people can upload own pho
 multiple owner ids? could be primary in the front end but need support on back end
 multiple owner numbers
 */
-const animals = [
-  {
-    id: 1,
-    species: 'dog',
-    last_seen_address: 'Ñuñoa, y visto en Grecia/Quilin',
-    name: 'Chester',
-    description: 'Mestizo, con collar',
-    message: '2,000,000 de recompensa!',
-    photo_url: `https://amigosperdidos.s3.sa-east-1.amazonaws.com/chester_perro_2.jpg`,
-    owner_id: 1,
-    owner_number: '+56965832621',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 2,
-    species: 'dog',
-    last_seen_address: 'Av. Las Condes con Padre Hurta',
-    name: 'Kali',
-    description: 'Chihuahua adoptada, esterilizada y con chip',
-    message: 'Instagram @buscamosakali',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/kali_perro.jpg',
-    owner_id: 2,
-    owner_number: '+56961912271',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 3,
-    species: 'dog',
-    last_seen_address: 'Ñuñoa',
-    name: 'Maximo',
-    description: 'Perro mediano color dorado y blanco raza mix',
-    message: 'Se ofrece recompensa',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/maximo_perro.jpg',
-    owner_id: 3,
-    owner_number: '+56972739243',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 4,
-    species: 'parrot',
-    last_seen_address: 'Plaza Egaña',
-    name: 'Pingüin',
-    description:
-      'Cata, color celeste con marca en su nariz, puntos en el cuello',
-    message: 'Recompensa! Ayuda para encontrar a nuestra catita australiana',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
-    owner_id: 4,
-    owner_number: '+56986967889',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 5,
-    species: 'cat',
-    last_seen_address: 'Carrera Pinto #1942',
-    name: 'Nombre no es disponible',
-    description: 'No tiene collar pero si tiene vacunas, es timida y cariñosa',
-    message:
-      'Necesitamos encontrarla, por favor cualquier noticia que vuela a casa',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_1.jpg',
-    owner_id: 5,
-    owner_number: '+56930945963',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 6,
-    species: 'cat',
-    last_seen_address: 'Ñuñoa',
-    name: 'Nombre no es disponible',
-    description: 'Gatita perdida!',
-    message: 'Gracias!!',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/gato_anonimo_2.jpg',
-    owner_id: 6,
-    owner_number: '+56965178500',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-  {
-    id: 7,
-    species: 'parrot',
-    last_seen_address: 'Plaza Egaña',
-    name: 'Pingüin',
-    description:
-      'Cata, color celeste con marca en su nariz, puntos en el cuello',
-    message: 'Recompensa! Ayuda para encontrar a nuestra catita australiana',
-    photo_url:
-      'https://amigosperdidos.s3.sa-east-1.amazonaws.com/pinguin_ave.jpg',
-    owner_id: 7,
-    owner_number: '+56986967889',
-    stray: false,
-    outdoor_pet: false,
-    details: {
-      additional_photos: [],
-    },
-  },
-]
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -158,13 +28,15 @@ const displayNameMap = {
 }
 
 const HomeScreen = () => {
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const handleAddFriendClick = () => {
+  const [amigos, setAmigos] = useState([])
+
+  const handleAddAmigoClick = () => {
     setIsModalVisible(true)
   }
 
-  const categorizedAnimalsObject = animals.reduce(
+  const categorizedAnimalsObject = amigos.reduce(
     (acc, curr) => {
       if (acc.hasOwnProperty(curr.species)) {
         acc[curr.species].push(curr)
@@ -178,17 +50,23 @@ const HomeScreen = () => {
       dog: [],
       cat: [],
       miscellaneous: [],
-      // unidentified: [], // non MVP, tracking animals without posts
+      // unidentified: [], // non MVP, tracking amigos without posts
     }
   )
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'TESTING',
-      headerShown: false,
-    })
-  }, [])
-
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:3000/amigos')
+        const data = await response.json()
+        setAmigos(data && Object.values(data))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchData()
+  }, [JSON.stringify(amigos)])
+  console.dir(amigos)
   return (
     <SafeAreaView>
       {/* Header */}
@@ -209,13 +87,16 @@ const HomeScreen = () => {
         </View>
         <View className="flex-row flex-1 space-x-2 p-3">
           <Text>Puedes agregar nuevo amigo:</Text>
-          <Pressable onPress={handleAddFriendClick}>
+          <Pressable onPress={handleAddAmigoClick}>
             <MagnifyingGlassPlusIcon color="#00CCBB" />
           </Pressable>
         </View>
         {/* <AdjustmentsVerticalIcon color="#00CCBB" /> */}
       </View>
-      <NewFriendModal isModalVisible={isModalVisible} closeModalHandler={setIsModalVisible} />
+      <NewAmigoModal
+        isModalVisible={isModalVisible}
+        closeModalHandler={setIsModalVisible}
+      />
 
       {/* Category by species */}
       <View className="bg-gray-100">
@@ -231,8 +112,7 @@ const HomeScreen = () => {
                 {/* this will show straight list, better than filters */}
                 <ArrowRightIcon color="#00CCBB" />
               </View>
-
-              <AnimalList animals={categorizedAnimalsObject[animalCategory]} />
+              <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
             </View>
           )
         })}
