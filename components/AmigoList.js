@@ -1,28 +1,20 @@
-import React from 'react';
+import React from 'react'
 import {
   Text,
-  TextInput,
   View,
-  SafeAreaView,
-  ScrollView,
   FlatList,
   Image,
   TouchableOpacity,
-} from 'react-native';
+} from 'react-native'
 import {
-  UserIcon,
-  LocationMarkerIcon,
-  ChevronDownIcon,
   MapPinIcon,
-  MapIcon,
-  ArrowRightIcon,
-} from 'react-native-heroicons/outline';
+} from 'react-native-heroicons/outline'
 
-const AnimalList = (props) => {
-  const { animals } = props;
+const AmigosList = (props) => {
+  const { amigos } = props
   return (
     <FlatList
-      data={animals}
+      data={amigos}
       horizontal={true}
       contentContainerStyle={{
         paddingHorizontal: 15,
@@ -43,7 +35,8 @@ const AnimalList = (props) => {
                 overflow: 'hidden',
                 marginHorizontal: 5,
                 width: 300,
-              }}>
+              }}
+            >
               <Image
                 source={{ uri: item.photo_url }}
                 style={{ width: '100%', aspectRatio: 1 }}
@@ -62,17 +55,19 @@ const AnimalList = (props) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <MapPinIcon color="#808080" size={16} />
-                  <Text style={{ fontSize: 12, color: '#808080', marginLeft: 5 }}>
+                  <Text
+                    style={{ fontSize: 12, color: '#808080', marginLeft: 5 }}
+                  >
                     Visto por ultimo vez en {item.last_seen_address}
                   </Text>
                 </View>
               </View>
             </TouchableOpacity>
-          );
+          )
         }
       }}
     />
-  );
-};
+  )
+}
 
-export default AnimalList;
+export default AmigosList

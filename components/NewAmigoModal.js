@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Pressable, Text, TextInput, View } from 'react-native'
-import AWS from 'aws-sdk'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import * as ImagePicker from 'expo-image-picker'
 
-const NewFriendModal = (props) => {
+const NewAmigoModal = (props) => {
   const { closeModalHandler, isModalVisible } = props
   const [species, setSpecies] = useState('')
   const [lastSeenAddress, setLastSeenAddress] = useState('')
@@ -10,56 +11,67 @@ const NewFriendModal = (props) => {
   const [description, setDescription] = useState('')
   const [message, setMessage] = useState('')
   const [ownerNumber, setOwnerNumber] = useState('')
-  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
+  const [imageUrl, setImageUrl] = useState(null)
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Implement save logic here using the input field values
-    saveImageUpload(imageUpload)
+
+    const presignedUrlRequest = await fetch('http://localhost:3000/s3')
+    const presignedUrlJSON = await presignedUrlRequest.json()
+    const presignedUrl = presignedUrlJSON.url
+
+
+    const savedAmigoResponse = await fetch('http://localhost:3000/amigos', {
+      method: 'POST',
+      // headers: {
+      // "Content-Type": "multipart/form-data"
+      // },
+      body: {
+        species,
+        last_seen_address: lastSeenAddress,
+        name,
+        description,
+        message,
+        owner_number: ownerNumber,
+      },
+    })
+    const savedAmigo = await savedAmigoResponse.json()
+    console.dir(savedAmigo)
+    if (savedAmigo.status === 200) {
+      await fetch(presignedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: imageUpload,
+      })
+    }
+
     closeModalHandler(false)
   }
 
-  const handleImageUpload = (event) => {
-    event.preventDefault();
-    const reader = new FileReader();
-    const file = event.target.files[0];
-  
-    reader.onloadend = () => {
-      setPreviewImage(reader.result);
-    };
-  
-    if (file) {
-      reader.readAsDataURL(file);
-      setImageUpload(file);
-    }
-  }
-
-  const saveImageUpload = (imageUpload) => {
-    if (!imageUpload) {
-      return;
-    }
-
-    const s3 = new AWS.S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION,
+  const handleImageUpload = async (event) => {
+    event.preventDefault()
+    // const reader = new FileReader()
+    // launchImageLibrary({}, (response) => {
+    //   if (response) {
+    //     setImageUpload(imageUpload)
+    //   }
+    // })
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-  
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: imageUpload.name,
-      Body: imageUpload,
-      ContentType: imageUpload.type,
-    };
-  
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(data.Location);
-    });
-  }
 
+    if (!result.canceled) {
+      setImageUpload(result.assets[0].uri);
+    }
+  
+  }
   return (
     <View
       style={{
@@ -89,7 +101,7 @@ const NewFriendModal = (props) => {
             }}
           >
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-              Add a New Friend
+              Agregar un Amigo
             </Text>
             <TextInput
               style={{
@@ -207,7 +219,9 @@ const NewFriendModal = (props) => {
                 backgroundColor: 'blue',
                 marginTop: 16,
               }}
-              onPress={handleSave}
+              onPress={async () => {
+                await handleSave()
+              }}
             >
               <Text
                 style={{
@@ -226,4 +240,4 @@ const NewFriendModal = (props) => {
   )
 }
 
-export default NewFriendModal
+export default NewAmigoModal
