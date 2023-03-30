@@ -96,6 +96,8 @@ const HomeScreen = () => {
       <NewAmigoModal
         isModalVisible={isModalVisible}
         closeModalHandler={setIsModalVisible}
+        setAmigos={setAmigos}
+        amigos={amigos}
       />
 
       {/* Category by species */}

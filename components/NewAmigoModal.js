@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Modal, Pressable, Text, TextInput, View } from 'react-native'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import * as ImagePicker from 'expo-image-picker'
+import { Buffer } from 'buffer';
 
 const NewAmigoModal = (props) => {
-  const { closeModalHandler, isModalVisible } = props
+  const { closeModalHandler, isModalVisible, setAmigos, amigos } = props
   const [species, setSpecies] = useState('')
   const [lastSeenAddress, setLastSeenAddress] = useState('')
   const [name, setName] = useState('')
@@ -12,43 +13,50 @@ const NewAmigoModal = (props) => {
   const [message, setMessage] = useState('')
   const [ownerNumber, setOwnerNumber] = useState('')
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
-  const [imageUrl, setImageUrl] = useState(null)
-
+  const [presignedUrl, setPresignedUrl] = useState('')
+  
   const handleSave = async () => {
     // Implement save logic here using the input field values
 
     const presignedUrlRequest = await fetch('http://localhost:3000/s3')
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
-
-
+    const rawBase64 = imageUpload.assets && imageUpload.assets[0] && imageUpload.assets[0].base64
+    var buffer = Buffer.from(rawBase64.replace(/^data:image\/\w+;base64,/, ""),'base64')
+    const s3Result = await fetch(presignedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/jpeg',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Encoding': 'base64',
+      },
+      body: buffer,
+    })
+    if (s3Result.status !== 200) {
+      console.dir("ERROR") // TODO add better error handle up in here
+    }
+    const photo_url = presignedUrl.split('?')[0]
     const savedAmigoResponse = await fetch('http://localhost:3000/amigos', {
       method: 'POST',
-      // headers: {
-      // "Content-Type": "multipart/form-data"
-      // },
-      body: {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         species,
         last_seen_address: lastSeenAddress,
         name,
         description,
         message,
         owner_number: ownerNumber,
-      },
+        photo_url,
+      }),
     })
     const savedAmigo = await savedAmigoResponse.json()
-    console.dir(savedAmigo)
-    if (savedAmigo.status === 200) {
-      await fetch(presignedUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: imageUpload,
-      })
-    }
 
+    const newAmigos = amigos.slice()
+    newAmigos.unshift(savedAmigo)
+    setAmigos(newAmigos)
     closeModalHandler(false)
   }
 
@@ -61,16 +69,20 @@ const NewAmigoModal = (props) => {
     //   }
     // })
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+      // mediaTypes: ImagePicker.MediaTypeOptions.All,
+      exif: true,
+      allowsEditing: false,
+      // aspect: [4, 3],
+      quality: 0.7,
+      base64: true,
+    })
+
 
     if (!result.canceled) {
-      setImageUpload(result.assets[0].uri);
+      setImageUpload(result)
+    } else {
+      console.log('successful image upload')
     }
-  
   }
   return (
     <View
