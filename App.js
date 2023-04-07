@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
-
+console.log('APP LOADED')
 export default function App() {
   const handlePress = (e) => {
     console.log(e)
