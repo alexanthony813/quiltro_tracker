@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  app:
+    image: 
+    build: ./
+    tty: true
+    ports:
+      - '19006:19006'
+      - '19001:19001'
+      - '19002:19002'
