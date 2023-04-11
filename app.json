@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "amigos_perdidos",
-    "slug": "amigos_perdidos",
+    "name": "amigos",
+    "slug": "amigos",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

@@ -4,6 +4,7 @@ RUN addgroup app && adduser -S -G app app
 USER app
 
 WORKDIR /app
+RUN mkdir data
 
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH /home/node/.npm-global/bin:$PATH
@@ -21,7 +22,7 @@ COPY . .
 
 # see below, yarn installing the optimized way not possible due to duplicate package.json's
 # Logs for your project will appear below. Press Ctrl+C to exit.
-# metro-file-map: Haste module naming collision: amigos_perdidos
+# metro-file-map: Haste module naming collision: amigos
 #   The following files share their name; please adjust your hasteImpl:
 #     * <rootDir>/app/package.json
 #     * <rootDir>/package.json
