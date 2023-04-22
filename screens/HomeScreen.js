@@ -1,6 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Text, View, SafeAreaView, Pressable } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import {
   UserIcon,
   ChevronDownIcon,
@@ -27,8 +26,7 @@ const displayNameMap = {
   unidentified: 'No Identificado (con Avistamiento y Foto)',
 }
 
-const HomeScreen = () => {
-  // const navigation = useNavigation()
+const HomeScreen = ({ navigation, route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [amigos, setAmigos] = useState([])
 
@@ -66,7 +64,7 @@ const HomeScreen = () => {
     }
     fetchData()
   }, [JSON.stringify(amigos)])
-  console.dir(amigos)
+
   return (
     <SafeAreaView>
       {/* Header */}
@@ -115,6 +113,14 @@ const HomeScreen = () => {
                 <ArrowRightIcon color="#00CCBB" />
               </View>
               <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
+              {/* <MapView
+                initialRegion={{
+                  latitude: 37.78825,
+                  longitude: -122.4324,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+              /> */}
             </View>
           )
         })}

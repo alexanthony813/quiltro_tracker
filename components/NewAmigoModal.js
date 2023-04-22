@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Pressable, Text, TextInput, View } from 'react-native'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer';
+import { useNavigation } from '@react-navigation/native';
 
 const NewAmigoModal = (props) => {
   const { closeModalHandler, isModalVisible, setAmigos, amigos } = props
@@ -13,11 +13,10 @@ const NewAmigoModal = (props) => {
   const [message, setMessage] = useState('')
   const [ownerNumber, setOwnerNumber] = useState('')
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
-  const [presignedUrl, setPresignedUrl] = useState('')
   
   const handleSave = async () => {
     // Implement save logic here using the input field values
-
+    const navigation = useNavigation()
     const presignedUrlRequest = await fetch('http://localhost:3000/s3')
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
@@ -62,12 +61,6 @@ const NewAmigoModal = (props) => {
 
   const handleImageUpload = async (event) => {
     event.preventDefault()
-    // const reader = new FileReader()
-    // launchImageLibrary({}, (response) => {
-    //   if (response) {
-    //     setImageUpload(imageUpload)
-    //   }
-    // })
     const result = await ImagePicker.launchImageLibraryAsync({
       // mediaTypes: ImagePicker.MediaTypeOptions.All,
       exif: true,

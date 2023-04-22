@@ -1,21 +1,15 @@
-import { TailwindProvider } from "tailwindcss-react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/HomeScreen";
+import { TailwindProvider } from 'tailwindcss-react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import AuthNavigator from './navigation/AuthNavigator'
+import navigationTheme from './navigation/navigationTheme'
+import AppNavigator from './navigation/AppNavigator'
 
-const Stack = createNativeStackNavigator();
-console.log('APP LOADED')
 export default function App() {
-  const handlePress = (e) => {
-    console.log(e)
-  }
-
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       <TailwindProvider>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-        </Stack.Navigator>
+        {/* todo update with auth */}
+        {true ? <AppNavigator /> : <AuthNavigator />}
       </TailwindProvider>
     </NavigationContainer>
   )
