@@ -34,21 +34,21 @@ const AppNavigator = () => (
     }}
   >
     <Tab.Screen
-      name="Home"
+      name="Buscar"
       component={StackNavigator}
       options={{
         tabBarIcon: ({ size, color }) => (
-          <MaterialCommunityIcons name="home" size={size} color={color} />
+          <MaterialCommunityIcons name="home-search" size={size} color={color} />
         ),
       }}
     />
     <Tab.Screen
-      name="ListingEdit"
+      name="MisAmigos"
       component={MisAmigosScreen}
       options={({ navigation }) => ({
         tabBarButton: () => (
           <MisAmigosButton
-            onPress={() => navigation.navigate(routes.LISTING_EDIT)}
+            onPress={() => navigation.navigate({name: routes.MIS_AMIGOS})}
           />
         ),
       })}

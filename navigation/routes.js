@@ -1,8 +1,10 @@
 export default Object.freeze({
-    AMIGO_DETAILS: "AmigoDetails",
-    AMIGO_EDIT: "AmigoEdit",
+    MIS_AMIGOS: "MisAmigos",
+    SETTINGS: "Configuration",
+    HOME: "home",
+    
     LOGIN: "Login",
-    MESSAGES: "Messages",
+    NOTIFICATIONS: "Messages",
     REGISTER: "Register",
   });
   
