@@ -1,17 +1,10 @@
 import React from 'react'
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native'
-import {
-  MapPinIcon,
-} from 'react-native-heroicons/outline'
+import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { MapPinIcon } from 'react-native-heroicons/outline'
 
-const AmigosList = (props) => {
+const AmigoList = (props) => {
   const { amigos } = props
+
   return (
     <FlatList
       data={amigos}
@@ -70,4 +63,4 @@ const AmigosList = (props) => {
   )
 }
 
-export default AmigosList
+export default AmigoList

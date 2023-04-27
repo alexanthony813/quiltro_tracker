@@ -1,23 +1,22 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Text, View, SafeAreaView, Pressable } from 'react-native'
+import {
+  Text,
+  View,
+  SafeAreaView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native'
 import {
   UserIcon,
   ChevronDownIcon,
   MapIcon,
   ArrowRightIcon,
-  MagnifyingGlassPlusIcon,
+  MapPinIcon,
 } from 'react-native-heroicons/outline'
 import AmigoList from '../components/AmigoList'
-import NewAmigoModal from '../components/NewAmigoModal'
-
-/* UI notes
-Crop photos? how to center on faces? should be ok when people can upload own photo but will need to center
-*/
-
-/* data model notes:
-multiple owner ids? could be primary in the front end but need support on back end
-multiple owner numbers
-*/
+import { getAmigos } from '../api'
+import useLocation from '../hooks/useLocation'
+import useApi from '../hooks/useApi'
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -28,11 +27,14 @@ const displayNameMap = {
 
 const HomeScreen = ({ navigation, route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [amigos, setAmigos] = useState([])
 
-  const handleAddAmigoClick = () => {
-    setIsModalVisible(true)
-  }
+  const {
+    data: amigos,
+    error,
+    isLoading,
+    request: loadAmigos,
+  } = useApi(getAmigos)
+  const currentLocation = useLocation()
 
   const categorizedAnimalsObject = amigos.reduce(
     (acc, curr) => {
@@ -53,16 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
   )
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('http://localhost:3000/amigos')
-        const data = await response.json()
-        setAmigos(data && Object.values(data))
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
+    loadAmigos()
   }, [JSON.stringify(amigos)])
 
   return (
@@ -71,11 +64,15 @@ const HomeScreen = ({ navigation, route }) => {
       <View className="flex-row pb-3 items-center mt-4 ml-5 space-x-2 ">
         <UserIcon size={35} />
         <View>
-          <Text className="font-bold text-sx">Ver Mascotas Perdidas</Text>
-          <Text className="font-bold text-xl">
-            Ubicacion Actual
-            <ChevronDownIcon size={20} color="#00CCBB" />
-          </Text>
+          {currentLocation ? (
+            <Text className="font-bold text-xl">
+              Buscando en {currentLocation.latitude} &&{' '}
+              {currentLocation.longitude}
+              <ChevronDownIcon size={20} color="#00CCBB" />
+            </Text>
+          ) : (
+            <ActivityIndicator animating={isLoading} size="small" />
+          )}
         </View>
       </View>
       <View className="flex-row items-center space-x-2 pb-2 mx-4">
@@ -84,19 +81,18 @@ const HomeScreen = ({ navigation, route }) => {
           <MapIcon color="#00CCBB" />
         </View>
         <View className="flex-row flex-1 space-x-2 p-3">
-          <Text>Puedes agregar nuevo amigo:</Text>
-          <Pressable onPress={handleAddAmigoClick}>
-            <MagnifyingGlassPlusIcon color="#00CCBB" />
+          <Text>Puedes cambiar tu Ubicacion:</Text>
+          <Pressable
+            onPress={() => {
+              alert(
+                "map not yet ready, come back later and why don't you speed it up"
+              )
+            }}
+          >
+            <MapPinIcon color="#00CCBB" />
           </Pressable>
         </View>
-        {/* <AdjustmentsVerticalIcon color="#00CCBB" /> */}
       </View>
-      <NewAmigoModal
-        isModalVisible={isModalVisible}
-        closeModalHandler={setIsModalVisible}
-        setAmigos={setAmigos}
-        amigos={amigos}
-      />
 
       {/* Category by species */}
       <View className="bg-gray-100">
@@ -112,6 +108,7 @@ const HomeScreen = ({ navigation, route }) => {
                 {/* this will show straight list, better than filters */}
                 <ArrowRightIcon color="#00CCBB" />
               </View>
+              <ActivityIndicator animating={isLoading} size="large" />
               <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
               {/* <MapView
                 initialRegion={{

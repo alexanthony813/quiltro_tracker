@@ -8,3 +8,9 @@ así como certificar la necesidad de hogar para aquellas que lo requieren.
 # general flow
 
 https://trello.com/b/IAaBUBzM/amigos
+
+
+/* data model notes:
+multiple owner ids? could be primary in the front end but need support on back end
+multiple owner numbers
+*/
