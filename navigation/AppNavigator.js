@@ -5,6 +5,8 @@ import UserScreen from '../screens/UserScreen'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MisAmigosScreen from '../screens/MisAmigosScreen'
+import MisAmigosButton from '../components/MisAmigosButton'
+import routes from './routes'
 
 const Stack = createNativeStackNavigator()
 
@@ -14,6 +16,7 @@ const StackNavigator = () => (
     screenOptions={{
       headerStyle: { backgroundColor: 'dodgerblue' },
       headerTintColor: 'white',
+      headerShown: false,
     }}
   >
     <Stack.Screen name="Home" component={HomeScreen} />
@@ -40,13 +43,15 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="MisAmigos"
+      name="ListingEdit"
       component={MisAmigosScreen}
-      options={{
-        tabBarIcon: ({ size, color }) => (
-          <MaterialCommunityIcons name="home" size={size} color={color} />
+      options={({ navigation }) => ({
+        tabBarButton: () => (
+          <MisAmigosButton
+            onPress={() => navigation.navigate(routes.LISTING_EDIT)}
+          />
         ),
-      }}
+      })}
     />
     <Tab.Screen name="User" component={StackNavigator} />
   </Tab.Navigator>

@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Text, View, SafeAreaView, Pressable } from 'react-native'
+import { Text, View, SafeAreaView, Pressable, ActivityIndicator } from 'react-native'
 import {
   UserIcon,
   ChevronDownIcon,
@@ -9,7 +9,8 @@ import {
 } from 'react-native-heroicons/outline'
 import AmigoList from '../components/AmigoList'
 import NewAmigoModal from '../components/NewAmigoModal'
-
+import { getAmigos } from '../api';
+import useApi from '../hooks/useApi'
 /* UI notes
 Crop photos? how to center on faces? should be ok when people can upload own photo but will need to center
 */
@@ -28,11 +29,12 @@ const displayNameMap = {
 
 const HomeScreen = ({ navigation, route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [amigos, setAmigos] = useState([])
 
   const handleAddAmigoClick = () => {
     setIsModalVisible(true)
   }
+
+  const { data: amigos, error, isLoading, request: loadAmigos } =  useApi(getAmigos)
 
   const categorizedAnimalsObject = amigos.reduce(
     (acc, curr) => {
@@ -53,16 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
   )
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('http://localhost:3000/amigos')
-        const data = await response.json()
-        setAmigos(data && Object.values(data))
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
+    loadAmigos()
   }, [JSON.stringify(amigos)])
 
   return (
@@ -94,7 +87,6 @@ const HomeScreen = ({ navigation, route }) => {
       <NewAmigoModal
         isModalVisible={isModalVisible}
         closeModalHandler={setIsModalVisible}
-        setAmigos={setAmigos}
         amigos={amigos}
       />
 
@@ -112,6 +104,7 @@ const HomeScreen = ({ navigation, route }) => {
                 {/* this will show straight list, better than filters */}
                 <ArrowRightIcon color="#00CCBB" />
               </View>
+              <ActivityIndicator animating={isLoading} size="large" />
               <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
               {/* <MapView
                 initialRegion={{

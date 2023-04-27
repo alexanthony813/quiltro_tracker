@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Pressable, Text, TextInput, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { Buffer } from 'buffer';
-import { useNavigation } from '@react-navigation/native';
+import { Buffer } from 'buffer'
+import { useNavigation } from '@react-navigation/native'
+import { saveNewAmigo } from '../api'
 
 const NewAmigoModal = (props) => {
-  const { closeModalHandler, isModalVisible, setAmigos, amigos } = props
+  const { closeModalHandler, isModalVisible, amigos } = props
   const [species, setSpecies] = useState('')
   const [lastSeenAddress, setLastSeenAddress] = useState('')
   const [name, setName] = useState('')
@@ -13,15 +14,22 @@ const NewAmigoModal = (props) => {
   const [message, setMessage] = useState('')
   const [ownerNumber, setOwnerNumber] = useState('')
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
-  
+
+
   const handleSave = async () => {
     // Implement save logic here using the input field values
-    const navigation = useNavigation()
-    const presignedUrlRequest = await fetch('http://localhost:3000/s3')
+    // const navigation = useNavigation()
+    const presignedUrlRequest = await getPresignedUrl()
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
-    const rawBase64 = imageUpload.assets && imageUpload.assets[0] && imageUpload.assets[0].base64
-    var buffer = Buffer.from(rawBase64.replace(/^data:image\/\w+;base64,/, ""),'base64')
+    const rawBase64 =
+      imageUpload.assets &&
+      imageUpload.assets[0] &&
+      imageUpload.assets[0].base64
+    var buffer = Buffer.from(
+      rawBase64.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
+    )
     const s3Result = await fetch(presignedUrl, {
       method: 'PUT',
       headers: {
@@ -32,30 +40,23 @@ const NewAmigoModal = (props) => {
       body: buffer,
     })
     if (s3Result.status !== 200) {
-      console.dir("ERROR") // TODO add better error handle up in here
+      console.dir('ERROR') // TODO add better error handle up in here
     }
     const photo_url = presignedUrl.split('?')[0]
-    const savedAmigoResponse = await fetch('http://localhost:3000/amigos', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    const savedAmigo = await saveNewAmigo({
+      amigo: {
+        lastSeenAddress,
         species,
-        last_seen_address: lastSeenAddress,
         name,
         description,
         message,
-        owner_number: ownerNumber,
+        ownerNumber,
         photo_url,
-      }),
+      },
     })
-    const savedAmigo = await savedAmigoResponse.json()
-
+    const savedAmigoJson = await savedAmigo.json()
     const newAmigos = amigos.slice()
-    newAmigos.unshift(savedAmigo)
-    setAmigos(newAmigos)
+    newAmigos.unshift(savedAmigoJson)
     closeModalHandler(false)
   }
 
@@ -69,7 +70,6 @@ const NewAmigoModal = (props) => {
       quality: 0.7,
       base64: true,
     })
-
 
     if (!result.canceled) {
       setImageUpload(result)
