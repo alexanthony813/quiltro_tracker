@@ -1,21 +1,24 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import * as Yup from "yup";
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import * as Yup from 'yup'
 
-import Screen from "../components/Screen";
-import { Form, FormField, SubmitButton } from "../components/forms";
+import Screen from '../components/Screen'
+import { Form, FormField, SubmitButton } from '../components/forms'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
-});
+  name: Yup.string().required().label('Name'),
+  // email: Yup.string().required().email().label("PhoneNumber"),
+  // ^^ What do we need? Don't want to deter people, can keep it to notifications in the app and
+  // if someone creates a post they are going to want to put their number,  can be required
+  // Yup, choices!
+  password: Yup.string().required().min(4).label('Password'),
+})
 
 function RegisterScreen() {
   return (
     <Screen style={styles.container}>
       <Form
-        initialValues={{ name: "", email: "", password: "" }}
+        initialValues={{ name: '', email: '', password: '' }}
         onSubmit={(values) => console.log(values)}
         validationSchema={validationSchema}
       >
@@ -25,7 +28,7 @@ function RegisterScreen() {
           name="name"
           placeholder="Name"
         />
-        <FormField
+        {/* <FormField ^Yup choices
           autoCapitalize="none"
           autoCorrect={false}
           icon="email"
@@ -33,7 +36,7 @@ function RegisterScreen() {
           name="email"
           placeholder="Email"
           textContentType="emailAddress"
-        />
+        /> */}
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
@@ -46,13 +49,13 @@ function RegisterScreen() {
         <SubmitButton title="Register" />
       </Form>
     </Screen>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
   },
-});
+})
 
-export default RegisterScreen;
+export default RegisterScreen

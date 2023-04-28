@@ -1,10 +1,10 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
-import UserScreen from '../screens/UserScreen'
+import SettingsScreen from '../screens/SettingsScreen'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MisAmigosScreen from '../screens/MisAmigosScreen'
+import MisAmigosScreen from '../screens/NewAmigoScreen'
 import MisAmigosButton from '../components/MisAmigosButton'
 import routes from './routes'
 
@@ -19,9 +19,9 @@ const StackNavigator = () => (
       headerShown: false,
     }}
   >
-    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Buscar" component={HomeScreen} />
     <Stack.Screen name="Mis Amigos" component={MisAmigosScreen} />
-    <Stack.Screen name="User" component={UserScreen} />
+    <Stack.Screen name="Configuracion" component={SettingsScreen} />
   </Stack.Navigator>
 )
 
@@ -38,7 +38,11 @@ const AppNavigator = () => (
       component={StackNavigator}
       options={{
         tabBarIcon: ({ size, color }) => (
-          <MaterialCommunityIcons name="home-search" size={size} color={color} />
+          <MaterialCommunityIcons
+            name="home-search"
+            size={size}
+            color={color}
+          />
         ),
       }}
     />
@@ -46,9 +50,12 @@ const AppNavigator = () => (
       name="MisAmigos"
       component={MisAmigosScreen}
       options={({ navigation }) => ({
-        tabBarButton: () => (
+        tabBarIcon: ({ size, color }) => (
           <MisAmigosButton
-            onPress={() => navigation.navigate({name: routes.MIS_AMIGOS})}
+            onPress={(e) => {
+              e.preventDefault()
+              navigation.navigate({ name: routes.MIS_AMIGOS })
+            }}
           />
         ),
       })}

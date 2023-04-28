@@ -26,7 +26,7 @@ const displayNameMap = {
 }
 
 const HomeScreen = ({ navigation, route }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const currentUserId = 5
 
   const {
     data: amigos,
