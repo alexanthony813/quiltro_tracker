@@ -17,6 +17,7 @@ import AmigoList from '../components/AmigoList'
 import { getAmigos } from '../api'
 import useLocation from '../hooks/useLocation'
 import useApi from '../hooks/useApi'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -95,7 +96,7 @@ const HomeScreen = ({ navigation, route }) => {
       </View>
 
       {/* Category by species */}
-      <View className="bg-gray-100">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-gray-100">
         {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
           const displayAnimalCategory = displayNameMap[animalCategory]
 
@@ -121,7 +122,7 @@ const HomeScreen = ({ navigation, route }) => {
             </View>
           )
         })}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }

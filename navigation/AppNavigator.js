@@ -1,29 +1,12 @@
 import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
 import SettingsScreen from '../screens/SettingsScreen'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MisAmigosScreen from '../screens/NewAmigoScreen'
 import MisAmigosButton from '../components/MisAmigosButton'
 import routes from './routes'
-
-const Stack = createNativeStackNavigator()
-
-// TODO THREE TAB VIEWS: Search, Paw, User
-const StackNavigator = () => (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: { backgroundColor: 'dodgerblue' },
-      headerTintColor: 'white',
-      headerShown: false,
-    }}
-  >
-    <Stack.Screen name="Buscar" component={HomeScreen} />
-    <Stack.Screen name="Mis Amigos" component={MisAmigosScreen} />
-    <Stack.Screen name="Configuracion" component={SettingsScreen} />
-  </Stack.Navigator>
-)
+import MisAmigosScreen from '../screens/MisAmigosScreen'
+import UserNavigator from './UserNavigator'
 
 const Tab = createBottomTabNavigator()
 
@@ -35,7 +18,8 @@ const AppNavigator = () => (
   >
     <Tab.Screen
       name="Buscar"
-      component={StackNavigator}
+      // TODO do need to have navigator here???
+      component={HomeScreen}
       options={{
         tabBarIcon: ({ size, color }) => (
           <MaterialCommunityIcons
@@ -60,7 +44,15 @@ const AppNavigator = () => (
         ),
       })}
     />
-    <Tab.Screen name="User" component={StackNavigator} />
+    <Tab.Screen
+      name="User"
+      component={UserNavigator}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="account" color={color} size={size} />
+        ),
+      }}
+    />
   </Tab.Navigator>
 )
 
