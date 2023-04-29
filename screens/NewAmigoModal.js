@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Modal, Text, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
 import { saveNewAmigo } from '../api'
 import useLocation from '../hooks/useLocation'
 import Button from '../components/Button'
 import Screen from '../components/Screen'
+import routes from '../navigation/routes'
+
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
 import {
@@ -32,15 +34,8 @@ const validationSchema = Yup.object().shape({
   ownerNumber: Yup.string().required().min(1).label('Contact Number'),
 })
 
-const NewAmigoScreen = (props) => {
+const NewAmigoModal = ({ isVisible, setIsVisible }) => {
   const userLocation = useLocation()
-  const currentUserId = 5
-  const [species, setSpecies] = useState('')
-  const [lastSeenAddress, setLastSeenAddress] = useState('')
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [message, setMessage] = useState('')
-  const [ownerNumber, setOwnerNumber] = useState('')
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
 
   const handleSubmit = async (amigo, { resetForm }) => {
@@ -76,10 +71,11 @@ const NewAmigoScreen = (props) => {
     const savedAmigo = await saveNewAmigo({
       amigo,
     })
-    // error handle
-    // const savedAmigoJson = await savedAmigo.json()
-    // const newAmigos = amigos.slice()
-    // newAmigos.unshift(savedAmigoJson)
+
+    if (savedAmigo) {
+      navigation.navigate(routes.HOME)
+      setIsVisible(false)
+    }
   }
 
   const handleImageUpload = async (event) => {
@@ -104,7 +100,7 @@ const NewAmigoScreen = (props) => {
 
 */
   return (
-    <Screen>
+    <Modal visible={isVisible}>
       <View
         style={{
           backgroundColor: 'white',
@@ -160,7 +156,11 @@ const NewAmigoScreen = (props) => {
                   flexDirection: 'row',
                 }}
               >
-                <Button color="medium" title="Cancel" />
+                <Button
+                  color="medium"
+                  title="Cancel"
+                  onPress={() => setIsVisible(false)}
+                />
                 <SubmitButton title="Save" />
               </View>
             </View>
@@ -168,8 +168,8 @@ const NewAmigoScreen = (props) => {
         </View>
         {imageUpload && <Text>Image Uploaded</Text>}
       </View>
-    </Screen>
+    </Modal>
   )
 }
 
-export default NewAmigoScreen
+export default NewAmigoModal

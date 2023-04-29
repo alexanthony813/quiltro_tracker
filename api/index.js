@@ -26,3 +26,11 @@ export const getPresignedUrl = async () => {
 export const getAmigos = async () => {
     return await fetch('http://localhost:3000/amigos')
 }
+
+export const getAmigo = async (amigoId) => {
+    return await fetch(`http://localhost:3000/amigos/${amigoId}`)
+}
+
+export const getUserAmigos = async ({ userId }) => {
+    return await fetch(`http://localhost:3000/users/${userId}/amigos`)
+}
