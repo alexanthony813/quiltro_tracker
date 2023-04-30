@@ -1,41 +1,38 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import React from 'react'
+import { StyleSheet, View, FlatList } from 'react-native'
 
-import { ListItem, ListItemSeparator } from "../components/lists";
-import colors from "../config/colors";
-import Icon from "../components/Icon";
-import routes from "../navigation/routes";
-import Screen from "../components/Screen";
-import useAuth from "../auth/useAuth";
+import { ListItem, ListItemSeparator } from '../components/lists'
+import colors from '../config/colors'
+import Icon from '../components/Icon'
+import routes from '../navigation/routes'
+import Screen from '../components/Screen'
+import useAuth from '../auth/useAuth'
 
 const menuItems = [
   {
-    title: "Mis Amigos",
+    title: 'Mis Amigos',
     icon: {
-      name: "format-list-bulleted",
+      name: 'format-list-bulleted',
       backgroundColor: colors.primary,
     },
   },
   {
-    title: "My Messages",
+    title: 'My Messages',
     icon: {
-      name: "email",
+      name: 'email',
       backgroundColor: colors.secondary,
     },
     targetScreen: routes.MESSAGES,
   },
-];
+]
 
 function AccountScreen({ navigation }) {
-  const { user, logOut } = useAuth();
+  const { user, logOut } = useAuth()
 
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        {/* <ListItem
-          title={user.name}
-          subTitle={user.email}
-        /> */}
+        <ListItem title={user.username} subTitle={user.phone_number} />
       </View>
       <View style={styles.container}>
         <FlatList
@@ -62,7 +59,7 @@ function AccountScreen({ navigation }) {
         onPress={() => logOut()}
       />
     </Screen>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -72,6 +69,6 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
   },
-});
+})
 
-export default AccountScreen;
+export default AccountScreen
