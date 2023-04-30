@@ -12,8 +12,8 @@ function WelcomeScreen({ navigation }) {
       source={require("../assets/background.jpg")}
     >
       <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={require("../assets/logo-red.png")} />
-        <Text style={styles.tagline}>Sell What You Don't Need</Text>
+        {/* TODO add paw in place of logo */}
+        <Text style={styles.tagline}>Buscar para tus Amigos</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <Button
@@ -21,7 +21,7 @@ function WelcomeScreen({ navigation }) {
           onPress={() => navigation.navigate(routes.LOGIN)}
         />
         <Button
-          title="Register"
+          title="Registrar"
           color="secondary"
           onPress={() => navigation.navigate(routes.REGISTER)}
         />
