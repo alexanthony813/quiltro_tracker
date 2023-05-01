@@ -43,7 +43,7 @@ function LoginScreen(props) {
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
-          icon="user"
+          icon="email"
           // keyboardType="username"
           name="username"
           placeholder="Username"

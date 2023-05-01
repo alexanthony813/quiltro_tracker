@@ -1,25 +1,25 @@
-import React from "react";
+import React from 'react'
 import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-} from "react-native";
-import { Image } from "react-native-expo-image-cache";
+} from 'react-native'
+import { Image } from 'react-native-expo-image-cache'
 
-import colors from "../config/colors";
-import ListItem from "../components/lists/ListItem";
-import Text from "../components/Text";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import colors from '../config/colors'
+import Text from '../components/Text'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import ContactOwnerForm from '../components/ContactOwnerForm'
 
 function amigoDetailsScreen({ route }) {
-  const amigo = route.params;
+  const amigo = route.params
 
   return (
     <KeyboardAvoidingView
       behavior="position"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
     >
       <Image
         style={styles.image}
@@ -30,9 +30,17 @@ function amigoDetailsScreen({ route }) {
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{amigo.title}</Text>
         <Text style={styles.price}>${amigo.price}</Text>
+        <View style={styles.userContainer}>
+          <ListItem
+            image={{ uri: amigo.photo_url }}
+            title={amigo.name}
+            // subTitle="5 Listings"
+          />
+        </View>
+        <ContactOwnerForm amigo={amigo} /> 
       </View>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -40,22 +48,22 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   image: {
-    width: "100%",
+    width: '100%',
     height: 300,
   },
   price: {
     color: colors.secondary,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 20,
     marginVertical: 10,
   },
   title: {
     fontSize: 24,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   userContainer: {
     marginVertical: 40,
   },
-});
+})
 
-export default amigoDetailsScreen;
+export default amigoDetailsScreen
