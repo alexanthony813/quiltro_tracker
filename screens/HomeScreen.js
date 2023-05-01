@@ -27,37 +27,40 @@ const displayNameMap = {
 }
 
 const HomeScreen = ({ navigation, route }) => {
-  const currentUserId = 5
-
   const {
     data: amigos,
     error,
     isLoading,
     request: loadAmigos,
   } = useApi(getAmigos)
-  const currentLocation = useLocation()
 
-  const categorizedAnimalsObject = amigos.reduce(
-    (acc, curr) => {
-      if (acc.hasOwnProperty(curr.species)) {
-        acc[curr.species].push(curr)
-      } else {
-        acc.miscellaneous.push(curr)
-      }
-      return acc
-    },
-    {
-      // this will control what rows we show and dynamically render otherwise
-      dog: [],
-      cat: [],
-      miscellaneous: [],
-      // unidentified: [], // non MVP, tracking amigos without posts
-    }
-  )
-
+  console.dir(amigos)
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos)])
+  const currentLocation = useLocation()
+  const categories = {
+    // this will control what rows we show and dynamically render otherwise
+    dog: [],
+    cat: [],
+    miscellaneous: [],
+    // unidentified: [], // non MVP, tracking amigos without posts
+  }
+
+  // if (!amigos) {
+  //   return <ActivityIndicator animating={isLoading} size="large" />
+  // }
+
+  const categorizedAnimalsObject = amigos
+    ? amigos.reduce((acc, curr) => {
+        if (acc.hasOwnProperty(curr.species)) {
+          acc[curr.species].push(curr)
+        } else {
+          acc.miscellaneous.push(curr)
+        }
+        return acc
+      }, categories)
+    : categories
 
   return (
     <SafeAreaView>
@@ -96,7 +99,10 @@ const HomeScreen = ({ navigation, route }) => {
       </View>
 
       {/* Category by species */}
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-gray-100">
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        className="bg-gray-100"
+      >
         {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
           const displayAnimalCategory = displayNameMap[animalCategory]
 

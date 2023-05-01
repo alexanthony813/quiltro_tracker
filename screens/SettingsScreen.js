@@ -1,38 +1,38 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import React from 'react'
+import { StyleSheet, View, FlatList } from 'react-native'
 
-import { ListItem, ListItemSeparator } from "../components/lists";
-import colors from "../config/colors";
-import Icon from "../components/Icon";
-import routes from "../navigation/routes";
-import Screen from "../components/Screen";
+import { ListItem, ListItemSeparator } from '../components/lists'
+import colors from '../config/colors'
+import Icon from '../components/Icon'
+import routes from '../navigation/routes'
+import Screen from '../components/Screen'
+import useAuth from '../auth/useAuth'
 
 const menuItems = [
   {
-    title: "My Listings",
+    title: 'Mis Amigos',
     icon: {
-      name: "format-list-bulleted",
+      name: 'format-list-bulleted',
       backgroundColor: colors.primary,
     },
   },
   {
-    title: "My Messages",
+    title: 'Mis Notificaciones',
     icon: {
-      name: "email",
+      name: 'email',
       backgroundColor: colors.secondary,
     },
-    targetScreen: routes.MESSAGES,
+    targetScreen: routes.NOTIFICATIONS,
   },
-];
+]
 
 function AccountScreen({ navigation }) {
+  const { user, logOut } = useAuth()
+
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        <ListItem
-          title="Alexander Anthony"
-          // image={require("../assets/.jpg")}
-        />
+        <ListItem title={user.username} subTitle={user.phone_number} />
       </View>
       <View style={styles.container}>
         <FlatList
@@ -56,9 +56,10 @@ function AccountScreen({ navigation }) {
       <ListItem
         title="Log Out"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={() => logOut()}
       />
     </Screen>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -68,6 +69,6 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
   },
-});
+})
 
-export default AccountScreen;
+export default AccountScreen

@@ -34,7 +34,7 @@
     "expo-location": "^15.1.1",
     "expo-notifications": "~0.18.1",
     "expo-permissions": "~14.1.1",
-    "expo-secure-store": "~8.1.0",
+    "expo-secure-store": "^12.1.1",
     "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
     "formik": "^2.2.9",
