@@ -1,7 +1,5 @@
-import settings from '../config/settings'
-
 export const saveNewAmigo = async ({ amigo }) => {
-  const response = await fetch(`${settings.apiUrl}/amigos`, {
+  const response = await fetch('http://localhost:3000/amigos', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -22,17 +20,17 @@ export const saveNewAmigo = async ({ amigo }) => {
 }
 
 export const getPresignedUrl = async () => {
-  return await fetch(`${settings.apiUrl}/s3`)
+  return await fetch('http://localhost:3000/s3')
 }
 
 export const getAmigos = async () => {
-    return await fetch(`${settings.apiUrl}/amigos`)
+    return await fetch('http://localhost:3000/amigos')
 }
 
 export const getAmigo = async (amigoId) => {
-    return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
+    return await fetch(`http://localhost:3000/amigos/${amigoId}`)
 }
 
 export const getUserAmigos = async ({ userId }) => {
-    return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
+    return await fetch(`http://localhost:3000/users/${userId}/amigos`)
 }
