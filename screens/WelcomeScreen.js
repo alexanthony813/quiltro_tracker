@@ -9,7 +9,7 @@ function WelcomeScreen({ navigation }) {
     <ImageBackground
       blurRadius={10}
       style={styles.background}
-      source={require("../assets/background.jpg")}
+      source={require("../assets/background.jpeg")}
     >
       <View style={styles.logoContainer}>
         {/* TODO add paw in place of logo */}
