@@ -13,6 +13,7 @@ import {
   SubmitButton,
 } from '../components/forms'
 import useApi from '../hooks/useApi'
+import { ActivityIndicator, View } from 'react-native'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Name'),
@@ -50,7 +51,6 @@ function RegisterScreen() {
 
   return (
     <>
-      {/* <ActivityIndicator visible={registerApi.loading || loginApi.loading} /> */}
       <Screen style={styles.container}>
         <Form
           initialValues={{ username: '', phone_number: '' }}
@@ -81,7 +81,9 @@ function RegisterScreen() {
             secureTextEntry
             // textContentType="password"
           />
-          <SubmitButton title="Registrar" />
+          <View style={styles.buttonsContainer}>
+            <SubmitButton title="Registrar" />
+          </View>
         </Form>
       </Screen>
     </>
@@ -91,6 +93,10 @@ function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+  },
+  buttonsContainer: {
+    padding: 20,
+    width: '100%',
   },
 })
 

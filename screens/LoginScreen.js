@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Image } from 'react-native'
+import { StyleSheet, Image, View } from 'react-native'
 import * as Yup from 'yup'
 
 import Screen from '../components/Screen'
@@ -58,7 +58,10 @@ function LoginScreen(props) {
           secureTextEntry
           textContentType="phone_number"
         />
-        <SubmitButton title="Login" />
+        <View style={styles.buttonsContainer}>
+
+          <SubmitButton title="Login" />
+        </View>
       </Form>
     </Screen>
   )
@@ -74,6 +77,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 50,
     marginBottom: 20,
+  },
+  buttonsContainer: {
+    padding: 20,
+    width: '100%',
   },
 })
 
