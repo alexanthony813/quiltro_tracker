@@ -20,7 +20,17 @@ import useApi from '../hooks/useApi'
 import { MapPinIcon } from 'react-native-heroicons/outline'
 import NewAmigoModal from './NewAmigoModal'
 
-function MisAmigosScreen({ navigation }) {
+// return (
+//   <SafeAreaView>
+//     <Text>Here is where the add/check user amigos will go</Text>
+//     <Text>Important to note, we will show this by default if any exists</Text>
+//     <Text>Important to note, if button pressed it will automatically open the new modal</Text>
+//   </SafeAreaView>
+// )
+function MisAmigosScreen(props) {
+  const { user } = props
+  const { userId } = user
+  console.dir(props)
   const {
     data: amigos,
     error,
@@ -30,12 +40,15 @@ function MisAmigosScreen({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   useEffect(() => {
-    loadAmigos({ userId: 1 })
+    loadAmigos({ userId })
   }, [JSON.stringify(amigos)])
 
   return (
     <Screen style={styles.screen}>
-      <NewAmigoModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
+      <NewAmigoModal
+        isVisible={isModalVisible}
+        setIsVisible={setIsModalVisible}
+      />
 
       {/* Header */}
       <View className="flex-row pb-3 items-center mt-4 ml-5 space-x-2 ">

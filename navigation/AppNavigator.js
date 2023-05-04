@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import HomeScreen from '../screens/HomeScreen'
+import HomeSearchScreen from '../screens/HomeSearchScreen'
 import expoPushTokensApi from '../api/expoPushTokens'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -20,7 +20,7 @@ const AppNavigator = () => {
       <Tab.Screen
         name="Buscar"
         // TODO do need to have navigator here???
-        component={HomeScreen}
+        component={HomeSearchScreen}
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons

@@ -1,6 +1,10 @@
 import React from 'react'
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { Text, View, FlatList, TouchableOpacity } from 'react-native'
 import { MapPinIcon } from 'react-native-heroicons/outline'
+import { Image } from 'expo-image'
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 const AmigoList = (props) => {
   const { amigos } = props
@@ -17,8 +21,9 @@ const AmigoList = (props) => {
       }}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item, index) => String(index)}
-      renderItem={({ item }) => {
+      renderItem={({ item, index }) => {
         if (item && item.name) {
+          const imageLoadPriority = (index < 2) ? 'high' : 'low'
           return (
             //animal card
             <TouchableOpacity
@@ -33,6 +38,9 @@ const AmigoList = (props) => {
               <Image
                 source={{ uri: item.photo_url }}
                 style={{ width: '100%', aspectRatio: 1 }}
+                loading={"lazy"}
+                placeholder={blurhash}
+                priority={imageLoadPriority}
               />
 
               <View style={{ padding: 10 }}>

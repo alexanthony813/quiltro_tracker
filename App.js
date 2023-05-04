@@ -21,6 +21,7 @@ export default function App() {
       setUser(user)
     }
   }
+  console.log(user)
 
   if (!isReady) {
     return (
@@ -33,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider user={user} value={{ user, setUser }}>
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
           {/* todo update with auth */}
