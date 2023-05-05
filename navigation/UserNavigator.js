@@ -7,7 +7,7 @@ const Stack = createStackNavigator()
 
 const UserNavigator = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Configuration" component={UserScreen} />
+    <Stack.Screen name="Configuracion" component={UserScreen} />
     <Stack.Screen name="Notifications" component={NotificationsScreen} />
   </Stack.Navigator>
 )

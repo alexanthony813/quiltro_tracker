@@ -10,7 +10,7 @@ function ContactOwnerForm({ amigo }) {
   const handleSubmit = async ({ message }, { resetForm }) => {
     Keyboard.dismiss()
 
-    const result = await messagesApi.send(message, amigo.id)
+    const result = await messagesApi.send(message, amigo._id)
 
     if (!result.ok) {
       console.log('Error', result)

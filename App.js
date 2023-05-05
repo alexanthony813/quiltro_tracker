@@ -11,7 +11,7 @@ import authStorage from './auth/storage'
 import { navigationRef } from './navigation/rootNavigation'
 
 export default function App() {
-  const [user, setUser] = useState()
+  const [_, setUser] = useState()
   const [error, setError] = useState()
   const [isReady, setIsReady] = useState(false)
 
@@ -22,7 +22,7 @@ export default function App() {
     }
   }
   console.log(user)
-
+  const user = { userId: "6453b61f4a2ba99c25bd8664", username: "oinkerman6" }
   if (!isReady) {
     return (
       <AppLoading
@@ -34,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <AuthContext.Provider user={user} value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
           {/* todo update with auth */}

@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   ownerNumber: Yup.string().required().min(1).label('Contact Number'),
 })
 
-const NewAmigoModal = ({ isVisible, setIsVisible }) => {
+const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
   const userLocation = useLocation()
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
   const [isImageUploading, setIsImageUploading] = useState(false)
@@ -40,10 +40,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
     const presignedUrlRequest = await getPresignedUrl()
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
-    const rawBase64 =
-      imageUpload.assets &&
-      imageUpload.assets[0] &&
-      imageUpload.assets[0].base64
+    const rawBase64 = imageUpload.base64
     var buffer = Buffer.from(
       rawBase64.replace(/^data:image\/\w+;base64,/, ''),
       'base64'
@@ -66,10 +63,12 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
     amigo.owner_id = user.userId
     // TODO make sure saveNewAmigo and other are attached to export object to make more easily noticable as ASYNC action
     const savedAmigo = await saveNewAmigo({
-      amigo,
+      last_seen_address: amigo.lastSeenAddress,
+      owner_number: amigo.ownerNumber,
+      ...amigo
     })
 
-    if (savedAmigo) {
+    if (savedAmigo.ok) {
       navigation.navigate(routes.HOME)
       setIsVisible(false)
     }
@@ -88,15 +87,17 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
       base64: true,
     })
 
-    // await ImageManipulator.manipulateAsync(uri, actions, saveOptions)
-    // const finalResult = await ImageManipulator.manipulateAsync(result.assets[0]?.uri, [
-    //   // {resize: {width: 640, height: 960}},
-
-    // ], { compress: 0.5 });
+    let finalResult
+    // await ImageManipulator.manipulateAsync(result.assets[0]?.uri, actions, saveOptions)
+    finalResult = await ImageManipulator.manipulateAsync(
+      result.assets[0]?.uri,
+      [{ resize: { width: 640, height: 960 } }],
+      { compress: 1 }
+    )
     // console.dir(finalResult)
 
     if (!result.canceled) {
-      setImageUpload(result)
+      setImageUpload(finalResult)
     } else {
       console.log('successful image upload')
     }
