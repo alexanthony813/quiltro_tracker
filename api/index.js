@@ -1,21 +1,13 @@
 import settings from '../config/settings'
 
-export const saveNewAmigo = async ({ amigo }) => {
+export const saveNewAmigo = async (amigo) => {
   const response = await fetch(`${settings.apiUrl}/amigos`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      species: amigo.species,
-      last_seen_address: amigo.lastSeenAddress,
-      name: amigo.name,
-      description: amigo.description,
-      message: amigo.message,
-      owner_number: amigo.ownerNumber,
-      photo_url: amigo.photo_url,
-    }),
+    body: JSON.stringify(amigo),
   })
 
   return response

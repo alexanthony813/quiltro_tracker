@@ -26,7 +26,7 @@ const displayNameMap = {
   unidentified: 'No Identificado (con Avistamiento y Foto)',
 }
 
-const HomeScreen = ({ navigation, route }) => {
+const HomeSearchScreen = ({ navigation, route }) => {
   const {
     data: amigos,
     error,
@@ -125,4 +125,4 @@ const HomeScreen = ({ navigation, route }) => {
   )
 }
 
-export default HomeScreen
+export default HomeSearchScreen

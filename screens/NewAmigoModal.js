@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Modal, Text, View } from 'react-native'
+import { Modal, Text, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
 import { saveNewAmigo } from '../api'
 import useLocation from '../hooks/useLocation'
 import Button from '../components/Button'
-import Screen from '../components/Screen'
 import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
@@ -16,14 +15,8 @@ import {
   FormPicker as Picker,
   SubmitButton,
 } from '../components/forms'
-// return (
-//   <SafeAreaView>
-//     <Text>Here is where the add/check user amigos will go</Text>
-//     <Text>Important to note, we will show this by default if any exists</Text>
-//     <Text>Important to note, if button pressed it will automatically open the new modal</Text>
-//     <Text>Map will stay available on this page</Text>
-//   </SafeAreaView>
-// )
+
+import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
   species: Yup.string().required().min(1).label('Species'),
@@ -34,20 +27,20 @@ const validationSchema = Yup.object().shape({
   ownerNumber: Yup.string().required().min(1).label('Contact Number'),
 })
 
-const NewAmigoModal = ({ isVisible, setIsVisible }) => {
+const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
   const userLocation = useLocation()
   const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
+  const [isImageUploading, setIsImageUploading] = useState(false)
+  const [isAmigoSubmitting, setIsAmigoSubmitting] = useState(false)
 
   const handleSubmit = async (amigo, { resetForm }) => {
+    setIsAmigoSubmitting(true)
     // Implement save logic here using the input field values
     // const navigation = useNavigation()
     const presignedUrlRequest = await getPresignedUrl()
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
-    const rawBase64 =
-      imageUpload.assets &&
-      imageUpload.assets[0] &&
-      imageUpload.assets[0].base64
+    const rawBase64 = imageUpload.base64
     var buffer = Buffer.from(
       rawBase64.replace(/^data:image\/\w+;base64,/, ''),
       'base64'
@@ -67,33 +60,48 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
     // const photo_url = presignedUrl.split('?')[0]
     amigo.photo_url = presignedUrl.split('?')[0]
     amigo.userLocation = userLocation
+    amigo.owner_id = user.userId
     // TODO make sure saveNewAmigo and other are attached to export object to make more easily noticable as ASYNC action
     const savedAmigo = await saveNewAmigo({
-      amigo,
+      last_seen_address: amigo.lastSeenAddress,
+      owner_number: amigo.ownerNumber,
+      ...amigo
     })
 
-    if (savedAmigo) {
+    if (savedAmigo.ok) {
       navigation.navigate(routes.HOME)
       setIsVisible(false)
     }
+    setIsAmigoSubmitting(false)
   }
 
   const handleImageUpload = async (event) => {
+    setIsImageUploading(true)
     event.preventDefault()
     const result = await ImagePicker.launchImageLibraryAsync({
       // mediaTypes: ImagePicker.MediaTypeOptions.All,
       exif: true,
       allowsEditing: false,
-      // aspect: [4, 3],
-      quality: 0.7,
+      aspect: [1, 1],
+      quality: 0.1,
       base64: true,
     })
 
+    let finalResult
+    // await ImageManipulator.manipulateAsync(result.assets[0]?.uri, actions, saveOptions)
+    finalResult = await ImageManipulator.manipulateAsync(
+      result.assets[0]?.uri,
+      [{ resize: { width: 640, height: 960 } }],
+      { compress: 1 }
+    )
+    // console.dir(finalResult)
+
     if (!result.canceled) {
-      setImageUpload(result)
+      setImageUpload(finalResult)
     } else {
       console.log('successful image upload')
     }
+    setIsImageUploading(false)
   }
 
   /*
@@ -101,6 +109,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
 */
   return (
     <Modal visible={isVisible}>
+      <ActivityIndicator animating={isAmigoSubmitting} size="small" />
       <View
         style={{
           backgroundColor: 'white',
@@ -146,6 +155,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible }) => {
             />
 
             <View>
+              <ActivityIndicator animating={isImageUploading} size="small" />
               <Button
                 onPress={handleImageUpload}
                 color="secondary"
