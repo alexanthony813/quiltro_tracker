@@ -65,7 +65,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     const savedAmigo = await saveNewAmigo({
       last_seen_address: amigo.lastSeenAddress,
       owner_number: amigo.ownerNumber,
-      ...amigo
+      ...amigo,
     })
 
     if (savedAmigo.ok) {
@@ -109,7 +109,6 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
 */
   return (
     <Modal visible={isVisible}>
-      <ActivityIndicator animating={isAmigoSubmitting} size="small" />
       <View
         style={{
           backgroundColor: 'white',
@@ -156,22 +155,24 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
 
             <View>
               <ActivityIndicator animating={isImageUploading} size="small" />
+
+              <View className="flex justify-between">
               <Button
                 onPress={handleImageUpload}
                 color="secondary"
                 title="Upload Image"
               />
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}
-              >
+              <SubmitButton
+                  className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
+                  title="Save"
+                />
                 <Button
                   color="medium"
                   title="Cancel"
+                  className="py-1 px-4 rounded-md bg-gray-300 hover:bg-gray-400"
                   onPress={() => setIsVisible(false)}
                 />
-                <SubmitButton title="Save" />
+
               </View>
             </View>
           </Form>

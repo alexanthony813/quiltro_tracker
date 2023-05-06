@@ -101,7 +101,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
       {/* Category by species */}
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-gray-100"
+        className="bg-red-100"
       >
         {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
           const displayAnimalCategory = displayNameMap[animalCategory]
@@ -116,7 +116,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
                 <ArrowRightIcon color="#00CCBB" />
               </View>
               <ActivityIndicator animating={isLoading} size="large" />
-              <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
+              <AmigoList showAllDetails={false} amigos={categorizedAnimalsObject[animalCategory]} />
             </View>
           )
         })}
