@@ -18,6 +18,7 @@ import { getAmigos } from '../api'
 import useLocation from '../hooks/useLocation'
 import useApi from '../hooks/useApi'
 import { ScrollView } from 'react-native-gesture-handler'
+import { SearchBar } from 'react-native-elements'
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -101,7 +102,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
       {/* Category by species */}
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-red-100"
+        className="bg-gray-100"
       >
         {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
           const displayAnimalCategory = displayNameMap[animalCategory]
@@ -116,7 +117,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
                 <ArrowRightIcon color="#00CCBB" />
               </View>
               <ActivityIndicator animating={isLoading} size="large" />
-              <AmigoList showAllDetails={false} amigos={categorizedAnimalsObject[animalCategory]} />
+              <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
             </View>
           )
         })}
