@@ -4,17 +4,12 @@ import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
 import { saveNewAmigo } from '../api'
 import useLocation from '../hooks/useLocation'
-import Button from '../components/Button'
+import Button from './Button'
 import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
-import {
-  Form,
-  FormField,
-  FormPicker as Picker,
-  SubmitButton,
-} from '../components/forms'
+import { Form, FormField, FormPicker, FormPicker as Picker, SubmitButton } from './forms'
 
 import * as ImageManipulator from 'expo-image-manipulator'
 
@@ -65,7 +60,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     const savedAmigo = await saveNewAmigo({
       last_seen_address: amigo.lastSeenAddress,
       owner_number: amigo.ownerNumber,
-      ...amigo,
+      ...amigo
     })
 
     if (savedAmigo.ok) {
@@ -109,6 +104,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
 */
   return (
     <Modal visible={isVisible}>
+      <ActivityIndicator animating={isAmigoSubmitting} size="small" />
       <View
         style={{
           backgroundColor: 'white',
@@ -136,6 +132,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
           >
             <FormField maxLength={255} name="name" placeholder="Name" />
             <FormField maxLength={255} name="species" placeholder="Species" />
+            {/* <FormPicker maxLength={255} name="species" items={["dog", "cat", "other"]} placeholder="Species" /> */}
             <FormField
               maxLength={255}
               name="lastSeenAddress"
@@ -153,26 +150,23 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
               placeholder="Owner Number"
             />
 
+            <ActivityIndicator animating={isImageUploading} size="small" />
             <View>
-              <ActivityIndicator animating={isImageUploading} size="small" />
-
               <View className="flex justify-between">
-              <Button
-                onPress={handleImageUpload}
-                color="secondary"
-                title="Upload Image"
-              />
-              <SubmitButton
+                <Button
+                  onPress={handleImageUpload}
+                  color="secondary"
+                  title="Upload Image"
+                />
+                <SubmitButton
                   className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
                   title="Save"
                 />
                 <Button
                   color="medium"
                   title="Cancel"
-                  className="py-1 px-4 rounded-md bg-gray-300 hover:bg-gray-400"
                   onPress={() => setIsVisible(false)}
                 />
-
               </View>
             </View>
           </Form>
