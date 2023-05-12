@@ -18,7 +18,7 @@ import { getAmigos } from '../api'
 import useLocation from '../hooks/useLocation'
 import useApi from '../hooks/useApi'
 import { ScrollView } from 'react-native-gesture-handler'
-import { SearchBar } from 'react-native-elements'
+import { Searchbar } from 'react-native-paper'
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -35,22 +35,22 @@ const HomeSearchScreen = ({ navigation, route }) => {
     request: loadAmigos,
   } = useApi(getAmigos)
 
-  console.dir(amigos)
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos)])
   const currentLocation = useLocation()
   const categories = {
-    // this will control what rows we show and dynamically render otherwise
     dog: [],
     cat: [],
     miscellaneous: [],
-    // unidentified: [], // non MVP, tracking amigos without posts
   }
 
   // if (!amigos) {
   //   return <ActivityIndicator animating={isLoading} size="large" />
   // }
+  const [searchQuery, setSearchQuery] = React.useState('')
+
+  const onChangeSearch = (query) => setSearchQuery(query)
 
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
@@ -80,7 +80,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
           )}
         </View>
       </View>
-      
+
       <View className="flex-row items-center space-x-2 pb-2 mx-4">
         <View className="flex-row flex-1 space-x-2 p-3">
           <Text>Puedes buscar en el mapa tambien:</Text>
@@ -98,6 +98,14 @@ const HomeSearchScreen = ({ navigation, route }) => {
             <MapPinIcon color="#00CCBB" />
           </Pressable>
         </View>
+      </View>
+
+      <View>
+        <Searchbar
+          placeholder="Buscar"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
       </View>
 
       {/* Category by species */}

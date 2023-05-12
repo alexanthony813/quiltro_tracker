@@ -3,9 +3,6 @@ import { StyleSheet } from 'react-native'
 import * as Yup from 'yup'
 
 import Screen from '../components/Screen'
-import usersApi from '../api/users'
-import authApi from '../api/auth'
-import useAuth from '../auth/useAuth'
 import {
   ErrorMessage,
   Form,
@@ -17,10 +14,6 @@ import { ActivityIndicator, View } from 'react-native'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Name'),
-  // email: Yup.string().required().email().label("password"),
-  // ^^ What do we need? Don't want to deter people, can keep it to notifications in the app and
-  // if someone creates a post they are going to want to put their number,  can be required
-  // Yup, choices!
   password: Yup.string().required().min(7).label('Password'),
 })
 
