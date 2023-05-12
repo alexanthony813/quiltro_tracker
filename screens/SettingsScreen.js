@@ -32,7 +32,7 @@ function AccountScreen({ navigation }) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        <ListItem title={user.username} subTitle={user.phone_number} />
+        <ListItem title={user.username} subTitle={user.password} />
       </View>
       <View style={styles.container}>
         <FlatList

@@ -21,7 +21,6 @@ export default function App() {
       setUser(user)
     }
   }
-  console.log(user)
   const user = { userId: "645cdfafd4ea51a958815c9c", username: "oinkerman6" }
   if (!isReady) {
     return (
