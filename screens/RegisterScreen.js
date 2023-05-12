@@ -17,11 +17,11 @@ import { ActivityIndicator, View } from 'react-native'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Name'),
-  // email: Yup.string().required().email().label("phone_number"),
+  // email: Yup.string().required().email().label("password"),
   // ^^ What do we need? Don't want to deter people, can keep it to notifications in the app and
   // if someone creates a post they are going to want to put their number,  can be required
   // Yup, choices!
-  phone_number: Yup.string().required().min(7).label('Phone Number'),
+  password: Yup.string().required().min(7).label('Password'),
 })
 
 function RegisterScreen() {
@@ -44,7 +44,7 @@ function RegisterScreen() {
 
     const { data: authToken } = await loginApi.request(
       userInfo.username,
-      userInfo.phone_number
+      userInfo.password
     )
     auth.logIn(authToken)
   }
@@ -53,7 +53,7 @@ function RegisterScreen() {
     <>
       <Screen style={styles.container}>
         <Form
-          initialValues={{ username: '', phone_number: '' }}
+          initialValues={{ username: '', password: '' }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
@@ -76,8 +76,8 @@ function RegisterScreen() {
             autoCapitalize="none"
             autoCorrect={false}
             icon="lock"
-            name="phone_number"
-            placeholder="Phone Number"
+            name="password"
+            placeholder="Password"
             secureTextEntry
             // textContentType="password"
           />

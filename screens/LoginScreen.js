@@ -14,15 +14,15 @@ import useAuth from '../auth/useAuth'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4).label('Username'),
-  phone_number: Yup.string().required().min(7).label('Phone Number'),
+  password: Yup.string().required().min(7).label('Password'),
 })
 
 function LoginScreen(props) {
   const auth = useAuth()
   const [loginFailed, setLoginFailed] = useState(false)
 
-  const handleSubmit = async ({ username, phone_number }) => {
-    const result = await authApi.login(username, phone_number)
+  const handleSubmit = async ({ username, password }) => {
+    const result = await authApi.login(username, password)
     if (!result.ok) return setLoginFailed(true)
     setLoginFailed(false)
     auth.logIn(result.data)
@@ -32,12 +32,12 @@ function LoginScreen(props) {
     <Screen style={styles.container}>
       {/* TODO add paw in place of logo */}
       <Form
-        initialValues={{ username: '', phone_number: '' }}
+        initialValues={{ username: '', password: '' }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <ErrorMessage
-          error="Invalid username and/or phone number."
+          error="Invalid username and/or password."
           visible={loginFailed}
         />
         <FormField
@@ -53,13 +53,12 @@ function LoginScreen(props) {
           autoCapitalize="none"
           autoCorrect={false}
           icon="lock"
-          name="phone_number"
-          placeholder="Phone Number"
+          name="password"
+          placeholder="Password"
           secureTextEntry
-          textContentType="phone_number"
+          textContentType="password"
         />
         <View style={styles.buttonsContainer}>
-
           <SubmitButton title="Login" />
         </View>
       </Form>
