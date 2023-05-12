@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import HomeSearchScreen from '../screens/HomeSearchScreen'
-import expoPushTokensApi from '../api/expoPushTokens'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MisAmigosButton from '../components/MisAmigosButton'

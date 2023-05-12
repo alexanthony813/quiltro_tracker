@@ -21,7 +21,7 @@ export default function App() {
       setUser(user)
     }
   }
-  const user = { userId: "645cdfafd4ea51a958815c9c", username: "oinkerman6" }
+  const user = { userId: "645e7685c82a065dfe600c88", username: "oinkerman1" }
   if (!isReady) {
     return (
       <AppLoading
@@ -36,7 +36,6 @@ export default function App() {
     <AuthContext.Provider value={{ user, setUser }}>
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {/* todo update with auth */}
           {user ? <AppNavigator /> : <AuthNavigator />}
         </TailwindProvider>
       </NavigationContainer>

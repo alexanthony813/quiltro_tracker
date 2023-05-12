@@ -9,7 +9,6 @@ import {
   FormField,
   SubmitButton,
 } from '../components/forms'
-import authApi from '../api/auth'
 import useAuth from '../auth/useAuth'
 
 const validationSchema = Yup.object().shape({
