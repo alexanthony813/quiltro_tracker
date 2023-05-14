@@ -45,15 +45,15 @@ const HomeSearchScreen = ({ navigation, route }) => {
     miscellaneous: [],
   }
 
-  // if (!amigos) {
-  //   return <ActivityIndicator animating={isLoading} size="large" />
-  // }
   const [searchQuery, setSearchQuery] = React.useState('')
 
   const onChangeSearch = (query) => setSearchQuery(query)
 
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
+        if (searchQuery !== '' && curr.name && curr.name.indexOf(searchQuery) === -1) {
+          return acc
+        }
         if (acc.hasOwnProperty(curr.species)) {
           acc[curr.species].push(curr)
         } else {
@@ -102,7 +102,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
 
       <View>
         <Searchbar
-          placeholder="Buscar"
+          placeholder="Buscar con Nombre" // in the future will want to use ID number
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
