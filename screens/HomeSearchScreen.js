@@ -1,24 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import {
-  Text,
-  View,
-  SafeAreaView,
-  Pressable,
-  ActivityIndicator,
-} from 'react-native'
-import {
-  UserIcon,
-  ChevronDownIcon,
-  MapIcon,
-  ArrowRightIcon,
-  MapPinIcon,
-} from 'react-native-heroicons/outline'
+import React, { useEffect } from 'react'
+import { View, SafeAreaView, ActivityIndicator } from 'react-native'
+import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import AmigoList from '../components/AmigoList'
+import Text from '../components/Text'
 import { getAmigos } from '../api'
 import useLocation from '../hooks/useLocation'
 import useApi from '../hooks/useApi'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Searchbar } from 'react-native-paper'
+import HomeSearchHeader from '../components/HomeSearchHeader'
 
 const displayNameMap = {
   dog: 'Perros Identificados',
@@ -51,7 +40,11 @@ const HomeSearchScreen = ({ navigation, route }) => {
 
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
-        if (searchQuery !== '' && curr.name && curr.name.indexOf(searchQuery) === -1) {
+        if (
+          searchQuery !== '' &&
+          curr.name &&
+          curr.name.indexOf(searchQuery) === -1
+        ) {
           return acc
         }
         if (acc.hasOwnProperty(curr.species)) {
@@ -65,48 +58,11 @@ const HomeSearchScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      {/* Header */}
-      <View className="flex-row pb-3 items-center mt-4 ml-5 space-x-2 ">
-        <UserIcon size={35} />
-        <View>
-          {currentLocation ? (
-            <Text className="font-bold text-xl">
-              Buscando en {currentLocation.latitude} &&{' '}
-              {currentLocation.longitude}
-              <ChevronDownIcon size={20} color="#00CCBB" />
-            </Text>
-          ) : (
-            <ActivityIndicator animating={isLoading} size="small" />
-          )}
-        </View>
-      </View>
-
-      <View className="flex-row items-center space-x-2 pb-2 mx-4">
-        <View className="flex-row flex-1 space-x-2 p-3">
-          <Text>Puedes buscar en el mapa tambien:</Text>
-          <MapIcon color="#00CCBB" />
-        </View>
-        <View className="flex-row flex-1 space-x-2 p-3">
-          <Text>Puedes cambiar tu Ubicacion:</Text>
-          <Pressable
-            onPress={() => {
-              alert(
-                "map not yet ready, come back later and why don't you speed it up"
-              )
-            }}
-          >
-            <MapPinIcon color="#00CCBB" />
-          </Pressable>
-        </View>
-      </View>
-
-      <View>
-        <Searchbar
-          placeholder="Buscar con Nombre" // in the future will want to use ID number
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </View>
+      <HomeSearchHeader
+        currentLocation={currentLocation}
+        searchQuery={searchQuery}
+        onChangeSearch={onChangeSearch}
+      />
 
       {/* Category by species */}
       <ScrollView
