@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import colors from '../config/colors'
 
-// rename flex button? better TODO for passing styles to these generic components 
+// rename flex button? better TODO for passing styles to these generic components
 function AppButton({ title, onPress, color = 'primary' }) {
   return (
     <TouchableOpacity

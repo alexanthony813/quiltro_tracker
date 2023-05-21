@@ -37,7 +37,7 @@ function amigoDetailsScreen({ route }) {
             // subTitle="5 Listings"
           />
         </View>
-        <ContactOwnerForm amigo={amigo} /> 
+        <ContactOwnerForm amigo={amigo} />
       </View>
     </KeyboardAvoidingView>
   )

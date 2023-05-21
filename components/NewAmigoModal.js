@@ -9,7 +9,13 @@ import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
-import { Form, FormField, FormPicker, FormPicker as Picker, SubmitButton } from './forms'
+import {
+  Form,
+  FormField,
+  FormPicker,
+  FormPicker as Picker,
+  SubmitButton,
+} from './forms'
 
 import * as ImageManipulator from 'expo-image-manipulator'
 
@@ -60,7 +66,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     const savedAmigo = await saveNewAmigo({
       last_seen_address: amigo.lastSeenAddress,
       owner_number: amigo.ownerNumber,
-      ...amigo
+      ...amigo,
     })
 
     if (savedAmigo.ok) {

@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import React, { useState } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
 
-import Screen from "../components/Screen";
+import Screen from '../components/Screen'
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
-} from "../components/lists";
+} from '../components/lists'
 
 const initialNotifications = [
   {
     id: 1,
-    title: "Test",
-    description: "Test?",
-  }
-];
+    title: 'Test',
+    description: 'Test?',
+  },
+]
 
 function NotificationsScreen(props) {
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const [refreshing, setRefreshing] = useState(false);
+  const [notifications, setNotifications] = useState(initialNotifications)
+  const [refreshing, setRefreshing] = useState(false)
 
   const handleDelete = (message) => {
     // Delete the message from notifications
-    setNotifications(notifications.filter((m) => m.id !== message.id));
-  };
+    setNotifications(notifications.filter((m) => m.id !== message.id))
+  }
 
   return (
     <Screen>
@@ -35,7 +35,7 @@ function NotificationsScreen(props) {
             title={item.title}
             subTitle={item.description}
             image={item.image}
-            onPress={() => console.log("Message selected", item)}
+            onPress={() => console.log('Message selected', item)}
             renderRightActions={() => (
               <ListItemDeleteAction onPress={() => handleDelete(item)} />
             )}
@@ -47,16 +47,16 @@ function NotificationsScreen(props) {
           setNotifications([
             {
               id: 2,
-              title: "T2",
-              description: "D2",
+              title: 'T2',
+              description: 'D2',
             },
-          ]);
+          ])
         }}
       />
     </Screen>
-  );
+  )
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
 
-export default NotificationsScreen;
+export default NotificationsScreen
