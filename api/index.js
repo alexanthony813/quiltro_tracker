@@ -18,13 +18,13 @@ export const getPresignedUrl = async () => {
 }
 
 export const getAmigos = async () => {
-    return await fetch(`${settings.apiUrl}/amigos`)
+  return await fetch(`${settings.apiUrl}/amigos`)
 }
 
 export const getAmigo = async (amigoId) => {
-    return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
+  return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
 }
 
 export const getUserAmigos = async ({ userId }) => {
-    return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
+  return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
 }

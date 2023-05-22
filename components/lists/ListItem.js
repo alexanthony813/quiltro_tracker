@@ -1,10 +1,10 @@
-import React from "react";
-import { View, StyleSheet, Image, TouchableHighlight } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import React from 'react'
+import { View, StyleSheet, Image, TouchableHighlight } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
-import Text from "../Text";
-import colors from "../../config/colors";
+import Text from '../Text'
+import colors from '../../config/colors'
 
 function ListItem({
   title,
@@ -38,20 +38,20 @@ function ListItem({
         </View>
       </TouchableHighlight>
     </Swipeable>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     padding: 15,
     backgroundColor: colors.white,
   },
   detailsContainer: {
     flex: 1,
     marginLeft: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   image: {
     width: 70,
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     color: colors.medium,
   },
   title: {
-    fontWeight: "500",
+    fontWeight: '500',
   },
-});
+})
 
-export default ListItem;
+export default ListItem
