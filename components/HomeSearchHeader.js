@@ -37,19 +37,6 @@ function HomeSearchHeader({ currentLocation, searchQuery, onChangeSearch }) {
             <MapIcon color="#00CCBB" />
           </Pressable>
         </View>
-        {/* not mvp..not sure when */}
-        {/* <View className="flex-row flex-1 space-x-2 p-3">
-          <Text>Cambiar Ubicacion:</Text>
-          <Pressable
-            onPress={() => {
-              alert(
-                "map not yet ready, come back later and why don't you speed it up"
-              )
-            }}
-          >
-            <MapPinIcon color="#00CCBB" />
-          </Pressable>
-        </View> */}
       </View>
 
       <View className="mx-1">

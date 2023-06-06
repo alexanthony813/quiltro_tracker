@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 
 import Screen from '../components/Screen'
 import {
@@ -8,55 +8,41 @@ import {
   ListItemSeparator,
 } from '../components/lists'
 
-const initialNotifications = [
-  {
-    id: 1,
-    title: 'Test',
-    description: 'Test?',
-  },
-]
-
 function NotificationsScreen(props) {
-  const [notifications, setNotifications] = useState(initialNotifications)
+  const [notifications, setNotifications] = useState([])
   const [refreshing, setRefreshing] = useState(false)
 
   const handleDelete = (message) => {
-    // Delete the message from notifications
     setNotifications(notifications.filter((m) => m.id !== message.id))
   }
 
   return (
     <Screen>
-      <FlatList
-        data={notifications}
-        keyExtractor={(message) => message.id.toString()}
-        renderItem={({ item }) => (
-          <ListItem
-            title={item.title}
-            subTitle={item.description}
-            image={item.image}
-            onPress={() => console.log('Message selected', item)}
-            renderRightActions={() => (
-              <ListItemDeleteAction onPress={() => handleDelete(item)} />
-            )}
-          />
-        )}
-        ItemSeparatorComponent={ListItemSeparator}
-        refreshing={refreshing}
-        onRefresh={() => {
-          setNotifications([
-            {
-              id: 2,
-              title: 'T2',
-              description: 'D2',
-            },
-          ])
-        }}
-      />
+      {notifications && notifications.length ? (
+        <FlatList
+          data={notifications}
+          keyExtractor={(message) => message.id.toString()}
+          renderItem={({ item }) => (
+            <ListItem
+              title={item.title}
+              subTitle={item.description}
+              image={item.image}
+              onPress={() => console.log('Message selected', item)}
+              renderRightActions={() => (
+                <ListItemDeleteAction onPress={() => handleDelete(item)} />
+              )}
+            />
+          )}
+          ItemSeparatorComponent={ListItemSeparator}
+          refreshing={refreshing}
+        />
+      ) : (
+        <View className="flex flex-1 justify-center items-center">
+          <Text>Aun no tienes notifications</Text>
+        </View>
+      )}
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({})
 
 export default NotificationsScreen
