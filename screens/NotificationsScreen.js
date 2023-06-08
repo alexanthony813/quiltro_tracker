@@ -27,7 +27,7 @@ function NotificationsScreen(props) {
               title={item.title}
               subTitle={item.description}
               image={item.image}
-              onPress={() => console.log('Message selected', item)}
+              onPress={() => console.trace('Message selected', item)}
               renderRightActions={() => (
                 <ListItemDeleteAction onPress={() => handleDelete(item)} />
               )}
@@ -44,5 +44,6 @@ function NotificationsScreen(props) {
     </Screen>
   )
 }
+
 
 export default NotificationsScreen

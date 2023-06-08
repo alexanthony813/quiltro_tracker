@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, SafeAreaView, ActivityIndicator } from 'react-native'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import AmigoList from '../components/AmigoList'
@@ -10,10 +10,9 @@ import { ScrollView } from 'react-native-gesture-handler'
 import HomeSearchHeader from '../components/HomeSearchHeader'
 
 const displayNameMap = {
-  dog: 'Perros Identificados',
-  cat: 'Gatos Identificados',
-  miscellaneous: 'Varios Identificando',
-  unidentified: 'No Identificado (con Avistamiento y Foto)',
+  dog: 'Perros',
+  cat: 'Gatos',
+  miscellaneous: 'Varios',
 }
 
 const HomeSearchScreen = ({ navigation, route }) => {
@@ -28,18 +27,21 @@ const HomeSearchScreen = ({ navigation, route }) => {
     loadAmigos()
   }, [JSON.stringify(amigos)])
   const currentLocation = useLocation()
-  const categories = {
+  const amigosMap = {
     dog: [],
     cat: [],
     miscellaneous: [],
   }
 
-  const [searchQuery, setSearchQuery] = React.useState('')
-
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isLostSelected, setIsLostSelected] = useState(true)
+  const selectedStatus = isLostSelected ? 'lost' : 'found'
   const onChangeSearch = (query) => setSearchQuery(query)
-
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
+        if (curr.status !== selectedStatus) {
+          return acc
+        }
         if (
           searchQuery !== '' &&
           curr.name &&
@@ -53,8 +55,8 @@ const HomeSearchScreen = ({ navigation, route }) => {
           acc.miscellaneous.push(curr)
         }
         return acc
-      }, categories)
-    : categories
+      }, amigosMap)
+    : amigosMap
 
   return (
     <SafeAreaView>
@@ -62,8 +64,9 @@ const HomeSearchScreen = ({ navigation, route }) => {
         currentLocation={currentLocation}
         searchQuery={searchQuery}
         onChangeSearch={onChangeSearch}
+        setIsLostSelected={setIsLostSelected}
+        isLostSelected={isLostSelected}
       />
-
       {/* Category by species */}
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}

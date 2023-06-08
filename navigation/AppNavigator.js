@@ -18,7 +18,6 @@ const AppNavigator = () => {
     >
       <Tab.Screen
         name="Buscar"
-        // TODO do need to have navigator here???
         component={HomeSearchScreen}
         options={{
           tabBarIcon: ({ size, color }) => (
