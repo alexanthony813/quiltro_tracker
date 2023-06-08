@@ -16,7 +16,7 @@ const useLocation = () => {
       } = lastKnownPosition
       setLocation({ latitude, longitude })
     } catch (error) {
-      console.log(error)
+      console.trace(error)
     }
   }
 

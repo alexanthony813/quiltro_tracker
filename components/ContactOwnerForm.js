@@ -13,7 +13,7 @@ function ContactOwnerForm({ amigo }) {
     const result = await messagesApi.send(message, amigo._id)
 
     if (!result.ok) {
-      console.log('Error', result)
+      console.trace('Error', result)
       return Alert.alert('Error', 'Could not send the message to the owner.')
     }
 

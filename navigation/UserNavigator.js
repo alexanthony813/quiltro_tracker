@@ -8,6 +8,7 @@ const Stack = createStackNavigator()
 const UserNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen name="Configuracion" component={UserScreen} />
+    {/* todo add link to mis amigos */}
     <Stack.Screen name="Notifications" component={NotificationsScreen} />
   </Stack.Navigator>
 )
