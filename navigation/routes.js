@@ -3,7 +3,6 @@ export default Object.freeze({
   AMIGO_DETAILS: 'AmigoDetails',
   USER: 'User',
   HOME: 'HomeSearch',
-
   LOGIN: 'Login',
   NOTIFICATIONS: 'Notifications',
   REGISTER: 'Register',

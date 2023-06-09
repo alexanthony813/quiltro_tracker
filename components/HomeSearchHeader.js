@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Pressable, ActivityIndicator } from 'react-native'
 import Text from './Text'
-import { Searchbar } from 'react-native-paper'
 import {
   AdjustmentsHorizontalIcon,
   MapIcon,
@@ -16,7 +15,7 @@ function HomeSearchHeader({
   isLostSelected,
 }) {
   return (
-    <View className="mx-1">
+    <View className="mx-1 mb-5">
       <View className="flex-row justify-between items-center ml-5 ">
         <View>
           <Text className="font-bold text-2xl -mx-1.5">AmigosPerdidos</Text>
