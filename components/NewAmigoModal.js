@@ -58,10 +58,11 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     if (s3Result.status !== 200) {
       console.dir('ERROR') // TODO add better error handle up in here
     }
+    // const photo_url = presignedUrl.split('?')[0]
     amigo.photo_url = presignedUrl.split('?')[0]
     amigo.userLocation = userLocation
     amigo.owner_id = user.userId
-    amigo.status = 'lost' //!
+    amigo.status = 'lost'
     // TODO make sure saveNewAmigo and other are attached to export object to make more easily noticable as ASYNC action
     const savedAmigo = await saveNewAmigo({
       last_seen_address: amigo.lastSeenAddress,

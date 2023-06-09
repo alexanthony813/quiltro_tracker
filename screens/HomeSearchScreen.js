@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, SafeAreaView, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import AmigoList from '../components/AmigoList'
 import Text from '../components/Text'
@@ -8,6 +8,7 @@ import useLocation from '../hooks/useLocation'
 import useApi from '../hooks/useApi'
 import { ScrollView } from 'react-native-gesture-handler'
 import HomeSearchHeader from '../components/HomeSearchHeader'
+import Screen from '../components/Screen'
 
 const displayNameMap = {
   dog: 'Perros',
@@ -59,7 +60,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
     : amigosMap
 
   return (
-    <SafeAreaView>
+    <Screen>
       <HomeSearchHeader
         currentLocation={currentLocation}
         searchQuery={searchQuery}
@@ -71,6 +72,7 @@ const HomeSearchScreen = ({ navigation, route }) => {
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         className="bg-gray-100"
+        showsHorizontalScrollIndicator={false}
       >
         {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
           const displayAnimalCategory = displayNameMap[animalCategory]
@@ -81,16 +83,16 @@ const HomeSearchScreen = ({ navigation, route }) => {
                 <Text className="font-bold text-ig">
                   {displayAnimalCategory}
                 </Text>
+                <ActivityIndicator animating={isLoading} size="large" />
                 {/* this will show straight list, better than filters */}
                 <ArrowRightIcon color="#00CCBB" />
               </View>
-              <ActivityIndicator animating={isLoading} size="large" />
               <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
             </View>
           )
         })}
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   )
 }
 

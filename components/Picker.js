@@ -58,6 +58,7 @@ function AppPicker({
             data={items}
             keyExtractor={(item) => item.value.toString()}
             numColumns={numberOfColumns}
+            showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
               <PickerItemComponent
                 item={item}

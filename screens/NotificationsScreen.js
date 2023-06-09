@@ -21,6 +21,7 @@ function NotificationsScreen(props) {
       {notifications && notifications.length ? (
         <FlatList
           data={notifications}
+          showsHorizontalScrollIndicator={false}
           keyExtractor={(message) => message.id.toString()}
           renderItem={({ item }) => (
             <ListItem

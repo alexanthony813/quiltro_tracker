@@ -15,9 +15,10 @@ const menuItems = [
       name: 'format-list-bulleted',
       backgroundColor: colors.primary,
     },
+    targetScreen: routes.MIS_AMIGOS,
   },
   {
-    title: 'Mis Notificaciones',
+    title: 'Mis Mensajes',
     icon: {
       name: 'email',
       backgroundColor: colors.secondary,
@@ -37,6 +38,7 @@ function AccountScreen({ navigation }) {
       <View style={styles.container}>
         <FlatList
           data={menuItems}
+          showsHorizontalScrollIndicator={false}
           keyExtractor={(menuItem) => menuItem.title}
           ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (
