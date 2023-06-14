@@ -4,7 +4,6 @@ import Text from './Text'
 import {
   AdjustmentsHorizontalIcon,
   MapIcon,
-  MagnifyingGlassIcon,
 } from 'react-native-heroicons/outline'
 
 function HomeSearchHeader({
@@ -13,6 +12,7 @@ function HomeSearchHeader({
   onChangeSearch,
   setIsLostSelected,
   isLostSelected,
+  setBottomSheetContentMode,
 }) {
   return (
     <View className="mx-1 mb-5">
@@ -23,27 +23,14 @@ function HomeSearchHeader({
         <View className="flex-row space-x-2 p-3 items-end">
           <Pressable
             onPress={() => {
-              alert(
-                "map not yet ready, come back later and why don't you speed it up"
-              )
+              setBottomSheetContentMode('map')
             }}
           >
             <MapIcon color="#00CCBB" />
           </Pressable>
           <Pressable
             onPress={() => {
-              alert(
-                "search not yet ready, come back later and why don't you speed it up"
-              )
-            }}
-          >
-            <MagnifyingGlassIcon color="#00CCBB" />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              alert(
-                "adjustments not yet ready, come back later and why don't you speed it up"
-              )
+              setBottomSheetContentMode('filters')
             }}
           >
             <AdjustmentsHorizontalIcon color="#00CCBB" />
