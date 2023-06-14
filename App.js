@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import AppLoading from 'expo-app-loading'
+import 'setimmediate'
 
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
@@ -21,7 +22,7 @@ export default function App() {
       setUser(user)
     }
   }
-  const user = { userId: "645e7685c82a065dfe600c88", username: "oinkerman1" }
+  const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
   if (!isReady) {
     return (
       <AppLoading
