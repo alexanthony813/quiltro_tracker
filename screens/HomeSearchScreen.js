@@ -13,6 +13,8 @@ import {
 import HomeSearchHeader from '../components/HomeSearchHeader'
 import Screen from '../components/Screen'
 import BottomSheet from '../components/BottomSheet'
+import ReportSightingModal from '../components/ReportSightingModal'
+import AuthContext from '../auth/context'
 
 const displayNameMap = {
   dog: 'Perros',
@@ -21,26 +23,27 @@ const displayNameMap = {
 }
 
 const HomeSearchScreen = () => {
+  const { user, setUser } = React.useContext(AuthContext)
   const {
     data: amigos,
     error,
     isLoading,
     request: loadAmigos,
   } = useApi(getAmigos)
-
+  const [bottomSheetContentMode, setBottomSheetContentMode] = useState()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [reportingAmigoId, setReportingAmigoId] = useState(false)
+  const [isLostSelected, setIsLostSelected] = useState(true)
+  const userLocation = useLocation()
   useEffect(() => {
     loadAmigos()
-  }, [JSON.stringify(amigos)])
-  const currentLocation = useLocation()
+  }, [JSON.stringify(amigos), reportingAmigoId, userLocation])
   const amigosMap = {
     dog: [],
     cat: [],
     miscellaneous: [],
   }
 
-  const [bottomSheetContentMode, setBottomSheetContentMode] = useState()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isLostSelected, setIsLostSelected] = useState(true)
   const selectedStatus = isLostSelected ? 'lost' : 'found'
   const onChangeSearch = (query) => setSearchQuery(query)
   const categorizedAnimalsObject = amigos
@@ -67,20 +70,30 @@ const HomeSearchScreen = () => {
   return (
     <Screen>
       <HomeSearchHeader
-        currentLocation={currentLocation}
+        userLocation={userLocation}
         searchQuery={searchQuery}
         onChangeSearch={onChangeSearch}
         setIsLostSelected={setIsLostSelected}
         isLostSelected={isLostSelected}
         setBottomSheetContentMode={setBottomSheetContentMode}
       />
+      <ReportSightingModal
+        amigoId={reportingAmigoId}
+        setReportingAmigoId={setReportingAmigoId}
+        user={user}
+        userLocation={userLocation}
+      />
       {/* Category by species */}
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
+          scrollEnabled={
+            bottomSheetContentMode !== 'map' &&
+            bottomSheetContentMode !== 'filters'
+          }
           className="bg-gray-100 flex"
           showsHorizontalScrollIndicator={false}
-          // simultaneousHandlers={[panGestureRef]} uhhh i guess unnecessary ? TODO refactor bototm sheet component to include more (without breaking everything this time)
+          // simultaneousHandlers={[panGestureRef]} // check if this is necessary? it's not fixing the bottom sheet
         >
           {Object.keys(categorizedAnimalsObject).map((animalCategory) => {
             const displayAnimalCategory = displayNameMap[animalCategory]
@@ -95,15 +108,16 @@ const HomeSearchScreen = () => {
                   {/* this will show straight list, better than filters */}
                   <ArrowRightIcon color="#00CCBB" />
                 </View>
-                <AmigoList amigos={categorizedAnimalsObject[animalCategory]} />
+                <AmigoList
+                  setReportingAmigoId={setReportingAmigoId}
+                  amigos={categorizedAnimalsObject[animalCategory]}
+                />
               </View>
             )
           })}
         </ScrollView>
         {bottomSheetContentMode && (
-          <BottomSheet
-            bottomSheetContentMode={bottomSheetContentMode}
-          />
+          <BottomSheet bottomSheetContentMode={bottomSheetContentMode} />
         )}
       </GestureHandlerRootView>
     </Screen>

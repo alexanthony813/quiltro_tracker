@@ -7,7 +7,7 @@ import {
 } from 'react-native-heroicons/outline'
 
 function HomeSearchHeader({
-  currentLocation,
+  userLocation,
   searchQuery,
   onChangeSearch,
   setIsLostSelected,

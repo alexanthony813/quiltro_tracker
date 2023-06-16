@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useImperativeHandle } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
   Extrapolate,
@@ -8,12 +8,25 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  EasingNode,
 } from 'react-native-reanimated'
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 
+const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50
+
 const BottomSheet = ({ bottomSheetContentMode }) => {
   const context = useSharedValue({ y: 0 })
+  const translateY = useSharedValue(0)
+  const active = useSharedValue(false)
+
+  const scrollTo = useCallback((destination) => {
+    'worklet'
+    active.value = destination !== 0
+
+    translateY.value = withSpring(destination, { damping: 50 })
+  }, [])
+
   const panGesture = Gesture.Pan()
     .onStart(() => {
       context.value = { y: translateY.value }
@@ -29,11 +42,34 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
         scrollTo(MAX_TRANSLATE_Y)
       }
     })
+
+  const fadeAnimation = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    const easing = EasingNode.ease
+    Animated.timing(fadeAnimation, {
+      toValue: 1,
+      duration: 500, // Adjust the duration as needed
+      useNativeDriver: true, // Enable native driver for better performance
+      easing,
+    }).start()
+  }, [])
+
+  const rBottomSheetStyle = {
+    opacity: fadeAnimation,
+    transform: [
+      {
+        translateY: fadeAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [50, 0], // Adjust the translation as needed
+        }),
+      },
+    ],
+  }
+  console.log(bottomSheetContentMode)
   return (
     <GestureDetector gesture={panGesture}>
-      <Animated.View
-        style={[styles.bottomSheetContainer, styles.rBottomSheetStyle]}
-      >
+      <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
         <View style={styles.line} />
         {bottomSheetContentMode && bottomSheetContentMode === 'map' && (
           <View>
