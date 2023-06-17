@@ -46,7 +46,7 @@ function LoginScreen(props) {
           // keyboardType="username"
           name="username"
           placeholder="Username"
-          textContentType="usernameAddress"
+          textContentType="usernameLocation"
         />
         <FormField
           autoCapitalize="none"

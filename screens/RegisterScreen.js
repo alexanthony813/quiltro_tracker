@@ -56,15 +56,6 @@ function RegisterScreen() {
             name="username"
             placeholder="Username"
           />
-          {/* <FormField ^Yup choices
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="email"
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
-        /> */}
           <FormField
             autoCapitalize="none"
             autoCorrect={false}

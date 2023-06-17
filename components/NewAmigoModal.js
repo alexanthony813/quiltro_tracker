@@ -3,41 +3,31 @@ import { Modal, Text, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
 import { saveNewAmigo } from '../api'
-import useLocation from '../hooks/useLocation'
 import Button from './Button'
 import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
-import {
-  Form,
-  FormField,
-  FormPicker,
-  FormPicker as Picker,
-  SubmitButton,
-} from './forms'
+import { Form, FormField, SubmitButton } from './forms'
 
 import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
   species: Yup.string().required().min(1).label('Species'),
-  lastSeenAddress: Yup.string().required().min(1).label('Last Seen Address'),
+  lastSeenLocation: Yup.string().required().min(1).label('Last Seen Location'),
   name: Yup.string().required().min(1).label('Name'),
   description: Yup.string().label('Description'),
   message: Yup.string().required().min(1).label('Message'),
   ownerNumber: Yup.string().required().min(1).label('Contact Number'),
 })
 
-const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
-  const userLocation = useLocation()
-  const [imageUpload, setImageUpload] = useState(null) // todo break up and only save image when posting new Amigo?
+const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
+  const [imageUpload, setImageUpload] = useState(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
   const [isAmigoSubmitting, setIsAmigoSubmitting] = useState(false)
 
   const handleSubmit = async (amigo, { resetForm }) => {
     setIsAmigoSubmitting(true)
-    // Implement save logic here using the input field values
-    // const navigation = useNavigation()
     const presignedUrlRequest = await getPresignedUrl()
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
@@ -58,14 +48,13 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     if (s3Result.status !== 200) {
       console.dir('ERROR') // TODO add better error handle up in here
     }
-    // const photo_url = presignedUrl.split('?')[0]
     amigo.photo_url = presignedUrl.split('?')[0]
-    amigo.userLocation = userLocation
+    amigo.userLocation = userLocation // TODO is this null??
     amigo.owner_id = user.userId
     amigo.status = 'lost'
-    // TODO make sure saveNewAmigo and other are attached to export object to make more easily noticable as ASYNC action
+
     const savedAmigo = await saveNewAmigo({
-      last_seen_address: amigo.lastSeenAddress,
+      last_seen_location: amigo.lastSeenLocation,
       owner_number: amigo.ownerNumber,
       ...amigo,
     })
@@ -81,7 +70,6 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
     setIsImageUploading(true)
     event.preventDefault()
     const result = await ImagePicker.launchImageLibraryAsync({
-      // mediaTypes: ImagePicker.MediaTypeOptions.All,
       exif: true,
       allowsEditing: false,
       aspect: [1, 1],
@@ -89,14 +77,11 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
       base64: true,
     })
 
-    let finalResult
-    // await ImageManipulator.manipulateAsync(result.assets[0]?.uri, actions, saveOptions)
-    finalResult = await ImageManipulator.manipulateAsync(
+    const finalResult = await ImageManipulator.manipulateAsync(
       result.assets[0]?.uri,
       [{ resize: { width: 640, height: 960 } }],
       { compress: 1 }
     )
-    // console.dir(finalResult)
 
     if (!result.canceled) {
       setImageUpload(finalResult)
@@ -128,7 +113,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
           <Form
             initialValues={{
               species: '',
-              lastSeenAddress: '',
+              lastSeenLocation: '',
               name: '',
               description: '',
               message: '',
@@ -142,8 +127,8 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user }) => {
             {/* <FormPicker maxLength={255} name="species" items={["dog", "cat", "other"]} placeholder="Species" /> */}
             <FormField
               maxLength={255}
-              name="lastSeenAddress"
-              placeholder="Last Seen Address"
+              name="lastSeenLocation"
+              placeholder="Last Seen Location"
             />
             <FormField
               maxLength={255}

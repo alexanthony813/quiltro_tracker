@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 
 import Button from '../components/Button'
-import colors from '../config/colors'
 import { getUserAmigos } from '../api/index'
 
 import Screen from '../components/Screen'
@@ -18,8 +17,11 @@ import { MapPinIcon } from 'react-native-heroicons/outline'
 import NewAmigoModal from '../components/NewAmigoModal'
 import MisAmigosHeader from '../components/MisAmigosHeader'
 import AuthContext from '../auth/context'
+import colors from '../config/colors'
+import useLocation from '../hooks/useLocation'
 
 function MisAmigosScreen() {
+  const userLocation = useLocation()
   const { user, setUser } = React.useContext(AuthContext)
   const { userId } = user
   const {
@@ -40,6 +42,7 @@ function MisAmigosScreen() {
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
         user={user}
+        userLocation={userLocation}
       />
 
       <MisAmigosHeader
@@ -76,16 +79,20 @@ function MisAmigosScreen() {
                 <Text style={{ fontSize: 14, marginBottom: 5 }}>
                   {item.description}
                 </Text>
-                <Text style={{ fontSize: 12, color: '#808080' }}>
+                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
                   {item.message}
                 </Text>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <MapPinIcon color="#808080" size={16} />
+                  <MapPinIcon color={colors[colors.icon]} size={16} />
                   <Text
-                    style={{ fontSize: 12, color: '#808080', marginLeft: 5 }}
+                    style={{
+                      fontSize: 12,
+                      color: colors[colors.icon],
+                      marginLeft: 5,
+                    }}
                   >
-                    Visto por ultimo vez en {item.last_seen_address}
+                    Visto por ultimo vez en {item.last_seen_location}
                   </Text>
                 </View>
               </View>
