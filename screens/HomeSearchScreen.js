@@ -48,7 +48,7 @@ const HomeSearchScreen = () => {
   const onChangeSearch = (query) => setSearchQuery(query)
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
-        if (curr.status !== selectedStatus) {
+        if ((curr.status !== selectedStatus) || (selectedStatus === 'found' && selectedStatus === 'found' && !curr.ownerId)) {
           return acc
         }
         if (

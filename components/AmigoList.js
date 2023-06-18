@@ -4,11 +4,14 @@ import { MapPinIcon } from 'react-native-heroicons/outline'
 import { Image } from 'expo-image'
 import Button from './Button'
 import colors from '../config/colors'
+import { calculateDaysPassed } from '../utility/helpers'
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
 const AmigoList = ({ amigos, setReportingAmigoId }) => {
+  const now = new Date()
+
   return (
     <FlatList
       data={amigos}
@@ -22,40 +25,66 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
-        if (item && item.name) {
-          const imageLoadPriority = index < 2 ? 'high' : 'low'
-          return (
-            //animal card
-            <TouchableOpacity
-              style={{
-                backgroundColor: 'white',
-                borderRadius: 8,
-                overflow: 'hidden',
-                marginHorizontal: 5,
-                width: 300,
-              }}
-            >
-              <Image
-                source={{ uri: item.photo_url }}
-                style={{ width: '100%', aspectRatio: 1 }}
-                loading={'lazy'}
-                placeholder={blurhash}
-                priority={imageLoadPriority}
-              />
-              <View className="attribute-container flex flex-row">
-                <View style={{ padding: 10 }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                    {item.name}
-                  </Text>
-                  <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                    {item.description}
-                  </Text>
-                  <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                    {item.message}
-                  </Text>
+        const {
+          last_status_event,
+          last_seen_date,
+          photo_url,
+          name,
+          status,
+          description,
+          message,
+        } = item
+        let daysElapsedSinceLastSeen
+        if (last_status_event && last_status_event.status === 'sighted') {
+          daysElapsedSinceLastSeen = calculateDaysPassed(
+            new Date(last_status_event.time),
+            now
+          )
+        } else {
+          daysElapsedSinceLastSeen = calculateDaysPassed(
+            new Date(item.last_seen_date),
+            now
+          )
+        }
+        const imageLoadPriority = index < 2 ? 'high' : 'low'
+        return (
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 8,
+              overflow: 'hidden',
+              marginHorizontal: 5,
+              width: 300,
+            }}
+          >
+            <Image
+              source={{ uri: photo_url }}
+              style={{ width: '100%', aspectRatio: 1 }}
+              loading={'lazy'}
+              placeholder={blurhash}
+              priority={imageLoadPriority}
+            />
+            <View className="attribute-container flex flex-row">
+              <View style={{ padding: 10 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{name}</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+                  {status}
+                </Text>
+                <Text style={{ fontSize: 14, marginBottom: 5 }}>
+                  {description}
+                </Text>
+                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
+                  {message}
+                </Text>
 
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <MapPinIcon color={colors[colors.icon]} size={16} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <MapPinIcon color={colors[colors.icon]} size={16} />
+                  {last_status_event &&
+                  last_status_event.status === 'sighted' ? (
+                    <Text>
+                      Visto hace {daysElapsedSinceLastSeen} dias!!
+                    </Text>
+                  ) : (
                     <Text
                       style={{
                         fontSize: 12,
@@ -64,25 +93,24 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
                       }}
                     >
                       {/* would be cool to have seen x away and sort by that, update based on reports and have special icon/style if recent */}
-                      Visto por ultimo vez en {item.last_seen_location}
+                      {/* TODO {item.last_seen_location} */}
+                      Perdido hace {daysElapsedSinceLastSeen} dias 
                     </Text>
-                  </View>
-                </View>
-
-                {/* TODO pass action buttons in so this doesn't differ from Mis to Perdidos */}
-                <View className="status-action-container h-1/2">
-                  <Button
-                    onPress={() => {
-                      setReportingAmigoId(item._id)
-                    }}
-                    color={colors[colors.secondary]}
-                    title={'Reportar'}
-                  />
+                  )}
                 </View>
               </View>
-            </TouchableOpacity>
-          )
-        }
+              <View className="status-action-container flex items-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
+                <Button
+                  onPress={() => {
+                    setReportingAmigoId(item._id)
+                  }}
+                  color={'bg-teal-600'}
+                  title={'Reportar'}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+        )
       }}
     />
   )
