@@ -12,13 +12,21 @@ import { Form, FormField, SubmitButton } from './forms'
 
 import * as ImageManipulator from 'expo-image-manipulator'
 
+
 const validationSchema = Yup.object().shape({
   species: Yup.string().required().min(1).label('Species'),
-  lastSeenLocation: Yup.string().required().min(1).label('Last Seen Location'),
+  last_seen_location: Yup.string()
+    .required()
+    .min(1)
+    .label('Last Seen Location'),
+  // last_seen_date: Yup.date().min( TODO 
+  //   Yup.ref('originalEndDate'),
+  //   ({ min }) => `Date needs to be before ${formatDate(min)}!!`,
+  // ),
   name: Yup.string().required().min(1).label('Name'),
   description: Yup.string().label('Description'),
   message: Yup.string().required().min(1).label('Message'),
-  ownerNumber: Yup.string().required().min(1).label('Contact Number'),
+  owner_number: Yup.string().required().min(1).label('Contact Number'),
 })
 
 const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
@@ -49,13 +57,12 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
       console.dir('ERROR') // TODO add better error handle up in here
     }
     amigo.photo_url = presignedUrl.split('?')[0]
-    amigo.userLocation = userLocation // TODO is this null??
+    amigo.last_seen_location = userLocation
+    amigo.last_seen_date = Date.now // TODO last_seen_date ||
     amigo.owner_id = user.userId
     amigo.status = 'lost'
 
     const savedAmigo = await saveNewAmigo({
-      last_seen_location: amigo.lastSeenLocation,
-      owner_number: amigo.ownerNumber,
       ...amigo,
     })
 
@@ -113,11 +120,12 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
           <Form
             initialValues={{
               species: '',
-              lastSeenLocation: '',
+              last_seen_location: '',
+              last_seen_date: '',
               name: '',
               description: '',
               message: '',
-              ownerNumber: '',
+              owner_number: '',
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
@@ -127,9 +135,14 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             {/* <FormPicker maxLength={255} name="species" items={["dog", "cat", "other"]} placeholder="Species" /> */}
             <FormField
               maxLength={255}
-              name="lastSeenLocation"
+              name="last_seen_location"
               placeholder="Last Seen Location"
             />
+            {/* <FormField
+              maxLength={255}
+              name="last_seen_date"
+              placeholder="Last Seen Date"
+            /> */}
             <FormField
               maxLength={255}
               name="description"
@@ -138,7 +151,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             <FormField maxLength={255} name="message" placeholder="Message" />
             <FormField
               maxLength={255}
-              name="ownerNumber"
+              name="owner_number"
               placeholder="Owner Number"
             />
 
