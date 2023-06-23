@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import firebase from '@react-native-firebase/app'
 import { Alert } from 'react-native'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import AppLoading from 'expo-app-loading'
 import 'setimmediate'
+import messaging from '@react-native-firebase/messaging'
 
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
@@ -13,50 +15,54 @@ import authStorage from './auth/storage'
 import { navigationRef } from './navigation/rootNavigation'
 import { StatusBar } from 'expo-status-bar'
 
+const RNfirebaseConfig = {
+  apiKey: 'AIzaSyCVMiiEci8yVa-g40_by6Lf5s89BqL57jQ',
+  // authDomain: '',
+  projectId: 'amigos-383614',
+  // storageBucket: '',
+  // messagingSenderId: '.....',
+  appId: '1:811603037043:android:0756c38f512e5820531306',
+}
+
+let app
+if (firebase.apps.length === 0) {
+  app = firebase.initializeApp(RNfirebaseConfig)
+} else {
+  app = firebase.app()
+}
+
 const requestUserPermission = async () => {
+  // this seems to be unnecessary
+  // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
   const authStatus = await messaging().requestUserPermission()
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL
 
-  console.dir(authStatus)
+  if (enabled) {
+    console.log('Authorization status:', authStatus)
+  }
 }
 
 export default function App() {
   const [_, setUser] = useState()
   const [error, setError] = useState()
   const [isReady, setIsReady] = useState(false)
-  const []
 
   useEffect(() => {
     if (requestUserPermission()) {
-      // return token 
-      messaging().getToken().then(token => {
-        console.dir(token)
-      })
+      // return token
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.dir(token)
+        })
     } else {
       console.dir(`Failed token status ${authStatus}`)
     }
 
-    messaging().getInitialNotification().then(remoteMessage => {
-      if (remoteMessage) {
-        console.dir(`Notification caused app to open from quit state: ${remoteMessage.notification}`)
-      //  setInitialRoute(remoteMessage.date.type)  // not needed? test
-      }
-      // setLoading(false) // not needed? test
-    })
-
-    messaging().onNotificationOpenedApp(async remoteMessage => {
-      console.log(`Notification caused app to open from background state: ${remoteMessage.notification}`)
-      // navigationRef.navigate(remoteMessage.data.type) // not needed? test
-
-    })
-
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.dir(`Message handled in the background! ${remoteMessage}`)
-    })
-
-    const unsubscribe = messaging().onMessage(aysnc remoteMessage => {
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
     })
 
