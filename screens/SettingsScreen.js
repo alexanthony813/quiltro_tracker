@@ -7,7 +7,7 @@ import Icon from '../components/Icon'
 import routes from '../navigation/routes'
 import Screen from '../components/Screen'
 import useAuth from '../auth/useAuth'
-
+// npx react-native run-android
 const menuItems = [
   {
     title: 'Mis Amigos',

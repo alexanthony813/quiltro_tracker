@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 
-import com.android.build.OutputFile
+// import com.android.build.OutputFile
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def expoDebuggableVariants = ['debug']
@@ -159,11 +159,11 @@ android {
             // https://developer.android.com/studio/build/configure-apk-splits.html
             // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-            def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
-            }
+            // def abi = output.getFilter(OutputFile.ABI)
+            // if (abi != null) {  // null for the universal-debug, universal-release variants
+            //     output.versionCodeOverride =
+            //             defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+            // }
 
         }
     }
@@ -236,6 +236,7 @@ dependencies {
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
 applyNativeModulesAppBuildGradle(project)
 
+apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'

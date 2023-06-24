@@ -17,10 +17,11 @@ import { StatusBar } from 'expo-status-bar'
 
 const RNfirebaseConfig = {
   apiKey: 'AIzaSyCVMiiEci8yVa-g40_by6Lf5s89BqL57jQ',
-  // authDomain: '',
+  authDomain: 'amigos-383614.firebaseapp.com',
+  databaseURL: 'https://amigos-383614.firebaseio.com',
   projectId: 'amigos-383614',
-  // storageBucket: '',
-  messagingSenderId: '.....',
+  storageBucket: 'amigos-383614.appspot.com',
+  messagingSenderId: '811603037043',
   appId: '1:811603037043:android:0756c38f512e5820531306',
 }
 
