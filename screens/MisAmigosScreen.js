@@ -21,7 +21,7 @@ import colors from '../config/colors'
 import useLocation from '../hooks/useLocation'
 
 function MisAmigosScreen() {
-  const userLocation = useLocation()
+  const userLocation = {} // useLocation()
   const { user, setUser } = React.useContext(AuthContext)
   const { userId } = user
   const {

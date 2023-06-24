@@ -20,9 +20,12 @@ const RNfirebaseConfig = {
   // authDomain: '',
   projectId: 'amigos-383614',
   // storageBucket: '',
-  // messagingSenderId: '.....',
+  messagingSenderId: '.....',
   appId: '1:811603037043:android:0756c38f512e5820531306',
 }
+
+// https://console.firebase.google.com/project/amigos-383614/overview
+// TODO for ios
 
 let app
 if (firebase.apps.length === 0) {
@@ -62,28 +65,13 @@ export default function App() {
       console.dir(`Failed token status ${authStatus}`)
     }
 
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.dir(
-            `Notification caused app to open from quit state: ${remoteMessage.notification}`
-          )
-          //  setInitialRoute(remoteMessage.date.type)  // not needed? test
-        }
-        // setLoading(false) // not needed? test
-      })
+    // messaging()
+    //   .subscribeToTopic('amigos')
+    //   .then(() => console.log('Subscribed to topic!'))
 
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        `Notification caused app to open from background state: ${remoteMessage.notification}`
-      )
-      // navigationRef.navigate(remoteMessage.data.type) // not needed? test
-    })
-
-    messaging().setBackgroundMessageHandler((remoteMessage) => {
-      console.dir(`Message handled in the background! ${remoteMessage}`)
-    })
+    // messaging()
+    //   .unsubscribeFromTopic('amigos')
+    //   .then(() => console.log('Unsubscribed fom the topic!'))
 
     const unsubscribe = messaging().onMessage((remoteMessage) => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
@@ -109,12 +97,12 @@ export default function App() {
     )
   }
 
-  const messagingComponent = (
-    <View className="flex justify-center align-center">
-      <Text>FCM Basic POC</Text>
-      <StatusBar style="auto" />
-    </View>
-  )
+  // const messagingComponent = (
+  //   <View className="flex justify-center align-center">
+  //     <Text>FCM Basic POC</Text>
+  //     <StatusBar style="auto" />
+  //   </View>
+  // )
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
