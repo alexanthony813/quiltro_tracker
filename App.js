@@ -33,6 +33,48 @@ export default function App() {
   const notificationListener = useRef()
   const responseListener = useRef()
 
+  useEffect(() => {
+    if (requestUserPermission()) {
+      // return token
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.dir(token)
+        })
+    } else {
+      console.dir(`Failed token status ${authStatus}`)
+    }
+
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.dir(
+            `Notification caused app to open from quit state: ${remoteMessage.notification}`
+          )
+          //  setInitialRoute(remoteMessage.date.type)  // not needed? test
+        }
+        // setLoading(false) // not needed? test
+      })
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        `Notification caused app to open from background state: ${remoteMessage.notification}`
+      )
+      // navigationRef.navigate(remoteMessage.data.type) // not needed? test
+    })
+
+    messaging().setBackgroundMessageHandler((remoteMessage) => {
+      console.dir(`Message handled in the background! ${remoteMessage}`)
+    })
+
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
+    })
+
+    return unsubscribe
+  }, [])
+
   const restoreUser = async () => {
     let user = await authStorage.getUser()
     if (user) {
@@ -71,6 +113,13 @@ export default function App() {
   //     />
   //   )
   // }
+
+  const messagingComponent = (
+    <View className="flex justify-center align-center">
+      <Text>FCM Basic POC</Text>
+      <StatusBar style="auto" />
+    </View>
+  )
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
