@@ -3,6 +3,8 @@ import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 // import AppLoading from 'expo-app-loading'
 import 'setimmediate'
+import * as Device from 'expo-device'
+import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
 
 import navigationTheme from './navigation/navigationTheme'
@@ -27,52 +29,38 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [_, setUser] = useState()
   const [error, setError] = useState()
-  const [isReady, setIsReady] = useState(false)
+  // const [isReady, setIsReady] = useState(false)
   const [expoPushToken, setExpoPushToken] = useState('')
+  console.dir(expoPushToken)
+  console.dir('expoPushToken')
   const [notification, setNotification] = useState(false)
   const notificationListener = useRef()
   const responseListener = useRef()
 
   useEffect(() => {
-    if (requestUserPermission()) {
-      // return token
-      messaging()
-        .getToken()
-        .then((token) => {
-          console.dir(token)
+    async function asyncHelper() {
+      const token = await registerForPushNotificationsAsync()
+      console.dir(token)
+      await setExpoPushToken(token)
+
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          setNotification(notification)
         })
-    } else {
-      console.dir(`Failed token status ${authStatus}`)
+
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response)
+        })
+
+      return () => {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        )
+        Notifications.removeNotificationSubscription(responseListener.current)
+      }
     }
-
-    messaging()
-      .getInitialNotification()
-      .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.dir(
-            `Notification caused app to open from quit state: ${remoteMessage.notification}`
-          )
-          //  setInitialRoute(remoteMessage.date.type)  // not needed? test
-        }
-        // setLoading(false) // not needed? test
-      })
-
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        `Notification caused app to open from background state: ${remoteMessage.notification}`
-      )
-      // navigationRef.navigate(remoteMessage.data.type) // not needed? test
-    })
-
-    messaging().setBackgroundMessageHandler((remoteMessage) => {
-      console.dir(`Message handled in the background! ${remoteMessage}`)
-    })
-
-    const unsubscribe = messaging().onMessage((remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
-    })
-
-    return unsubscribe
+    asyncHelper()
   }, [])
 
   const restoreUser = async () => {
@@ -83,21 +71,23 @@ export default function App() {
   }
   const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
   useEffect(() => {
-    async function asyncHelper(){
+    async function asyncHelper() {
       const token = await registerForPushNotificationsAsync()
       await setExpoPushToken(token)
       notificationListener.current =
         Notifications.addNotificationReceivedListener((notification) => {
           setNotification(notification)
         })
-  
+
       responseListener.current =
         Notifications.addNotificationResponseReceivedListener((response) => {
           console.log(response)
         })
-  
+
       return () => {
-        Notifications.removeNotificationSubscription(notificationListener.current)
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        )
         Notifications.removeNotificationSubscription(responseListener.current)
       }
     }
@@ -114,12 +104,12 @@ export default function App() {
   //   )
   // }
 
-  const messagingComponent = (
-    <View className="flex justify-center align-center">
-      <Text>FCM Basic POC</Text>
-      <StatusBar style="auto" />
-    </View>
-  )
+  // const messagingComponent = (
+  //   <View className="flex justify-center align-center">
+  //     <Text>FCM Basic POC</Text>
+  //     <StatusBar style="auto" />
+  //   </View>
+  // )
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
