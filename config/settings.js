@@ -1,5 +1,7 @@
 import Constants from 'expo-constants'
 
+const localhost = '102.129.153.236'
+
 const settings = {
   dev: {
     apiUrl: `http://localhost:3000`,
