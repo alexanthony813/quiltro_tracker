@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import AppLoading from 'expo-app-loading'
+// import AppLoading from 'expo-app-loading'
 import 'setimmediate'
+import * as Notifications from 'expo-notifications'
 
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
@@ -10,11 +11,27 @@ import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './auth/context'
 import authStorage from './auth/storage'
 import { navigationRef } from './navigation/rootNavigation'
+import {
+  sendPushNotification,
+  registerForPushNotificationsAsync,
+} from './utility/notifications'
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+})
 
 export default function App() {
   const [_, setUser] = useState()
   const [error, setError] = useState()
   const [isReady, setIsReady] = useState(false)
+  const [expoPushToken, setExpoPushToken] = useState('')
+  const [notification, setNotification] = useState(false)
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   const restoreUser = async () => {
     let user = await authStorage.getUser()
@@ -23,15 +40,37 @@ export default function App() {
     }
   }
   const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
-  if (!isReady) {
-    return (
-      <AppLoading
-        onError={setError}
-        startAsync={restoreUser}
-        onFinish={() => setIsReady(true)}
-      />
-    )
-  }
+  useEffect(() => {
+    async function asyncHelper(){
+      const token = await registerForPushNotificationsAsync()
+      await setExpoPushToken(token)
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          setNotification(notification)
+        })
+  
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response)
+        })
+  
+      return () => {
+        Notifications.removeNotificationSubscription(notificationListener.current)
+        Notifications.removeNotificationSubscription(responseListener.current)
+      }
+    }
+    asyncHelper()
+  }, [])
+
+  // if (!isReady) {
+  //   return (
+  //     <AppLoading
+  //       onError={setError}
+  //       startAsync={restoreUser}
+  //       onFinish={() => setIsReady(true)}
+  //     />
+  //   )
+  // }
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

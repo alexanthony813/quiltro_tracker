@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "811603037043",
+    "project_id": "amigos-383614",
+    "storage_bucket": "amigos-383614.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811603037043:android:0756c38f512e5820531306",
+        "android_client_info": {
+          "package_name": "com.alexanderlee.amigosperdidos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811603037043-9nv0k4ead1cl85ojvq00qeb4vmikkf76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexanderlee.amigosperdidos",
+            "certificate_hash": "6d22781d1fc5618248a1a1eda39fd6428706c83f"
+          }
+        },
+        {
+          "client_id": "811603037043-ubpi2s79b65skdekmqm3m5u8o1lhdi09.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexanderlee.amigosperdidos",
+            "certificate_hash": "628995b38eb4444153444dbc7d155199b4d17f3e"
+          }
+        },
+        {
+          "client_id": "811603037043-t7oijojvdobjg4dltvlc8brvk4v91r2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVMiiEci8yVa-g40_by6Lf5s89BqL57jQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811603037043-t7oijojvdobjg4dltvlc8brvk4v91r2l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "811603037043-crnmfmf0k2ssb7rebpqu5brh5m5j7jo9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alexanderlee.amigosperdidos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
