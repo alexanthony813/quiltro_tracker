@@ -6,7 +6,7 @@ import 'setimmediate'
 import * as Device from 'expo-device'
 import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
-
+import { Alert } from 'react-native'
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
@@ -37,42 +37,19 @@ export default function App() {
   const notificationListener = useRef()
   const responseListener = useRef()
 
-  useEffect(() => {
-    async function asyncHelper() {
-      const token = await registerForPushNotificationsAsync()
-      console.dir(token)
-      await setExpoPushToken(token)
-
-      notificationListener.current =
-        Notifications.addNotificationReceivedListener((notification) => {
-          setNotification(notification)
-        })
-
-      responseListener.current =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log(response)
-        })
-
-      return () => {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
-        )
-        Notifications.removeNotificationSubscription(responseListener.current)
-      }
-    }
-    asyncHelper()
-  }, [])
-
-  const restoreUser = async () => {
-    let user = await authStorage.getUser()
-    if (user) {
-      setUser(user)
-    }
-  }
+  // const restoreUser = async () => {
+  //   let user = await authStorage.getUser()
+  //   if (user) {
+  //     setUser(user)
+  //   }
+  // }
   const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
   useEffect(() => {
     async function asyncHelper() {
-      const token = await registerForPushNotificationsAsync()
+      const token = (await Notifications.getDevicePushTokenAsync()).data
+      console.dir('expoPushToken')
+      Alert.alert(token)
+
       await setExpoPushToken(token)
       notificationListener.current =
         Notifications.addNotificationReceivedListener((notification) => {
@@ -93,6 +70,7 @@ export default function App() {
     }
     asyncHelper()
   }, [])
+  console.dir(expoPushToken)
 
   // if (!isReady) {
   //   return (

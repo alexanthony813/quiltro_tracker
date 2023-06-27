@@ -16,7 +16,7 @@ const useNotifications = (notificationListener) => {
       const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS)
       if (!permission.granted) return
 
-      // const token = await Notifications.getExpoPushTokenAsync()
+      const token = await Notifications.getExpoPushTokenAsync()
       expoPushTokensApi.register(token)
     } catch (error) {
       console.trace('Error getting a push token', error)
