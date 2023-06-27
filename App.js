@@ -33,40 +33,18 @@ export default function App() {
   const notificationListener = useRef()
   const responseListener = useRef()
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      console.dir(token)
-      setExpoPushToken(token)
-    })
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification)
-      })
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response)
-      })
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current)
-      Notifications.removeNotificationSubscription(responseListener.current)
-    }
-  }, [])
-
-  const restoreUser = async () => {
-    let user = await authStorage.getUser()
-    if (user) {
-      setUser(user)
-    }
-  }
+  // const restoreUser = async () => {
+  //   let user = await authStorage.getUser()
+  //   if (user) {
+  //     setUser(user)
+  //   }
+  // }
   const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
   useEffect(() => {
     async function asyncHelper() {
-      const token = await registerForPushNotificationsAsync()
+      const token = (await Notifications.getDevicePushTokenAsync()).data
       console.dir('expoPushToken')
-      console.dir(token)
+      Alert.alert(token)
 
       await setExpoPushToken(token)
       notificationListener.current =
@@ -88,6 +66,7 @@ export default function App() {
     }
     asyncHelper()
   }, [])
+  console.dir(expoPushToken)
 
   // if (!isReady) {
   //   return (
