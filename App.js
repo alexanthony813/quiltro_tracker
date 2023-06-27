@@ -3,6 +3,8 @@ import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 // import AppLoading from 'expo-app-loading'
 import 'setimmediate'
+import * as Device from 'expo-device'
+import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
 import { Alert } from 'react-native'
 import navigationTheme from './navigation/navigationTheme'
@@ -29,6 +31,8 @@ export default function App() {
   const [error, setError] = useState()
   // const [isReady, setIsReady] = useState(false)
   const [expoPushToken, setExpoPushToken] = useState('')
+  console.dir(expoPushToken)
+  console.dir('expoPushToken')
   const [notification, setNotification] = useState(false)
   const notificationListener = useRef()
   const responseListener = useRef()
