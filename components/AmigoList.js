@@ -32,7 +32,6 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
           name,
           status,
           description,
-          message,
         } = item
         let daysElapsedSinceLastSeen
         if (last_status_event && last_status_event.status === 'sighted') {
@@ -72,9 +71,6 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
                 </Text>
                 <Text style={{ fontSize: 14, marginBottom: 5 }}>
                   {description}
-                </Text>
-                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  {message}
                 </Text>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>

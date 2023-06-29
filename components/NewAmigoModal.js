@@ -12,20 +12,19 @@ import { Form, FormField, SubmitButton } from './forms'
 
 import * as ImageManipulator from 'expo-image-manipulator'
 
-
 const validationSchema = Yup.object().shape({
   species: Yup.string().required().min(1).label('Species'),
   last_seen_location: Yup.string()
     .required()
     .min(1)
     .label('Last Seen Location'),
-  // last_seen_date: Yup.date().min( TODO 
+  // last_seen_date: Yup.date().min( TODO
   //   Yup.ref('originalEndDate'),
   //   ({ min }) => `Date needs to be before ${formatDate(min)}!!`,
   // ),
   name: Yup.string().required().min(1).label('Name'),
   description: Yup.string().label('Description'),
-  message: Yup.string().required().min(1).label('Message'),
+  body: Yup.string().required().min(1).label('Message'),
   owner_number: Yup.string().required().min(1).label('Contact Number'),
 })
 
@@ -124,7 +123,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
               last_seen_date: '',
               name: '',
               description: '',
-              message: '',
+              body: '',
               owner_number: '',
             }}
             onSubmit={handleSubmit}
@@ -148,7 +147,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
               name="description"
               placeholder="Description"
             />
-            <FormField maxLength={255} name="message" placeholder="Message" />
+            <FormField maxLength={255} name="body" placeholder="Message" />
             <FormField
               maxLength={255}
               name="owner_number"

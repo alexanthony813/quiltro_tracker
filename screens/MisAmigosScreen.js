@@ -80,7 +80,7 @@ function MisAmigosScreen() {
                   {item.description}
                 </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  {item.message}
+                  {item.body}
                 </Text>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>

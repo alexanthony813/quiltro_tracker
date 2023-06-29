@@ -24,6 +24,8 @@ const displayNameMap = {
 
 const HomeSearchScreen = () => {
   const { user, setUser } = React.useContext(AuthContext)
+  console.dir('hello')
+  console.log(JSON.stringify(user.expoPushToken))
   const {
     data: amigos,
     error,
@@ -35,6 +37,7 @@ const HomeSearchScreen = () => {
   const [reportingAmigoId, setReportingAmigoId] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
   const userLocation = useLocation()
+
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos), reportingAmigoId, userLocation])
@@ -48,7 +51,12 @@ const HomeSearchScreen = () => {
   const onChangeSearch = (query) => setSearchQuery(query)
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
-        if ((curr.status !== selectedStatus) || (selectedStatus === 'found' && selectedStatus === 'found' && !curr.ownerId)) {
+        if (
+          curr.status !== selectedStatus ||
+          (selectedStatus === 'found' &&
+            selectedStatus === 'found' &&
+            !curr.ownerId)
+        ) {
           return acc
         }
         if (

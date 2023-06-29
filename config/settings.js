@@ -1,16 +1,17 @@
 import Constants from 'expo-constants'
 
-const localhost = '102.129.153.236'
+const myPhone = '192.168.0.2'
+const localhost = 'localhost'
 
 const settings = {
   dev: {
-    apiUrl: `http://localhost:3000`,
+    apiUrl: `http://${localhost}:3000`,
   },
   staging: {
-    apiUrl: `http://localhost:3000`,
+    apiUrl: `http://${localhost}:3000`,
   },
   prod: {
-    apiUrl: `http://localhost:3000`,
+    apiUrl: `http://${localhost}:3000`,
   },
 }
 
