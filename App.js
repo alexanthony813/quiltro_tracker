@@ -3,21 +3,16 @@ import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 // import AppLoading from 'expo-app-loading'
 import 'setimmediate'
-import * as Device from 'expo-device'
 import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
-import { Alert } from 'react-native'
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './auth/context'
-import authStorage from './auth/storage'
-import { navigationRef } from './navigation/rootNavigation'
-import {
-  sendPushNotification,
-  registerForPushNotificationsAsync,
-} from './utility/notifications'
 
+import { navigationRef } from './navigation/rootNavigation'
+
+// todo move all of this to api in new file and use to break up
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -31,8 +26,6 @@ export default function App() {
   const [error, setError] = useState()
   // const [isReady, setIsReady] = useState(false)
   const [expoPushToken, setExpoPushToken] = useState('')
-  console.dir(expoPushToken)
-  console.dir('expoPushToken')
   const [notification, setNotification] = useState(false)
   const notificationListener = useRef()
   const responseListener = useRef()
@@ -43,14 +36,12 @@ export default function App() {
   //     setUser(user)
   //   }
   // }
-  const user = { userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
+  const user = { expoPushToken: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]', userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
   useEffect(() => {
     async function asyncHelper() {
-      const token = (await Notifications.getDevicePushTokenAsync()).data
-      console.dir('expoPushToken')
-      Alert.alert(token)
-
-      await setExpoPushToken(token)
+      const token = await Notifications.getExpoPushTokenAsync()
+      console.dir(token)
+      await setExpoPushToken(token.data)
       notificationListener.current =
         Notifications.addNotificationReceivedListener((notification) => {
           setNotification(notification)
@@ -70,24 +61,11 @@ export default function App() {
     }
     asyncHelper()
   }, [])
+  
+  // TODO figure way to track this before merge
+  // set for hard coded user above doesn't work on web browser or emulator 
   console.dir(expoPushToken)
-
-  // if (!isReady) {
-  //   return (
-  //     <AppLoading
-  //       onError={setError}
-  //       startAsync={restoreUser}
-  //       onFinish={() => setIsReady(true)}
-  //     />
-  //   )
-  // }
-
-  // const messagingComponent = (
-  //   <View className="flex justify-center align-center">
-  //     <Text>FCM Basic POC</Text>
-  //     <StatusBar style="auto" />
-  //   </View>
-  // )
+  user.expoPushToken = expoPushToken
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
