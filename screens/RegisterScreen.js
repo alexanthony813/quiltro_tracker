@@ -4,13 +4,12 @@ import * as Yup from 'yup'
 
 import Screen from '../components/Screen'
 import {
-  ErrorMessage,
   Form,
   FormField,
   SubmitButton,
 } from '../components/forms'
 import useApi from '../hooks/useApi'
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label('Name'),

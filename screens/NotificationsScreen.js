@@ -46,5 +46,4 @@ function NotificationsScreen(props) {
   )
 }
 
-
 export default NotificationsScreen

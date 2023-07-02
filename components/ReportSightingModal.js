@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Text, Switch, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewStatusEvent } from '../api'
+import { saveNewStatusEvent, sendPushNotification } from '../api'
 import Button from './Button'
 import routes from '../navigation/routes'
 
@@ -13,18 +13,11 @@ import { Form, FormField, SubmitButton } from './forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
-  // location: Yup.object({
-  //   latitude: Yup.string().required(`You must enable location`),
-  //   longitude: Yup.string().required(`You must enable location`),
-  // })
-  //   .required()
-  //   .label('Location'),
-  // photo_url: Yup.string().label('Name'),
-  message: Yup.string().min(1).label('Message'),
+  body: Yup.string().min(1).label('Message'),
 })
 
 const ReportSightingModal = ({
-  amigoId,
+  amigo_id,
   setReportingAmigoId,
   userLocation,
   user,
@@ -42,6 +35,7 @@ const ReportSightingModal = ({
       const presignedUrlRequest = await getPresignedUrl()
       const presignedUrlJSON = await presignedUrlRequest.json()
       const presignedUrl = presignedUrlJSON.url
+      statusEvent.photo_url = presignedUrl.split('?')[0]
       const rawBase64 = imageUpload.base64
       var buffer = Buffer.from(
         rawBase64.replace(/^data:image\/\w+;base64,/, ''),
@@ -59,21 +53,30 @@ const ReportSightingModal = ({
       if (s3Result.status !== 200) {
         console.dir('ERROR') // TODO add better error handle up in here
       }
-      statusEvent.photo_url = presignedUrl.split('?')[0]
     }
     statusEvent.location = userLocation
-    statusEvent.amigoId = amigoId
+    statusEvent.amigo_id = amigo_id
     statusEvent.status = isSecured ? 'found' : 'sighted'
+    const from = user.userId
+    const { body } = statusEvent
     statusEvent.details = {
-      message: statusEvent.message,
-      reporterId: user.userId,
+      body,
+      from,
     }
 
     const savedStatusEvent = await saveNewStatusEvent({
       ...statusEvent,
     })
 
-    if (savedStatusEvent.ok) {
+    const message = {
+      to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]', // TODO better idea for how to track this? fix before merging!
+      title: amigo_id,
+      from,
+      body,
+    }
+    const sentNotification = await sendPushNotification(message)
+
+    if (savedStatusEvent.ok && sentNotification) {
       navigation.navigate(routes.HOME)
       setReportingAmigoId(null)
     }
@@ -107,7 +110,7 @@ const ReportSightingModal = ({
   }
 
   return (
-    <Modal visible={amigoId && amigoId.length}>
+    <Modal visible={amigo_id && amigo_id.length}>
       <ActivityIndicator animating={isSubmitting} size="small" />
       <View
         style={{
@@ -125,7 +128,7 @@ const ReportSightingModal = ({
           <Form
             initialValues={{
               // isSecured: false,
-              message: '',
+              body: '',
             }}
             onSubmit={(values) => {
               handleSubmit(values)
@@ -133,7 +136,7 @@ const ReportSightingModal = ({
             validationSchema={validationSchema}
           >
             {/* <FormField maxLength={255} name="location" placeholder="Location" /> */}
-            <FormField maxLength={255} name="message" placeholder="Message" />
+            <FormField maxLength={255} name="body" placeholder="Message" />
             <View className="flex-row justify-stretch">
               <Text>Tengo la mascota {'  '}</Text>
               <Switch

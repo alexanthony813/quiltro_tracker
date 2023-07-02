@@ -4,7 +4,6 @@ import {
   Image,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
 } from 'react-native'
 
@@ -50,7 +49,7 @@ function MisAmigosScreen() {
           setIsModalVisible(!isModalVisible)
         }}
       />
-      {amigos && amigos.length && (
+      {amigos && amigos.length ? (
         <FlatList
           data={amigos}
           className="align-center"
@@ -80,7 +79,7 @@ function MisAmigosScreen() {
                   {item.description}
                 </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  {item.message}
+                  {item.body}
                 </Text>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -99,9 +98,9 @@ function MisAmigosScreen() {
             </TouchableOpacity>
           )}
         />
-      )}
+      ) : null}
 
-      {(!amigos || !amigos.length) && (
+      {!amigos || !amigos.length ? (
         <View className="flex h-full">
           <View className={'flex flex-1 justify-center items-center'}>
             <Text className={'text-center text-xl font-bold italic'}>
@@ -118,7 +117,7 @@ function MisAmigosScreen() {
             />
           </View>
         </View>
-      )}
+      ) : null}
     </Screen>
   )
 }

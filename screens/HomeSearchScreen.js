@@ -35,6 +35,7 @@ const HomeSearchScreen = () => {
   const [reportingAmigoId, setReportingAmigoId] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
   const userLocation = {} // useLocation()
+  
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos), reportingAmigoId, userLocation])
@@ -48,7 +49,12 @@ const HomeSearchScreen = () => {
   const onChangeSearch = (query) => setSearchQuery(query)
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
-        if ((curr.status !== selectedStatus) || (selectedStatus === 'found' && selectedStatus === 'found' && !curr.ownerId)) {
+        if (
+          curr.status !== selectedStatus ||
+          (selectedStatus === 'found' &&
+            selectedStatus === 'found' &&
+            !curr.ownerId)
+        ) {
           return acc
         }
         if (
@@ -78,7 +84,7 @@ const HomeSearchScreen = () => {
         setBottomSheetContentMode={setBottomSheetContentMode}
       />
       <ReportSightingModal
-        amigoId={reportingAmigoId}
+        amigo_id={reportingAmigoId}
         setReportingAmigoId={setReportingAmigoId}
         user={user}
         userLocation={userLocation}
