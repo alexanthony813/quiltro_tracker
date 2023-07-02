@@ -1,7 +1,6 @@
 export default {
   primary: '#fc5c65',
   secondary: '#00CCBB',
-  // teal
   black: '#000',
   icon: '#808080',
   white: '#fff',

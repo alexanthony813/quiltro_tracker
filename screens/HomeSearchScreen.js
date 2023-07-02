@@ -24,8 +24,6 @@ const displayNameMap = {
 
 const HomeSearchScreen = () => {
   const { user, setUser } = React.useContext(AuthContext)
-  console.dir('hello')
-  console.log(JSON.stringify(user.expoPushToken))
   const {
     data: amigos,
     error,
@@ -86,7 +84,7 @@ const HomeSearchScreen = () => {
         setBottomSheetContentMode={setBottomSheetContentMode}
       />
       <ReportSightingModal
-        amigoId={reportingAmigoId}
+        amigo_id={reportingAmigoId}
         setReportingAmigoId={setReportingAmigoId}
         user={user}
         userLocation={userLocation}

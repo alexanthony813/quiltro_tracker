@@ -4,7 +4,6 @@ import {
   Image,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
 } from 'react-native'
 

@@ -1,6 +1,5 @@
 import Constants from 'expo-constants'
 
-const myPhone = '192.168.0.2'
 const localhost = 'localhost'
 
 const settings = {

@@ -4,13 +4,11 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
 } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 
 import colors from '../config/colors'
 import Text from '../components/Text'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import ContactOwnerForm from '../components/ContactOwnerForm'
 
 function amigoDetailsScreen({ route }) {

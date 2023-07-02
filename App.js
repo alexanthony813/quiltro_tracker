@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
-// import AppLoading from 'expo-app-loading'
 import 'setimmediate'
-import { Alert } from 'react-native'
 import * as Notifications from 'expo-notifications'
 import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
@@ -36,11 +34,14 @@ export default function App() {
   //     setUser(user)
   //   }
   // }
-  const user = { expoPushToken: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]', userId: '645e7685c82a065dfe600c88', username: 'oinkerman1' }
+  const user = {
+    expoPushToken: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
+    userId: '645e7685c82a065dfe600c88',
+    username: 'oinkerman1',
+  }
   useEffect(() => {
     async function asyncHelper() {
       const token = await Notifications.getExpoPushTokenAsync()
-      console.dir(token)
       await setExpoPushToken(token.data)
       notificationListener.current =
         Notifications.addNotificationReceivedListener((notification) => {
@@ -61,10 +62,7 @@ export default function App() {
     }
     asyncHelper()
   }, [])
-  
-  // TODO figure way to track this before merge
-  // set for hard coded user above doesn't work on web browser or emulator 
-  console.dir(expoPushToken)
+
   user.expoPushToken = expoPushToken
 
   return (

@@ -1,7 +1,6 @@
 import settings from '../config/settings'
 // import * as Notifications from 'expo-notifications'
 
-// Can use this function below OR use Expo's Push Notification Tool from: https://expo.dev/notifications
 export const sendPushNotification = async (message) => {
   const { title, body, to } = message
   const expo_message = {
@@ -12,21 +11,6 @@ export const sendPushNotification = async (message) => {
     data: {},
   }
   message.expo_message = expo_message
-
-  // TODO I'm not sure if this is needed anymore? if doing on the server too...
-  // await Notifications.scheduleNotificationAsync({
-  //   content: {
-  //     title,
-  //     body,
-  //     data
-  //   },
-  //   trigger: { seconds: 2 },
-  // })
-
-  // await Notifications.scheduleNotificationAsync({
-  //   content: expo_message,
-  //   trigger: { seconds: 2 },
-  // })
 
   const response = await fetch(`${settings.apiUrl}/messages`, {
     method: 'POST',
@@ -54,7 +38,7 @@ export const saveNewAmigo = async (amigo) => {
 
 export const saveNewStatusEvent = async (statusEvent) => {
   const response = await fetch(
-    `${settings.apiUrl}/amigos/${statusEvent.amigoId}/event`,
+    `${settings.apiUrl}/amigos/${statusEvent.amigo_id}/event`,
     {
       method: 'POST',
       headers: {
@@ -79,16 +63,16 @@ export const getAmigos = async () => {
   return await fetch(`${settings.apiUrl}/amigos`)
 }
 
-export const getAmigoEvents = async (amigoId) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigoId}/events`)
+export const getAmigoEvents = async (amigo_id) => {
+  return await fetch(`${settings.apiUrl}/amigos/${amigo_id}/events`)
 }
 
 export const getEvents = async () => {
   return await fetch(`${settings.apiUrl}/events`)
 }
 
-export const getAmigo = async (amigoId) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
+export const getAmigo = async (amigo_id) => {
+  return await fetch(`${settings.apiUrl}/amigos/${amigo_id}`)
 }
 
 export const getUserAmigos = async ({ userId }) => {
