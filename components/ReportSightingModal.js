@@ -13,18 +13,11 @@ import { Form, FormField, SubmitButton } from './forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
-  // location: Yup.object({
-  //   latitude: Yup.string().required(`You must enable location`),
-  //   longitude: Yup.string().required(`You must enable location`),
-  // })
-  //   .required()
-  //   .label('Location'),
-  // photo_url: Yup.string().label('Name'),
   body: Yup.string().min(1).label('Message'),
 })
 
 const ReportSightingModal = ({
-  amigoId,
+  amigo_id,
   setReportingAmigoId,
   userLocation,
   user,
@@ -62,10 +55,10 @@ const ReportSightingModal = ({
       }
     }
     statusEvent.location = userLocation
-    statusEvent.amigoId = amigoId
+    statusEvent.amigo_id = amigo_id
     statusEvent.status = isSecured ? 'found' : 'sighted'
     const from = user.userId
-    const { body } = statusEvent 
+    const { body } = statusEvent
     statusEvent.details = {
       body,
       from,
@@ -77,7 +70,7 @@ const ReportSightingModal = ({
 
     const message = {
       to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]', // TODO better idea for how to track this? fix before merging!
-      title: amigoId,
+      title: amigo_id,
       from,
       body,
     }
@@ -117,7 +110,7 @@ const ReportSightingModal = ({
   }
 
   return (
-    <Modal visible={amigoId && amigoId.length}>
+    <Modal visible={amigo_id && amigo_id.length}>
       <ActivityIndicator animating={isSubmitting} size="small" />
       <View
         style={{

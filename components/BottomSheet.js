@@ -66,7 +66,6 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
       },
     ],
   }
-  console.log(bottomSheetContentMode)
   return (
     <GestureDetector gesture={panGesture}>
       <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>

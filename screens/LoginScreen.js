@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import * as Yup from 'yup'
 
 import Screen from '../components/Screen'
