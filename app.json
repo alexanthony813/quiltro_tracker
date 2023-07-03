@@ -18,6 +18,9 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyACL8w_nMf6LmcZXxzNHcGA6-npnkZTCzM"
+      },
       "bundleIdentifier": "com.alexanderlee.amigosperdidos",
       "buildNumber": "1.0.0",
       "googleServicesFile": "./GoogleService-Info.plist",
@@ -41,9 +44,6 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/perf",
-      "@react-native-firebase/crashlytics",
       [
         "expo-image-picker",
         {
@@ -70,7 +70,9 @@
         "projectId": "3062f8fa-a7b8-4284-8702-41760209aba2"
       }
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "updates": {
       "url": "https://u.expo.dev/3062f8fa-a7b8-4284-8702-41760209aba2"
     }
