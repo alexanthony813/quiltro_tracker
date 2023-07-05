@@ -34,8 +34,8 @@ const HomeSearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [reportingAmigoId, setReportingAmigoId] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
-  const userLocation = useLocation()
-
+  const userLocation = {} // useLocation()
+  
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos), reportingAmigoId, userLocation])

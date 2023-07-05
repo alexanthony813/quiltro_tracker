@@ -18,8 +18,18 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyACL8w_nMf6LmcZXxzNHcGA6-npnkZTCzM"
+      },
       "bundleIdentifier": "com.alexanderlee.amigosperdidos",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
+      }
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -39,12 +49,32 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.0",
+            "useFrameworks": "static"
+          }
+        }
       ]
     ],
     "extra": {
       "eas": {
         "projectId": "3062f8fa-a7b8-4284-8702-41760209aba2"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3062f8fa-a7b8-4284-8702-41760209aba2"
     }
   }
 }
