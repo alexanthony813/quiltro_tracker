@@ -38,7 +38,7 @@ const HomeSearchScreen = () => {
   
   useEffect(() => {
     loadAmigos()
-  }, [JSON.stringify(amigos), reportingAmigoId, userLocation])
+  }, [JSON.stringify(amigos), reportingAmigoId])
   const amigosMap = {
     dog: [],
     cat: [],
