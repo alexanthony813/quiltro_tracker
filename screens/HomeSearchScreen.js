@@ -35,7 +35,7 @@ const HomeSearchScreen = () => {
   const [reportingAmigoId, setReportingAmigoId] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
   const userLocation = {} // useLocation()
-  
+
   useEffect(() => {
     loadAmigos()
   }, [JSON.stringify(amigos), reportingAmigoId])
@@ -47,14 +47,10 @@ const HomeSearchScreen = () => {
 
   const selectedStatus = isLostSelected ? 'lost' : 'found'
   const onChangeSearch = (query) => setSearchQuery(query)
+  console.dir(selectedStatus)
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
-        if (
-          curr.status !== selectedStatus ||
-          (selectedStatus === 'found' &&
-            selectedStatus === 'found' &&
-            !curr.ownerId)
-        ) {
+        if (curr.status !== selectedStatus) {
           return acc
         }
         if (
