@@ -6,7 +6,6 @@ import Animated, {
   withSpring,
   EasingNode,
 } from 'react-native-reanimated'
-import { PROVIDER_GOOGLE, MapView } from 'react-native-maps'
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 
@@ -67,21 +66,6 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
     <GestureDetector gesture={panGesture}>
       <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
         <View style={styles.line} />
-        {bottomSheetContentMode && bottomSheetContentMode === 'map' && (
-          // TODO break this out into new component before merge
-          <View className="flex">
-            <MapView
-              initialRegion={{
-                latitude: -33.4489,
-                longitude: -70.6693,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              provider={PROVIDER_GOOGLE}
-              className="w-full"
-            />
-          </View>
-        )}
         {bottomSheetContentMode && bottomSheetContentMode === 'filters' && (
           <View>
             <Text>Filters</Text>
