@@ -56,7 +56,7 @@ const ReportSightingModal = ({
     }
     statusEvent.location = userLocation
     statusEvent.amigo_id = amigo_id
-    statusEvent.status = isSecured ? 'found' : 'sighted'
+    statusEvent.status = isSecured ? 'recovered' : 'sighted'
     const from = user.userId
     const { body } = statusEvent
     statusEvent.details = {
@@ -69,7 +69,7 @@ const ReportSightingModal = ({
     })
 
     const message = {
-      to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]', // TODO better idea for how to track this? fix before merging!
+      to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
       title: amigo_id,
       from,
       body,
