@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  View,
-  Image,
-  Text,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native'
 
 import Button from '../components/Button'
 import { getUserAmigos } from '../api/index'
@@ -55,7 +49,7 @@ function MisAmigosScreen() {
           className="align-center"
           showsHorizontalScrollIndicator={false}
           keyExtractor={(amigo) => amigo._id.toString()}
-          renderItem={({ item }) => (
+          renderamigo={({ amigo }) => (
             <TouchableOpacity
               style={{
                 backgroundColor: 'white',
@@ -67,32 +61,32 @@ function MisAmigosScreen() {
               }}
             >
               <Image
-                source={{ uri: item.photo_url }}
+                source={{ uri: amigo.photo_url }}
                 style={{ width: '100%', aspectRatio: 1 }}
               />
 
               <View style={{ padding: 10 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  {item.name}
+                  {amigo.name}
                 </Text>
                 <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                  {item.description}
+                  {amigo.description}
                 </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  {item.body}
+                  {amigo.body}
                 </Text>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignamigos: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: colors[colors.icon],
-                      marginLeft: 5,
-                    }}
-                  >
-                    Visto por ultimo vez en {item.last_seen_location}
-                  </Text>
+                  {amigo.last_status_event &&
+                    amigo.last_status_event.status === 'sighted' && (
+                      <View>
+                        <Button title="Confirm"></Button>
+                        <Text>
+                          Visto hace {daysElapsedSinceLastSeen} dias!!
+                        </Text>
+                      </View>
+                    )}
                 </View>
               </View>
             </TouchableOpacity>
@@ -102,7 +96,7 @@ function MisAmigosScreen() {
 
       {!amigos || !amigos.length ? (
         <View className="flex h-full">
-          <View className={'flex flex-1 justify-center items-center'}>
+          <View className={'flex flex-1 justify-center amigos-center'}>
             <Text className={'text-center text-xl font-bold italic'}>
               No has agregado amigos perdidos, usa el botón para crear anuncio
             </Text>

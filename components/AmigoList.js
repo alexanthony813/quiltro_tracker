@@ -75,11 +75,8 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {last_status_event &&
-                  last_status_event.status === 'sighted' ? (
-                    <Text>
-                      Visto hace {daysElapsedSinceLastSeen} dias!!
-                    </Text>
+                  {last_status_event?.status === 'sighted' ? (
+                    <Text>Visto hace {daysElapsedSinceLastSeen} dias!!</Text>
                   ) : (
                     <Text
                       style={{
@@ -90,7 +87,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
                     >
                       {/* would be cool to have seen x away and sort by that, update based on reports and have special icon/style if recent */}
                       {/* TODO {item.last_seen_location} */}
-                      Perdido hace {daysElapsedSinceLastSeen} dias 
+                      Perdido hace {daysElapsedSinceLastSeen} dias
                     </Text>
                   )}
                 </View>

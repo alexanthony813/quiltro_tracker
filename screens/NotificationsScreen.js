@@ -1,28 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FlatList, Text, View } from 'react-native'
+import { getUserNotifications } from '../api/index'
 
+import useApi from '../hooks/useApi'
 import Screen from '../components/Screen'
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
 } from '../components/lists'
+import useAuth from '../auth/useAuth'
 
-function NotificationsScreen(props) {
-  const [notifications, setNotifications] = useState([])
+function NotificationsScreen() {
+  const {
+    data: userNotifications,
+    error,
+    isLoading,
+    request: loadUserNotifications,
+  } = useApi(getUserNotifications)
   const [refreshing, setRefreshing] = useState(false)
+  const { user } = useAuth()
+  const { userId } = user
+  useEffect(() => {
+    loadUserNotifications({ userId })
+  }, [JSON.stringify(userNotifications)])
 
   const handleDelete = (message) => {
-    setNotifications(notifications.filter((m) => m.id !== message.id))
+    setNotifications(userNotifications.filter((m) => m.id !== message._id))
   }
 
   return (
     <Screen>
-      {notifications && notifications.length ? (
+      {userNotifications && userNotifications.length ? (
         <FlatList
-          data={notifications}
+          data={userNotifications}
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(message) => message.id.toString()}
+          keyExtractor={(message) => message._id.toString()}
           renderItem={({ item }) => (
             <ListItem
               title={item.title}
@@ -39,7 +52,7 @@ function NotificationsScreen(props) {
         />
       ) : (
         <View className="flex flex-1 justify-center items-center">
-          <Text>Aun no tienes notifications</Text>
+          <Text>Aun no tienes userNotifications</Text>
         </View>
       )}
     </Screen>

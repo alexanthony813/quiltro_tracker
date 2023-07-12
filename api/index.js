@@ -78,3 +78,7 @@ export const getAmigo = async (amigo_id) => {
 export const getUserAmigos = async ({ userId }) => {
   return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
 }
+
+export const getUserNotifications = async ({ userId }) => {
+  return await fetch(`${settings.apiUrl}/users/${userId}/messages`)
+}
