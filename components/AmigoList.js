@@ -9,7 +9,7 @@ import { calculateDaysPassed } from '../utility/helpers'
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
-const AmigoList = ({ amigos, setReportingAmigoId }) => {
+const AmigoList = ({ amigos, setReportingAmigo }) => {
   const now = new Date()
 
   return (
@@ -23,8 +23,8 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
         justifyContent: 'space-between',
       }}
       showsHorizontalScrollIndicator={false}
-      keyExtractor={(item, index) => String(index)}
-      renderItem={({ item, index }) => {
+      keyExtractor={(_, index) => String(index)}
+      renderItem={({ item: amigo, index }) => {
         const {
           last_status_event,
           last_seen_date,
@@ -32,7 +32,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
           name,
           status,
           description,
-        } = item
+        } = amigo
         let daysElapsedSinceLastSeen
         if (last_status_event && last_status_event.status === 'sighted') {
           daysElapsedSinceLastSeen = calculateDaysPassed(
@@ -41,7 +41,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
           )
         } else {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(item.last_seen_date),
+            new Date(amigo.last_seen_date),
             now
           )
         }
@@ -75,11 +75,8 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {last_status_event &&
-                  last_status_event.status === 'sighted' ? (
-                    <Text>
-                      Visto hace {daysElapsedSinceLastSeen} dias!!
-                    </Text>
+                  {last_status_event?.status === 'sighted' ? (
+                    <Text>Visto hace {daysElapsedSinceLastSeen} dias!!</Text>
                   ) : (
                     <Text
                       style={{
@@ -89,16 +86,16 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
                       }}
                     >
                       {/* would be cool to have seen x away and sort by that, update based on reports and have special icon/style if recent */}
-                      {/* TODO {item.last_seen_location} */}
-                      Perdido hace {daysElapsedSinceLastSeen} dias 
+                      {/* TODO {amigo.last_seen_location} */}
+                      Perdido hace {daysElapsedSinceLastSeen} dias
                     </Text>
                   )}
                 </View>
               </View>
-              <View className="status-action-container flex items-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
+              <View className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
                 <Button
                   onPress={() => {
-                    setReportingAmigoId(item._id)
+                    setReportingAmigo(amigo)
                   }}
                   color={'bg-teal-600'}
                   title={'Reportar'}

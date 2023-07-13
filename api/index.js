@@ -1,7 +1,6 @@
 import settings from '../config/settings'
-// import * as Notifications from 'expo-notifications'
 
-export const sendPushNotification = async (message) => {
+export const sendNotification = async (message) => {
   const { title, body, to } = message
   const expo_message = {
     sound: 'default',
@@ -77,4 +76,8 @@ export const getAmigo = async (amigo_id) => {
 
 export const getUserAmigos = async ({ userId }) => {
   return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
+}
+
+export const getUserNotifications = async ({ userId }) => {
+  return await fetch(`${settings.apiUrl}/users/${userId}/messages`)
 }

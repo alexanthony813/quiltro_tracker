@@ -5,5 +5,6 @@ export default Object.freeze({
   HOME: 'HomeSearch',
   LOGIN: 'Login',
   NOTIFICATIONS: 'Notifications',
+  CONVERSATION: 'Conversation',
   REGISTER: 'Register',
 })
