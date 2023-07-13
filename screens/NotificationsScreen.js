@@ -8,7 +8,7 @@ import { ListItem, ListItemSeparator } from '../components/lists'
 import useNotifications from '../notifications/useNotifications'
 import routes from '../navigation/routes'
 
-function NotificationsScreen() {
+function NotificationsScreen({ navigation }) {
   const { user, setUser } = useAuth()
   const { userId } = user
   const {
