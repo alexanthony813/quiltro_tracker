@@ -23,7 +23,7 @@ const displayNameMap = {
 }
 
 const HomeSearchScreen = () => {
-  const { user, setUser } = React.useContext(AuthContext)
+  const { user, setUser } = React.useContext(AuthContext) // TODO should be doing this everywhere??
   const {
     data: amigos,
     error,
@@ -32,13 +32,13 @@ const HomeSearchScreen = () => {
   } = useApi(getAmigos)
   const [bottomSheetContentMode, setBottomSheetContentMode] = useState()
   const [searchQuery, setSearchQuery] = useState('')
-  const [reportingAmigoId, setReportingAmigoId] = useState(false)
+  const [reportingAmigo, setReportingAmigo] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
-  const userLocation = {} // useLocation()
+  const userLocation = {} // useLocation() TODO
 
   useEffect(() => {
     loadAmigos()
-  }, [JSON.stringify(amigos), reportingAmigoId])
+  }, [JSON.stringify(amigos), reportingAmigo])
   const amigosMap = {
     dog: [],
     cat: [],
@@ -47,7 +47,6 @@ const HomeSearchScreen = () => {
 
   const selectedStatus = isLostSelected ? 'lost' : 'found'
   const onChangeSearch = (query) => setSearchQuery(query)
-  console.dir(selectedStatus)
   const categorizedAnimalsObject = amigos
     ? amigos.reduce((acc, curr) => {
         if (curr.status !== selectedStatus) {
@@ -68,7 +67,6 @@ const HomeSearchScreen = () => {
         return acc
       }, amigosMap)
     : amigosMap
-
   return (
     <Screen>
       <HomeSearchHeader
@@ -80,8 +78,8 @@ const HomeSearchScreen = () => {
         setBottomSheetContentMode={setBottomSheetContentMode}
       />
       <ReportSightingModal
-        amigo_id={reportingAmigoId}
-        setReportingAmigoId={setReportingAmigoId}
+        amigo={reportingAmigo}
+        setReportingAmigo={setReportingAmigo}
         user={user}
         userLocation={userLocation}
       />
@@ -111,7 +109,7 @@ const HomeSearchScreen = () => {
                   <ArrowRightIcon color="#00CCBB" />
                 </View>
                 <AmigoList
-                  setReportingAmigoId={setReportingAmigoId}
+                  setReportingAmigo={setReportingAmigo}
                   amigos={categorizedAnimalsObject[animalCategory]}
                 />
               </View>

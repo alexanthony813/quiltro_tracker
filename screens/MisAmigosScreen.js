@@ -24,7 +24,6 @@ function MisAmigosScreen() {
     request: loadAmigos,
   } = useApi(getUserAmigos)
   const [isModalVisible, setIsModalVisible] = useState(false)
-
   useEffect(() => {
     loadAmigos({ userId })
   }, [JSON.stringify(amigos)])

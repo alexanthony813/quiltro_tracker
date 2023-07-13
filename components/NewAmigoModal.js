@@ -92,7 +92,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     if (!result.canceled) {
       setImageUpload(finalResult)
     } else {
-      console.trace('successful image upload')
+      console.dir('successful image upload')
     }
     setIsImageUploading(false)
   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Text, Switch, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewStatusEvent, sendPushNotification } from '../api'
+import { saveNewStatusEvent, sendNotification } from '../api'
 import Button from './Button'
 import routes from '../navigation/routes'
 
@@ -17,8 +17,8 @@ const validationSchema = Yup.object().shape({
 })
 
 const ReportSightingModal = ({
-  amigo_id,
-  setReportingAmigoId,
+  amigo,
+  setReportingAmigo,
   userLocation,
   user,
 }) => {
@@ -55,8 +55,9 @@ const ReportSightingModal = ({
       }
     }
     statusEvent.location = userLocation
-    statusEvent.amigo_id = amigo_id
+    statusEvent.amigo_id = amigo._id
     statusEvent.status = isSecured ? 'recovered' : 'sighted'
+
     const from = user.userId
     const { body } = statusEvent
     statusEvent.details = {
@@ -70,17 +71,17 @@ const ReportSightingModal = ({
 
     const message = {
       to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
-      title: amigo_id,
+      title: `${amigo.name} was ${statusEvent.status}!`,
       from,
       body,
     }
-    const sentNotification = await sendPushNotification(message)
+    const sentNotification = await sendNotification(message)
 
     if (savedStatusEvent.ok && sentNotification) {
-      navigation.navigate(routes.HOME)
-      setReportingAmigoId(null)
+      setReportingAmigo(null)
     }
     setIsSubmitting(false)
+    navigation.navigate(routes.HOME)
   }
 
   const handleImageUpload = async (event) => {
@@ -103,14 +104,14 @@ const ReportSightingModal = ({
     if (!result.canceled) {
       setImageUpload(finalResult)
     } else {
-      console.trace('successful image upload')
+      console.dir('successful image upload')
     }
     setIsSecuredEnabled(true)
     setIsImageUploading(false)
   }
 
   return (
-    <Modal visible={amigo_id && amigo_id.length}>
+    <Modal visible={amigo}>
       <ActivityIndicator animating={isSubmitting} size="small" />
       <View
         style={{
@@ -173,7 +174,7 @@ const ReportSightingModal = ({
               <Button
                 color="medium"
                 title="Cancel"
-                onPress={() => setReportingAmigoId(null)}
+                onPress={() => setReportingAmigo(null)}
               />
             </View>
           </Form>
