@@ -12,16 +12,16 @@ import {
 import useAuth from '../auth/useAuth'
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required().min(4).label('Username'),
-  password: Yup.string().required().min(7).label('Password'),
+  phoneNumber: Yup.string().required().min(4).label('PhoneNumber'),
+  // password: Yup.string().required().min(7).label('Password'),
 })
 
 function LoginScreen(props) {
   const auth = useAuth()
   const [loginFailed, setLoginFailed] = useState(false)
 
-  const handleSubmit = async ({ username, password }) => {
-    const result = await authApi.login(username, password)
+  const handleSubmit = async ({ phoneNumber }) => {
+    const result = await authApi.login(phoneNumber)
     if (!result.ok) return setLoginFailed(true)
     setLoginFailed(false)
     auth.logIn(result.data)
@@ -31,24 +31,24 @@ function LoginScreen(props) {
     <Screen style={styles.container}>
       {/* TODO add paw in place of logo */}
       <Form
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ phoneNumber: '' }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <ErrorMessage
-          error="Invalid username and/or password."
+          error="Invalid phone number."
           visible={loginFailed}
         />
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
           icon="email"
-          // keyboardType="username"
-          name="username"
-          placeholder="Username"
-          textContentType="usernameLocation"
+          // keyboardType="phoneNumber"
+          name="phoneNumber"
+          placeholder="PhoneNumber"
+          textContentType="phoneNumberLocation"
         />
-        <FormField
+        {/* <FormField
           autoCapitalize="none"
           autoCorrect={false}
           icon="lock"
@@ -56,7 +56,7 @@ function LoginScreen(props) {
           placeholder="Password"
           secureTextEntry
           textContentType="password"
-        />
+        /> */}
         <View style={styles.buttonsContainer}>
           <SubmitButton title="Login" />
         </View>

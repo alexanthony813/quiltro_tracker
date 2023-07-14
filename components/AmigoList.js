@@ -30,6 +30,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
           last_seen_date,
           photo_url,
           name,
+          user,
           status,
           description,
         } = amigo
@@ -66,9 +67,11 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
             <View className="attribute-container flex flex-row">
               <View style={{ padding: 10 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{name}</Text>
-                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  {status}
-                </Text>
+                {user?.phone_number && (
+                  <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+                    {status}
+                  </Text>
+                )}
                 <Text style={{ fontSize: 14, marginBottom: 5 }}>
                   {description}
                 </Text>
@@ -92,7 +95,10 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
                   )}
                 </View>
               </View>
-              <View style={{alignItems: 'center'}} className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
+              <View
+                style={{ alignItems: 'center' }}
+                className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600"
+              >
                 <Button
                   onPress={() => {
                     setReportingAmigo(amigo)

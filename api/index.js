@@ -50,6 +50,28 @@ export const saveNewStatusEvent = async (statusEvent) => {
   return response
 }
 
+export const registerUser = async (user) => {
+  return await fetch(`${settings.apiUrl}/users`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+}
+
+export const loginUser = async (user) => {
+  return await fetch(`${settings.apiUrl}/auth`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+}
+
 export const getUserMessages = async ({ userId }) => {
   return await fetch(`${settings.apiUrl}/users/${userId}/messages`)
 }

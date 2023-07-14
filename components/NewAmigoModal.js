@@ -60,6 +60,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     amigo.last_seen_date = Date.now // TODO last_seen_date ||
     amigo.owner_id = user.userId
     amigo.status = 'lost'
+    amigo.user = user
 
     const savedAmigo = await saveNewAmigo({
       ...amigo,
