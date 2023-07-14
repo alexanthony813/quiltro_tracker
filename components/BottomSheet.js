@@ -46,7 +46,7 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       duration: 500, // Adjust the duration as needed
-      useNativeDriver: true, // Enable native driver for better performance
+      // useNativeDriver: true, // TODO revisit when have time to solve  `useNativeDriver` is not supported because the native animated module is missing.
       easing,
     }).start()
   }, [])

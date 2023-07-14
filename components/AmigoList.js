@@ -9,7 +9,7 @@ import { calculateDaysPassed } from '../utility/helpers'
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
-const AmigoList = ({ amigos, setReportingAmigo }) => {
+const AmigoList = ({ user, amigos, setReportingAmigo }) => {
   const now = new Date()
 
   return (
@@ -92,13 +92,14 @@ const AmigoList = ({ amigos, setReportingAmigo }) => {
                   )}
                 </View>
               </View>
-              <View className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
+              <View style={{alignItems: 'center'}} className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
                 <Button
                   onPress={() => {
                     setReportingAmigo(amigo)
                   }}
                   color={'bg-teal-600'}
                   title={'Reportar'}
+                  // isDisabled={amigo.owner_id === user.userId}, don't want to scare the owner by hiding/disabling the button
                 />
               </View>
             </View>
