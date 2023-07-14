@@ -23,7 +23,7 @@ const displayNameMap = {
 }
 
 const HomeSearchScreen = () => {
-  const { user, setUser } = React.useContext(AuthContext) // TODO should be doing this everywhere??
+  const { user } = React.useContext(AuthContext) // TODO should be doing this everywhere??
   const {
     data: amigos,
     error,
@@ -109,6 +109,7 @@ const HomeSearchScreen = () => {
                   <ArrowRightIcon color="#00CCBB" />
                 </View>
                 <AmigoList
+                  user={user}
                   setReportingAmigo={setReportingAmigo}
                   amigos={categorizedAnimalsObject[animalCategory]}
                 />

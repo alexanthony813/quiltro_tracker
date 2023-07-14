@@ -22,7 +22,6 @@ Notifications.setNotificationHandler({
 
 export default function App() {
   const [user, setUser] = useState(null)
-  const [conversationSenderId, setConversationSenderId] = useState(null)
   const [error, setError] = useState(null)
   const [notifications, setNotifications] = useState([])
   const [expoPushToken, setExpoPushToken] = useState('')
@@ -79,7 +78,7 @@ export default function App() {
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
           <NotificationsContext.Provider
-            value={{ conversationSenderId, setConversationSenderId }}
+            value={{ notifications, setNotifications }}
           >
             {hardCodedUser ? <AppNavigator /> : <AuthNavigator />}
           </NotificationsContext.Provider>

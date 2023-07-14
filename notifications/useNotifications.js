@@ -2,9 +2,9 @@ import React, { useContext } from 'react'
 import NotificationsContext from './context'
 
 const useNotifications = () => {
-  const { conversationSenderId, setConversationSenderId } = useContext(NotificationsContext)
+  const { notifications, setNotifications } = useContext(NotificationsContext)
 
-  return { conversationSenderId, setConversationSenderId }
+  return { notifications, setNotifications }
 }
 
 export default useNotifications

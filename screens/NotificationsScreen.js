@@ -18,25 +18,26 @@ function NotificationsScreen({ navigation }) {
     request: loadUserNotifications,
   } = useApi(getUserNotifications)
   const [refreshing, setRefreshing] = useState(false)
-  const { setConversationSenderId } = useNotifications()
+  const { setNotifications } = useNotifications()
 
   useEffect(() => {
     loadUserNotifications({ userId })
   }, [userNotifications.length])
 
-  const userConversations = !userNotifications.length
-    ? []
-    : Object.values(
-        userNotifications.reduce((acc, curr) => {
-          const senderId = curr.from
-          if (acc.hasOwnProperty(senderId)) {
-            acc[senderId]['messages'].push(curr)
-          } else {
-            acc[senderId] = { messages: [curr], senderId: senderId }
-          }
-          return acc
-        }, {})
-      )
+  let userConversations
+  if (userNotifications.length) {
+    userConversations = Object.values(
+      userNotifications.reduce((acc, curr) => {
+        const senderId = curr.from
+        if (acc.hasOwnProperty(senderId)) {
+          acc[senderId]['messages'].push(curr)
+        } else {
+          acc[senderId] = { messages: [curr], senderId: senderId }
+        }
+        return acc
+      }, {})
+    )
+  }
 
   return (
     <Screen>
@@ -45,18 +46,22 @@ function NotificationsScreen({ navigation }) {
           data={userConversations}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(conversation) => conversation.senderId}
-          renderItem={(conversation) => (
-            <ListItem
-              onPress={() => {
-                // navigation.navigate('User', {
-                //   screen: 'Conversation',
-                //   params: { conversationSenderId: conversation.senderId },
-                // })
-                navigation.navigate(routes.CONVERSATION)
-              }}
-              title={`Conversation with ${conversation.senderId}`}
-            />
-          )}
+          renderItem={({ item: conversation }) => {
+            return (
+              <ListItem
+                onPress={() => {
+                  console.dir(conversation)
+                  setNotifications(userNotifications)
+                  navigation.navigate(routes.CONVERSATION, {
+                    // screen: 'Conversation',
+                    params: { conversationSenderId: conversation.senderId },
+                  })
+                  // navigation.navigate(routes.CONVERSATION)
+                }}
+                title={`Conversation with ${conversation.senderId}`}
+              />
+            )
+          }}
           ItemSeparatorComponent={ListItemSeparator}
           refreshing={refreshing}
         />
