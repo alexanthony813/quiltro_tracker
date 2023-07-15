@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const ReportSightingModal = ({
-  amigo_id,
+  amigoId,
   setReportingAmigoId,
   userLocation,
   user,
@@ -35,7 +35,7 @@ const ReportSightingModal = ({
       const presignedUrlRequest = await getPresignedUrl()
       const presignedUrlJSON = await presignedUrlRequest.json()
       const presignedUrl = presignedUrlJSON.url
-      statusEvent.photo_url = presignedUrl.split('?')[0]
+      statusEvent.photoUrl = presignedUrl.split('?')[0]
       const rawBase64 = imageUpload.base64
       var buffer = Buffer.from(
         rawBase64.replace(/^data:image\/\w+;base64,/, ''),
@@ -55,7 +55,7 @@ const ReportSightingModal = ({
       }
     }
     statusEvent.location = userLocation
-    statusEvent.amigo_id = amigo_id
+    statusEvent.amigoId = amigoId
     statusEvent.status = isSecured ? 'recovered' : 'sighted'
     const from = user.userId
     const { body } = statusEvent
@@ -70,7 +70,7 @@ const ReportSightingModal = ({
 
     const message = {
       to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
-      title: amigo_id,
+      title: amigoId,
       from,
       body,
     }
@@ -110,7 +110,7 @@ const ReportSightingModal = ({
   }
 
   return (
-    <Modal visible={amigo_id && amigo_id.length}>
+    <Modal visible={amigoId && amigoId.length}>
       <ActivityIndicator animating={isSubmitting} size="small" />
       <View
         style={{

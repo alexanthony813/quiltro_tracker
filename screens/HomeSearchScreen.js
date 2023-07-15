@@ -79,7 +79,7 @@ const HomeSearchScreen = () => {
         setBottomSheetContentMode={setBottomSheetContentMode}
       />
       <ReportSightingModal
-        amigo_id={reportingAmigoId}
+        amigoId={reportingAmigoId}
         setReportingAmigoId={setReportingAmigoId}
         user={user}
         userLocation={userLocation}

@@ -26,22 +26,22 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
         const {
-          last_status_event,
-          last_seen_date,
-          photo_url,
+          lastStatusEvent,
+          lastSeenDate,
+          photoUrl,
           name,
           status,
           description,
         } = item
         let daysElapsedSinceLastSeen
-        if (last_status_event && last_status_event.status === 'sighted') {
+        if (lastStatusEvent && lastStatusEvent.status === 'sighted') {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(last_status_event.time),
+            new Date(lastStatusEvent.time),
             now
           )
         } else {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(item.last_seen_date),
+            new Date(item.lastSeenDate),
             now
           )
         }
@@ -57,7 +57,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
             }}
           >
             <Image
-              source={{ uri: photo_url }}
+              source={{ uri: photoUrl }}
               style={{ width: '100%', aspectRatio: 1 }}
               loading={'lazy'}
               placeholder={blurhash}
@@ -75,7 +75,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {last_status_event?.status === 'sighted' ? (
+                  {lastStatusEvent?.status === 'sighted' ? (
                     <Text>Visto hace {daysElapsedSinceLastSeen} dias!!</Text>
                   ) : (
                     <Text
