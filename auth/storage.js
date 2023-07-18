@@ -7,7 +7,7 @@ const storeToken = async (authToken) => {
   try {
     await SecureStore.setItemAsync(key, authToken)
   } catch (error) {
-    console.trace('Error storing the auth token', error)
+    console.dir('Error storing the auth token', error)
   }
 }
 
@@ -15,7 +15,7 @@ const getToken = async () => {
   try {
     return await SecureStore.getItemAsync(key)
   } catch (error) {
-    console.trace('Error getting the auth token', error)
+    console.dir('Error getting the auth token', error)
   }
 }
 
@@ -28,7 +28,7 @@ const removeToken = async () => {
   try {
     await SecureStore.deleteItemAsync(key)
   } catch (error) {
-    console.trace('Error removing the auth token', error)
+    console.dir('Error removing the auth token', error)
   }
 }
 

@@ -23,7 +23,7 @@ const displayNameMap = {
 }
 
 const HomeSearchScreen = () => {
-  const { user, setUser } = React.useContext(AuthContext)
+  const { user } = React.useContext(AuthContext) // TODO should be doing this everywhere??
   const {
     data: amigos,
     error,
@@ -32,13 +32,13 @@ const HomeSearchScreen = () => {
   } = useApi(getAmigos)
   const [bottomSheetContentMode, setBottomSheetContentMode] = useState()
   const [searchQuery, setSearchQuery] = useState('')
-  const [reportingAmigoId, setReportingAmigoId] = useState(false)
+  const [reportingAmigo, setReportingAmigo] = useState(false)
   const [isLostSelected, setIsLostSelected] = useState(true)
-  const userLocation = {} // useLocation()
+  const userLocation = {} // useLocation() TODO
 
   useEffect(() => {
     loadAmigos()
-  }, [JSON.stringify(amigos), reportingAmigoId])
+  }, [JSON.stringify(amigos), reportingAmigo])
   const amigosMap = {
     dog: [],
     cat: [],
@@ -67,7 +67,6 @@ const HomeSearchScreen = () => {
         return acc
       }, amigosMap)
     : amigosMap
-
   return (
     <Screen>
       <HomeSearchHeader
@@ -110,7 +109,8 @@ const HomeSearchScreen = () => {
                   <ArrowRightIcon color="#00CCBB" />
                 </View>
                 <AmigoList
-                  setReportingAmigoId={setReportingAmigoId}
+                  user={user}
+                  setReportingAmigo={setReportingAmigo}
                   amigos={categorizedAnimalsObject[animalCategory]}
                 />
               </View>

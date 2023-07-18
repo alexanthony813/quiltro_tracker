@@ -1,7 +1,6 @@
 import settings from '../config/settings'
-// import * as Notifications from 'expo-notifications'
 
-export const sendPushNotification = async (message) => {
+export const sendNotification = async (message) => {
   const { title, body, to } = message
   const expo_message = {
     sound: 'default',

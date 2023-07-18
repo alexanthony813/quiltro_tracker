@@ -9,7 +9,7 @@ import { calculateDaysPassed } from '../utility/helpers'
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
-const AmigoList = ({ amigos, setReportingAmigoId }) => {
+const AmigoList = ({ user, amigos, setReportingAmigo }) => {
   const now = new Date()
 
   return (
@@ -23,8 +23,8 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
         justifyContent: 'space-between',
       }}
       showsHorizontalScrollIndicator={false}
-      keyExtractor={(item, index) => String(index)}
-      renderItem={({ item, index }) => {
+      keyExtractor={(_, index) => String(index)}
+      renderItem={({ item: amigo, index }) => {
         const {
           lastStatusEvent,
           lastSeenDate,
@@ -32,7 +32,7 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
           name,
           status,
           description,
-        } = item
+        } = amigo
         let daysElapsedSinceLastSeen
         if (lastStatusEvent && lastStatusEvent.status === 'sighted') {
           daysElapsedSinceLastSeen = calculateDaysPassed(
@@ -86,19 +86,19 @@ const AmigoList = ({ amigos, setReportingAmigoId }) => {
                       }}
                     >
                       {/* would be cool to have seen x away and sort by that, update based on reports and have special icon/style if recent */}
-                      {/* TODO {item.last_seen_location} */}
                       Perdido hace {daysElapsedSinceLastSeen} dias
                     </Text>
                   )}
                 </View>
               </View>
-              <View className="status-action-container flex items-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
+              <View style={{alignItems: 'center'}} className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600">
                 <Button
                   onPress={() => {
-                    setReportingAmigoId(item._id)
+                    setReportingAmigo(amigo)
                   }}
                   color={'bg-teal-600'}
                   title={'Reportar'}
+                  // isDisabled={amigo.owner_id === user.userId}, don't want to scare the owner by hiding/disabling the button
                 />
               </View>
             </View>

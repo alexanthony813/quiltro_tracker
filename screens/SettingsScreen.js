@@ -10,12 +10,12 @@ import useAuth from '../auth/useAuth'
 // npx react-native run-android
 const menuItems = [
   {
-    title: 'Mis Amigos',
+    title: 'Mis Alertas',
     icon: {
-      name: 'format-list-bulleted',
+      name: 'exclamation-thick',
       backgroundColor: colors.primary,
     },
-    targetScreen: routes.MIS_AMIGOS,
+    targetScreen: routes.CONVERSATION,
   },
   {
     title: 'Mis Mensajes',

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Text, Switch, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewStatusEvent, sendPushNotification } from '../api'
+import { saveNewStatusEvent, sendNotification } from '../api'
 import Button from './Button'
 import routes from '../navigation/routes'
 
@@ -70,17 +70,17 @@ const ReportSightingModal = ({
 
     const message = {
       to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
-      title: amigoId,
+      title: `${amigo.name} was ${statusEvent.status}!`,
       from,
       body,
     }
-    const sentNotification = await sendPushNotification(message)
+    const sentNotification = await sendNotification(message)
 
     if (savedStatusEvent.ok && sentNotification) {
-      navigation.navigate(routes.HOME)
-      setReportingAmigoId(null)
+      setReportingAmigo(null)
     }
     setIsSubmitting(false)
+    navigation.navigate(routes.HOME)
   }
 
   const handleImageUpload = async (event) => {
@@ -103,7 +103,7 @@ const ReportSightingModal = ({
     if (!result.canceled) {
       setImageUpload(finalResult)
     } else {
-      console.trace('successful image upload')
+      console.dir('successful image upload')
     }
     setIsSecuredEnabled(true)
     setIsImageUploading(false)
@@ -173,7 +173,7 @@ const ReportSightingModal = ({
               <Button
                 color="medium"
                 title="Cancel"
-                onPress={() => setReportingAmigoId(null)}
+                onPress={() => setReportingAmigo(null)}
               />
             </View>
           </Form>

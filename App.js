@@ -7,6 +7,7 @@ import navigationTheme from './navigation/navigationTheme'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './auth/context'
+import NotificationsContext from './notifications/context'
 
 import { navigationRef } from './navigation/rootNavigation'
 
@@ -20,11 +21,10 @@ Notifications.setNotificationHandler({
 })
 
 export default function App() {
-  const [_, setUser] = useState()
-  const [error, setError] = useState()
-  // const [isReady, setIsReady] = useState(false)
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
+  const [notifications, setNotifications] = useState([])
   const [expoPushToken, setExpoPushToken] = useState('')
-  const [notification, setNotification] = useState(false)
   const notificationListener = useRef()
   const responseListener = useRef()
 
@@ -34,11 +34,7 @@ export default function App() {
   //     setUser(user)
   //   }
   // }
-  const user = {
-    expoPushToken: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
-    userId: '645e7685c82a065dfe600c88',
-    username: 'oinkerman1',
-  }
+
   useEffect(() => {
     async function asyncHelper() {
       const token = await Notifications.getExpoPushTokenAsync()
@@ -63,13 +59,29 @@ export default function App() {
     asyncHelper()
   }, [])
 
-  user.expoPushToken = expoPushToken
+  const hardCodedUser = {
+    expoPushToken: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
+    userId: '645e7685c82a065dfe600c88',
+    username: 'oinkerman1',
+  }
+  hardCodedUser.expoPushToken = expoPushToken
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider
+      value={{
+        user: hardCodedUser,
+        setUser: () => {
+          setUser(hardCodedUser)
+        },
+      }}
+    >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {user ? <AppNavigator /> : <AuthNavigator />}
+          <NotificationsContext.Provider
+            value={{ notifications, setNotifications }}
+          >
+            {hardCodedUser ? <AppNavigator /> : <AuthNavigator />}
+          </NotificationsContext.Provider>
         </TailwindProvider>
       </NavigationContainer>
     </AuthContext.Provider>

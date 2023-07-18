@@ -31,28 +31,33 @@ function NotificationsScreen() {
 
   return (
     <Screen>
-      {userNotifications && userNotifications.length ? (
+      {userConversations && userConversations.length ? (
         <FlatList
-          data={userNotifications}
+          data={userConversations}
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(message) => message._id.toString()}
-          renderItem={({ item }) => (
-            <ListItem
-              title={item.title}
-              subTitle={item.description}
-              image={item.image}
-              onPress={() => console.trace('Message selected', item)}
-              renderRightActions={() => (
-                <ListItemDeleteAction onPress={() => handleDelete(item)} />
-              )}
-            />
-          )}
+          keyExtractor={(conversation) => conversation.senderId}
+          renderItem={({ item: conversation }) => {
+            return (
+              <ListItem
+                onPress={() => {
+                  console.dir(conversation)
+                  setNotifications(userNotifications)
+                  navigation.navigate(routes.CONVERSATION, {
+                    // screen: 'Conversation',
+                    params: { conversationSenderId: conversation.senderId },
+                  })
+                  // navigation.navigate(routes.CONVERSATION)
+                }}
+                title={`Conversation with ${conversation.senderId}`}
+              />
+            )
+          }}
           ItemSeparatorComponent={ListItemSeparator}
           refreshing={refreshing}
         />
       ) : (
         <View className="flex flex-1 justify-center items-center">
-          <Text>Aun no tienes userNotifications</Text>
+          <Text>Aun no tienes notificationes</Text>
         </View>
       )}
     </Screen>
