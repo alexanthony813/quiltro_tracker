@@ -10,16 +10,6 @@ export const sendNotification = async (message) => {
     data: {},
   }
   message.expo_message = expo_message
-
-  const response = await fetch(`${settings.apiUrl}/messages`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ message }),
-  })
-  return response
 }
 
 export const saveNewAmigo = async (amigo) => {

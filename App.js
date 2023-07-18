@@ -10,6 +10,13 @@ import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './auth/context'
 import authStorage from './auth/storage'
 
+const hardCodedUser = {
+  phoneNumber: '109692896821923',
+  joinedOn: '2023-07-18T18:06:01.481Z',
+  _id: '64b6d489c059ac97b164e971',
+  __v: 0,
+}
+
 import { navigationRef } from './navigation/rootNavigation'
 
 export default function App() {
@@ -18,15 +25,10 @@ export default function App() {
   const [isReady, setIsReady] = useState(false)
 
   const restoreUser = async () => {
-    let user = await authStorage.getUser()
-    if (user) {
-      setUser(user)
-    }
-  }
-
-  const hardCodedUser = {
-    userId: '645e7685c82a065dfe600c88',
-    phoneNumber: 'oinkerman1',
+    // let user = await authStorage.getUser()
+    // if (user) {
+    setUser(hardCodedUser)
+    // }
   }
 
   if (!isReady) {

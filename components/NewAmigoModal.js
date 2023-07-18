@@ -159,11 +159,13 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             <View>
               <View className="flex justify-between">
                 <Button
+                  isDisabled={imageUpload}
                   onPress={handleImageUpload}
                   color="secondary"
                   title="Upload Image"
                 />
                 <SubmitButton
+                  isDisabled={!imageUpload}
                   className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
                   title="Save"
                 />

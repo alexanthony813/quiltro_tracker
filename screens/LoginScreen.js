@@ -35,10 +35,7 @@ function LoginScreen(props) {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <ErrorMessage
-          error="Invalid phone number."
-          visible={loginFailed}
-        />
+        <ErrorMessage error="Invalid phoneNumber." visible={loginFailed} />
         <FormField
           autoCapitalize="none"
           autoCorrect={false}

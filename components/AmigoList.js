@@ -42,7 +42,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
           )
         } else {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(item.lastSeenDate),
+            new Date(amigo.lastSeenDate),
             now
           )
         }

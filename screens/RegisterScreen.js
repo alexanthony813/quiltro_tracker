@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
 
 function RegisterScreen() {
   const registerApi = useApi(registerUser)
-  const loginApi = useApi(loginUser)
+  // const loginApi = useApi(loginUser) TODO fix
   const auth = useAuth()
   const [error, setError] = useState()
 
@@ -30,16 +30,19 @@ function RegisterScreen() {
       }
       return
     }
-
-    const { data: authToken } = await loginApi.request(userInfo.phoneNumber)
-    auth.logIn(authToken)
+    const { phoneNumber } = userInfo
+    const loginResponse = await loginUser({
+      phoneNumber,
+    })
+    const data = await loginResponse.json()
+    auth.logIn(data)
   }
 
   return (
     <>
       <Screen style={styles.container}>
         <Form
-          initialValues={{ phoneNumber: '', password: '' }}
+          initialValues={{ phoneNumber: '' }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
