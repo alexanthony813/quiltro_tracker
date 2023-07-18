@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import colors from '../config/colors'
 
-// TODO DELETE!
 function AppButton({
   styles,
   title,

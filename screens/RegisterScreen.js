@@ -1,24 +1,21 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import * as Yup from 'yup'
-
+import { loginUser, registerUser } from '../api/index'
+import useAuth from '../auth/useAuth'
 import Screen from '../components/Screen'
-import {
-  Form,
-  FormField,
-  SubmitButton,
-} from '../components/forms'
+import { Form, FormField, SubmitButton } from '../components/forms'
 import useApi from '../hooks/useApi'
 import { View } from 'react-native'
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required().label('Name'),
-  password: Yup.string().required().min(7).label('Password'),
+  phoneNumber: Yup.string().required().label('Name'),
+  // password: Yup.string().required().min(7).label('Password'),
 })
 
 function RegisterScreen() {
-  const registerApi = useApi(usersApi.register)
-  const loginApi = useApi(authApi.login)
+  const registerApi = useApi(registerUser)
+  // const loginApi = useApi(loginUser) TODO fix
   const auth = useAuth()
   const [error, setError] = useState()
 
@@ -33,29 +30,29 @@ function RegisterScreen() {
       }
       return
     }
-
-    const { data: authToken } = await loginApi.request(
-      userInfo.username,
-      userInfo.password
-    )
-    auth.logIn(authToken)
+    const { phoneNumber } = userInfo
+    const loginResponse = await loginUser({
+      phoneNumber,
+    })
+    const data = await loginResponse.json()
+    auth.logIn(data)
   }
 
   return (
     <>
       <Screen style={styles.container}>
         <Form
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ phoneNumber: '' }}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
           <FormField
             autoCorrect={false}
             icon="account"
-            name="username"
-            placeholder="Username"
+            name="phoneNumber"
+            placeholder="PhoneNumber"
           />
-          <FormField
+          {/* <FormField
             autoCapitalize="none"
             autoCorrect={false}
             icon="lock"
@@ -63,7 +60,7 @@ function RegisterScreen() {
             placeholder="Password"
             secureTextEntry
             // textContentType="password"
-          />
+          /> */}
           <View style={styles.buttonsContainer}>
             <SubmitButton title="Registrar" />
           </View>

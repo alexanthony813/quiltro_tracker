@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+// TODO use this everywhere
 const useApi = (apiFunc) => {
   const [data, setData] = useState([])
   const [error, setError] = useState(false)

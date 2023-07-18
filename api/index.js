@@ -10,16 +10,6 @@ export const sendNotification = async (message) => {
     data: {},
   }
   message.expo_message = expo_message
-
-  const response = await fetch(`${settings.apiUrl}/messages`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ message }),
-  })
-  return response
 }
 
 export const saveNewAmigo = async (amigo) => {
@@ -48,6 +38,28 @@ export const saveNewStatusEvent = async (statusEvent) => {
     }
   )
   return response
+}
+
+export const registerUser = async (user) => {
+  return await fetch(`${settings.apiUrl}/users`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+}
+
+export const loginUser = async (user) => {
+  return await fetch(`${settings.apiUrl}/auth`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
 }
 
 export const getUserMessages = async ({ userId }) => {
