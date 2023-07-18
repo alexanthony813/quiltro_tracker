@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { getUserNotifications } from '../api/index'
-import useAuth from '../auth/useAuth'
+
 import useApi from '../hooks/useApi'
 import Screen from '../components/Screen'
-import { ListItem, ListItemSeparator } from '../components/lists'
-import useNotifications from '../notifications/useNotifications'
-import routes from '../navigation/routes'
+import {
+  ListItem,
+  ListItemDeleteAction,
+  ListItemSeparator,
+} from '../components/lists'
+import useAuth from '../auth/useAuth'
 
-function NotificationsScreen({ navigation }) {
-  const { user, setUser } = useAuth()
-  const { userId } = user
+function NotificationsScreen() {
   const {
     data: userNotifications,
     error,
@@ -18,25 +19,14 @@ function NotificationsScreen({ navigation }) {
     request: loadUserNotifications,
   } = useApi(getUserNotifications)
   const [refreshing, setRefreshing] = useState(false)
-  const { setNotifications } = useNotifications()
-
+  const { user } = useAuth()
+  const { userId } = user
   useEffect(() => {
     loadUserNotifications({ userId })
-  }, [userNotifications.length])
+  }, [JSON.stringify(userNotifications)])
 
-  let userConversations
-  if (userNotifications.length) {
-    userConversations = Object.values(
-      userNotifications.reduce((acc, curr) => {
-        const senderId = curr.from
-        if (acc.hasOwnProperty(senderId)) {
-          acc[senderId]['messages'].push(curr)
-        } else {
-          acc[senderId] = { messages: [curr], senderId: senderId }
-        }
-        return acc
-      }, {})
-    )
+  const handleDelete = (message) => {
+    setNotifications(userNotifications.filter((m) => m.id !== message._id))
   }
 
   return (

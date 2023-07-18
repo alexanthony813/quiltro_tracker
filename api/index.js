@@ -37,7 +37,7 @@ export const saveNewAmigo = async (amigo) => {
 
 export const saveNewStatusEvent = async (statusEvent) => {
   const response = await fetch(
-    `${settings.apiUrl}/amigos/${statusEvent.amigo_id}/event`,
+    `${settings.apiUrl}/amigos/${statusEvent.amigoId}/event`,
     {
       method: 'POST',
       headers: {
@@ -62,16 +62,16 @@ export const getAmigos = async () => {
   return await fetch(`${settings.apiUrl}/amigos`)
 }
 
-export const getAmigoEvents = async (amigo_id) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigo_id}/events`)
+export const getAmigoEvents = async (amigoId) => {
+  return await fetch(`${settings.apiUrl}/amigos/${amigoId}/events`)
 }
 
 export const getEvents = async () => {
   return await fetch(`${settings.apiUrl}/events`)
 }
 
-export const getAmigo = async (amigo_id) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigo_id}`)
+export const getAmigo = async (amigoId) => {
+  return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
 }
 
 export const getUserAmigos = async ({ userId }) => {

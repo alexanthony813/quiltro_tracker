@@ -26,22 +26,22 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
       keyExtractor={(_, index) => String(index)}
       renderItem={({ item: amigo, index }) => {
         const {
-          last_status_event,
-          last_seen_date,
-          photo_url,
+          lastStatusEvent,
+          lastSeenDate,
+          photoUrl,
           name,
           status,
           description,
         } = amigo
         let daysElapsedSinceLastSeen
-        if (last_status_event && last_status_event.status === 'sighted') {
+        if (lastStatusEvent && lastStatusEvent.status === 'sighted') {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(last_status_event.time),
+            new Date(lastStatusEvent.time),
             now
           )
         } else {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(amigo.last_seen_date),
+            new Date(item.lastSeenDate),
             now
           )
         }
@@ -57,7 +57,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
             }}
           >
             <Image
-              source={{ uri: photo_url }}
+              source={{ uri: photoUrl }}
               style={{ width: '100%', aspectRatio: 1 }}
               loading={'lazy'}
               placeholder={blurhash}
@@ -75,7 +75,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {last_status_event?.status === 'sighted' ? (
+                  {lastStatusEvent?.status === 'sighted' ? (
                     <Text>Visto hace {daysElapsedSinceLastSeen} dias!!</Text>
                   ) : (
                     <Text
@@ -86,7 +86,6 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
                       }}
                     >
                       {/* would be cool to have seen x away and sort by that, update based on reports and have special icon/style if recent */}
-                      {/* TODO {amigo.last_seen_location} */}
                       Perdido hace {daysElapsedSinceLastSeen} dias
                     </Text>
                   )}
