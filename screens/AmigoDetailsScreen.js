@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native'
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 
 import colors from '../config/colors'
@@ -21,16 +16,16 @@ function amigoDetailsScreen({ route }) {
     >
       <Image
         style={styles.image}
-        preview={{ uri: amigo.photo_url }}
+        preview={{ uri: amigo.photoUrl }}
         tint="light"
-        uri={amigo.photo_url}
+        uri={amigo.photoUrl}
       />
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{amigo.title}</Text>
         <Text style={styles.price}>${amigo.price}</Text>
         <View style={styles.userContainer}>
           <ListItem
-            image={{ uri: amigo.photo_url }}
+            image={{ uri: amigo.photoUrl }}
             title={amigo.name}
             // subTitle="5 Listings"
           />

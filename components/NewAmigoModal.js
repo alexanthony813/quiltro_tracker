@@ -18,14 +18,14 @@ const validationSchema = Yup.object().shape({
     .required()
     .min(1)
     .label('Last Seen Location'),
-  // last_seen_date: Yup.date().min( TODO
+  // lastSeenDate: Yup.date().min( TODO
   //   Yup.ref('originalEndDate'),
   //   ({ min }) => `Date needs to be before ${formatDate(min)}!!`,
   // ),
   name: Yup.string().required().min(1).label('Name'),
   description: Yup.string().label('Description'),
   body: Yup.string().required().min(1).label('Message'),
-  owner_number: Yup.string().required().min(1).label('Contact Number'),
+  ownerNumber: Yup.string().required().min(1).label('Contact Number'),
 })
 
 const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
@@ -55,10 +55,10 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     if (s3Result.status !== 200) {
       console.dir('ERROR') // TODO add better error handle up in here
     }
-    amigo.photo_url = presignedUrl.split('?')[0]
+    amigo.photoUrl = presignedUrl.split('?')[0]
     amigo.last_seen_location = userLocation
-    amigo.last_seen_date = Date.now // TODO last_seen_date ||
-    amigo.owner_id = user.userId
+    amigo.lastSeenDate = Date.now // TODO lastSeenDate ||
+    amigo.ownerId = user.userId
     amigo.status = 'lost'
     amigo.user = user
 
@@ -121,11 +121,11 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             initialValues={{
               species: '',
               last_seen_location: '',
-              last_seen_date: '',
+              lastSeenDate: '',
               name: '',
               description: '',
               body: '',
-              owner_number: '',
+              ownerNumber: '',
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
@@ -140,7 +140,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             />
             {/* <FormField
               maxLength={255}
-              name="last_seen_date"
+              name="lastSeenDate"
               placeholder="Last Seen Date"
             /> */}
             <FormField
@@ -151,7 +151,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             <FormField maxLength={255} name="body" placeholder="Message" />
             <FormField
               maxLength={255}
-              name="owner_number"
+              name="ownerNumber"
               placeholder="Owner Number"
             />
 

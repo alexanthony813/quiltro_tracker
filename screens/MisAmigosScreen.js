@@ -60,7 +60,7 @@ function MisAmigosScreen() {
               }}
             >
               <Image
-                source={{ uri: amigo.photo_url }}
+                source={{ uri: amigo.photoUrl }}
                 style={{ width: '100%', aspectRatio: 1 }}
               />
 
@@ -77,8 +77,8 @@ function MisAmigosScreen() {
 
                 <View style={{ flexDirection: 'row', alignamigos: 'center' }}>
                   <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {amigo.last_status_event &&
-                    amigo.last_status_event.status === 'sighted' && (
+                  {amigo.lastStatusEvent &&
+                    amigo.lastStatusEvent.status === 'sighted' && (
                       <View>
                         <Button title="Confirm"></Button>
                         <Text>
