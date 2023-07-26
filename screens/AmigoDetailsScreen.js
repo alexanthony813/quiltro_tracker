@@ -6,7 +6,7 @@ import colors from '../config/colors'
 import Text from '../components/Text'
 import ContactOwnerForm from '../components/ContactOwnerForm'
 
-function amigoDetailsScreen({ route }) {
+function AmigoDetailsScreen({ route }) {
   const amigo = route.params
 
   return (
@@ -21,14 +21,13 @@ function amigoDetailsScreen({ route }) {
         uri={amigo.photoUrl}
       />
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{amigo.title}</Text>
-        <Text style={styles.price}>${amigo.price}</Text>
+        <Text style={styles.title}>{amigo.name}</Text>
+        <Text>${amigo.age}</Text>
+        <Text>${amigo.favoriteFoods}</Text>
+        <Text>${amigo.cannotOrWontEat}</Text>
+        <Text>${amigo.location}</Text>
         <View style={styles.userContainer}>
-          <ListItem
-            image={{ uri: amigo.photoUrl }}
-            title={amigo.name}
-            // subTitle="5 Listings"
-          />
+          <ListItem image={{ uri: amigo.photoUrl }} title={amigo.name} />
         </View>
         <ContactOwnerForm amigo={amigo} />
       </View>
@@ -59,4 +58,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default amigoDetailsScreen
+export default AmigoDetailsScreen

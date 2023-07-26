@@ -5,8 +5,7 @@ import AppLoading from 'expo-app-loading'
 
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
-import AppNavigator from './navigation/AppNavigator'
-import AuthNavigator from './navigation/AuthNavigator'
+import AdminNavigator from './navigation/AdminNavigator'
 import AuthContext from './auth/context'
 import authStorage from './auth/storage'
 
@@ -19,8 +18,13 @@ const hardCodedUser = {
 
 import { navigationRef } from './navigation/rootNavigation'
 
-export default function App() {
+export default function App(props) {
+  // console.dir(props.route.params)
+  // const { quiltro_id } = this.props.route.params;
+  // const isAdmin = quiltro_id === null
+  const isAdmin = true
   const [user, setUser] = useState(null)
+
   const [error, setError] = useState(null)
   const [isReady, setIsReady] = useState(false)
 
@@ -50,7 +54,7 @@ export default function App() {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {user ? <AppNavigator /> : <AuthNavigator />}
+          {isAdmin ? <AdminNavigator /> : <UserNavigator />}
         </TailwindProvider>
       </NavigationContainer>
     </AuthContext.Provider>

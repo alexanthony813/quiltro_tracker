@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Text, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewAmigo } from '../api'
+import { saveNewQuiltro } from '../api'
 import Button from './Button'
 import routes from '../navigation/routes'
 
@@ -13,28 +13,20 @@ import { Form, FormField, SubmitButton } from './forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
-  species: Yup.string().required().min(1).label('Species'),
-  last_seen_location: Yup.string()
-    .required()
-    .min(1)
-    .label('Last Seen Location'),
-  // lastSeenDate: Yup.date().min( TODO
-  //   Yup.ref('originalEndDate'),
-  //   ({ min }) => `Date needs to be before ${formatDate(min)}!!`,
-  // ),
-  name: Yup.string().required().min(1).label('Name'),
-  description: Yup.string().label('Description'),
-  body: Yup.string().required().min(1).label('Message'),
-  ownerNumber: Yup.string().required().min(1).label('Contact Number'),
+  name: Yup.string().required().min(1).label('Nombre'),
+  age: Yup.string().label('Edad'),
+  favoriteFoods: Yup.string().label('Comidas favoritas'),
+  cannotOrWontEat: Yup.string().label('Comidas no puede comer'),
+  location: Yup.string().label('Ubicacion'),
 })
 
-const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
+const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
   const [imageUpload, setImageUpload] = useState(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
-  const [isAmigoSubmitting, setIsAmigoSubmitting] = useState(false)
+  const [isQuiltroSubmitting, setIsQuiltroSubmitting] = useState(false)
 
-  const handleSubmit = async (amigo, { resetForm }) => {
-    setIsAmigoSubmitting(true)
+  const handleSubmit = async (quiltro, { resetForm }) => {
+    setIsQuiltroSubmitting(true)
     const presignedUrlRequest = await getPresignedUrl()
     const presignedUrlJSON = await presignedUrlRequest.json()
     const presignedUrl = presignedUrlJSON.url
@@ -53,24 +45,20 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
       body: buffer,
     })
     if (s3Result.status !== 200) {
-      console.dir('ERROR') // TODO add better error handle up in here
+      console.dir('ERROR') // TODO add better error handle in here
     }
-    amigo.photoUrl = presignedUrl.split('?')[0]
-    amigo.last_seen_location = userLocation
-    amigo.lastSeenDate = Date.now // TODO lastSeenDate ||
-    amigo.ownerId = user.userId
-    amigo.status = 'lost'
-    amigo.user = user
+    quiltro.photoUrl = presignedUrl.split('?')[0]
+    quiltro.userId = user._id // todo make many to many
 
-    const savedAmigo = await saveNewAmigo({
-      ...amigo,
+    const savedQuiltro = await saveNewQuiltro({
+      ...quiltro,
     })
 
-    if (savedAmigo.ok) {
+    if (savedQuiltro.ok) {
       navigation.navigate(routes.HOME)
       setIsVisible(false)
     }
-    setIsAmigoSubmitting(false)
+    setIsQuiltroSubmitting(false)
   }
 
   const handleImageUpload = async (event) => {
@@ -103,7 +91,7 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
 */
   return (
     <Modal visible={isVisible}>
-      <ActivityIndicator animating={isAmigoSubmitting} size="small" />
+      <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
       <View
         style={{
           backgroundColor: 'white',
@@ -114,47 +102,42 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-          Agregar un Amigo
+          Agregar un Quiltro
         </Text>
         <View style={{ paddingTop: 5, paddingBottom: 50 }}>
           <Form
             initialValues={{
-              species: '',
-              last_seen_location: '',
-              lastSeenDate: '',
               name: '',
-              description: '',
-              body: '',
-              ownerNumber: '',
+              age: '',
+              favoriteFoods: '',
+              cannotOrWontEat: '',
+              location: '',
+              // requested_items: '',
+              // medical_issues: '',
+              // medical_history: '',
+              // health_issues: '',
+              // chip_id: '',
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            <FormField maxLength={255} name="name" placeholder="Name" />
-            <FormField maxLength={255} name="species" placeholder="Species" />
-            {/* <FormPicker maxLength={255} name="species" items={["dog", "cat", "other"]} placeholder="Species" /> */}
+            <FormField maxLength={255} name="name" placeholder="Nombre" />
+            <FormField maxLength={255} name="age" placeholder="Edad" />
             <FormField
               maxLength={255}
-              name="last_seen_location"
-              placeholder="Last Seen Location"
+              name="favoriteFoods"
+              placeholder="Comidas favoritas"
             />
-            {/* <FormField
-              maxLength={255}
-              name="lastSeenDate"
-              placeholder="Last Seen Date"
-            /> */}
             <FormField
               maxLength={255}
-              name="description"
-              placeholder="Description"
+              name="cannotOrWontEat"
+              placeholder="Comidas no puede comer"
             />
-            <FormField maxLength={255} name="body" placeholder="Message" />
             <FormField
               maxLength={255}
-              name="ownerNumber"
-              placeholder="Owner Number"
+              name="location"
+              placeholder="Ubicacion"
             />
-
             <ActivityIndicator animating={isImageUploading} size="small" />
             <View>
               <View className="flex justify-between">
@@ -184,4 +167,4 @@ const NewAmigoModal = ({ isVisible, setIsVisible, user, userLocation }) => {
   )
 }
 
-export default NewAmigoModal
+export default NewQuiltroModal

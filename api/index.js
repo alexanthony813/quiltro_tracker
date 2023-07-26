@@ -12,14 +12,14 @@ export const sendNotification = async (message) => {
   message.expo_message = expo_message
 }
 
-export const saveNewAmigo = async (amigo) => {
-  const response = await fetch(`${settings.apiUrl}/amigos`, {
+export const saveNewQuiltro = async (quiltro) => {
+  const response = await fetch(`${settings.apiUrl}/quiltros`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(amigo),
+    body: JSON.stringify(quiltro),
   })
 
   return response
@@ -86,8 +86,8 @@ export const getAmigo = async (amigoId) => {
   return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
 }
 
-export const getUserAmigos = async ({ userId }) => {
-  return await fetch(`${settings.apiUrl}/users/${userId}/amigos`)
+export const getUserQuiltros = async ({ userId }) => {
+  return await fetch(`${settings.apiUrl}/users/${userId}/quiltros`)
 }
 
 export const getUserNotifications = async ({ userId }) => {
