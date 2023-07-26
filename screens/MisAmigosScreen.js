@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native'
 
 import Button from '../components/Button'
-import { getUserAmigos } from '../api/index'
+import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
@@ -12,22 +12,23 @@ import MisAmigosHeader from '../components/MisAmigosHeader'
 import AuthContext from '../auth/context'
 import colors from '../config/colors'
 import useLocation from '../hooks/useLocation'
+import { PlusCircleIcon } from 'react-native-heroicons/outline'
 
 function MisAmigosScreen() {
   const userLocation = {} // useLocation()
   const { user, setUser } = React.useContext(AuthContext)
-  const { userId } = user
+  const userId = user._id
   const {
-    data: amigos,
+    data: quiltros,
     error,
     isLoading,
     request: loadAmigos,
-  } = useApi(getUserAmigos)
+  } = useApi(getUserQuiltros)
   const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
     loadAmigos({ userId })
-  }, [JSON.stringify(amigos)])
-
+  }, [JSON.stringify(quiltros)])
+  console.dir(quiltros)
   return (
     <Screen>
       <NewAmigoModal
@@ -42,13 +43,13 @@ function MisAmigosScreen() {
           setIsModalVisible(!isModalVisible)
         }}
       />
-      {amigos && amigos.length ? (
+      {quiltros && quiltros.length ? (
         <FlatList
-          data={amigos}
+          data={quiltros}
           className="align-center"
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(amigo) => amigo._id.toString()}
-          renderamigo={({ amigo }) => (
+          keyExtractor={(quiltro) => quiltro._id.toString()}
+          renderItem={({ item: quiltro }) => (
             <TouchableOpacity
               style={{
                 backgroundColor: 'white',
@@ -60,32 +61,28 @@ function MisAmigosScreen() {
               }}
             >
               <Image
-                source={{ uri: amigo.photoUrl }}
+                source={{ uri: quiltro.photoUrl }}
                 style={{ width: '100%', aspectRatio: 1 }}
               />
-
               <View style={{ padding: 10 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  {amigo.name}
+                  Me llama {quiltro.name}
                 </Text>
                 <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                  {amigo.description}
+                  Tengo {quiltro.age} de edad
                 </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  {amigo.body}
+                  Prefiero comer {quiltro.favoriteFoods}
+                </Text>
+                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
+                  No puedo comer {quiltro.cannotOrWontEat}
+                </Text>
+                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
+                  Vivo en {quiltro.location}
                 </Text>
 
-                <View style={{ flexDirection: 'row', alignamigos: 'center' }}>
-                  <MapPinIcon color={colors[colors.icon]} size={16} />
-                  {amigo.lastStatusEvent &&
-                    amigo.lastStatusEvent.status === 'sighted' && (
-                      <View>
-                        <Button title="Confirm"></Button>
-                        <Text>
-                          Visto hace {daysElapsedSinceLastSeen} dias!!
-                        </Text>
-                      </View>
-                    )}
+                <View style={{ flexDirection: 'row', alignquiltros: 'center' }}>
+                  {/* <MapPinIcon color={colors[colors.icon]} size={16} /> */}
                 </View>
               </View>
             </TouchableOpacity>
@@ -93,11 +90,13 @@ function MisAmigosScreen() {
         />
       ) : null}
 
-      {!amigos || !amigos.length ? (
+      {!quiltros || !quiltros.length ? (
         <View className="flex h-full">
-          <View className={'flex flex-1 justify-center amigos-center'}>
+          <View className={'flex flex-1 justify-center quiltros-center'}>
             <Text className={'text-center text-xl font-bold italic'}>
-              No has agregado amigos perdidos, usa el botón para crear anuncio
+              No has agregado quiltros perdidos, usa el botón
+              <PlusCircleIcon color="#00CCBB" />
+              para crear anuncio
             </Text>
           </View>
           <View className="flex">

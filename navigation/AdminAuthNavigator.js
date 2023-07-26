@@ -7,7 +7,7 @@ import WelcomeScreen from '../screens/WelcomeScreen'
 
 const Stack = createStackNavigator()
 
-const AuthNavigator = () => (
+const AdminAuthNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Welcome"
@@ -19,4 +19,4 @@ const AuthNavigator = () => (
   </Stack.Navigator>
 )
 
-export default AuthNavigator
+export default AdminAuthNavigator
