@@ -1,37 +1,34 @@
 import React from 'react'
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
+import Screen from '../components/Screen'
+import ListItem from '../components/lists/ListItem'
 
 import colors from '../config/colors'
 import Text from '../components/Text'
-import ContactOwnerForm from '../components/ContactOwnerForm'
 
 function AmigoDetailsScreen({ route }) {
-  const amigo = route.params
+  const { quiltro } = route.params
 
   return (
-    <KeyboardAvoidingView
-      behavior="position"
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}
-    >
+    <Screen>
       <Image
         style={styles.image}
-        preview={{ uri: amigo.photoUrl }}
+        preview={{ uri: quiltro.photoUrl }}
         tint="light"
-        uri={amigo.photoUrl}
+        uri={quiltro.photoUrl}
       />
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{amigo.name}</Text>
-        <Text>${amigo.age}</Text>
-        <Text>${amigo.favoriteFoods}</Text>
-        <Text>${amigo.cannotOrWontEat}</Text>
-        <Text>${amigo.location}</Text>
+        <Text style={styles.title}>{quiltro.name}</Text>
+        <Text>{quiltro.age}</Text>
+        <Text>{quiltro.favoriteFoods}</Text>
+        <Text>{quiltro.cannotOrWontEat}</Text>
+        <Text>{quiltro.location}</Text>
         <View style={styles.userContainer}>
-          <ListItem image={{ uri: amigo.photoUrl }} title={amigo.name} />
+          <ListItem image={{ uri: quiltro.photoUrl }} title={`Quiero ayudar ${quiltro.name}`} />
         </View>
-        <ContactOwnerForm amigo={amigo} />
       </View>
-    </KeyboardAvoidingView>
+    </Screen>
   )
 }
 
