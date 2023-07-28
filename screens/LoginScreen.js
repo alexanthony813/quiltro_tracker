@@ -29,7 +29,6 @@ function LoginScreen(props) {
 
   return (
     <Screen style={styles.container}>
-      {/* TODO add paw in place of logo */}
       <Form
         initialValues={{ phoneNumber: '' }}
         onSubmit={handleSubmit}

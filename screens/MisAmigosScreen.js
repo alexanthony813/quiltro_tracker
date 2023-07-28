@@ -6,16 +6,18 @@ import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
-import { MapPinIcon } from 'react-native-heroicons/outline'
 import NewAmigoModal from '../components/NewAmigoModal'
 import MisAmigosHeader from '../components/MisAmigosHeader'
 import AuthContext from '../auth/context'
 import colors from '../config/colors'
 import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
+import routes from '../navigation/routes'
+import { useNavigation } from '@react-navigation/native'
 
 function MisAmigosScreen() {
   const userLocation = {} // useLocation()
+  const navigation = useNavigation()
   const { user, setUser } = React.useContext(AuthContext)
   const userId = user._id
   const {
@@ -58,6 +60,12 @@ function MisAmigosScreen() {
                 marginHorizontal: 5,
                 width: '100%',
                 marginBottom: 30,
+              }}
+              onPress={(e) => {
+                e.preventDefault()
+                navigation.navigate(routes.AMIGO_DETAILS, {
+                  quiltro,
+                })
               }}
             >
               <Image
