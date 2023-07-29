@@ -1,15 +1,18 @@
 import settings from '../config/settings'
 
-export const sendNotification = async (message) => {
-  const { title, body, to } = message
-  const expo_message = {
-    sound: 'default',
-    title,
-    body,
-    to,
-    data: {},
-  }
-  message.expo_message = expo_message
+export const subscribeUserToAmigo = async (userId, quiltroId) => {
+  const response = await fetch(
+    `${settings.apiUrl}/users/${userId}/quiltros/${quiltroId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  return response
 }
 
 export const saveNewQuiltro = async (quiltro) => {
@@ -88,6 +91,11 @@ export const getAmigo = async (amigoId) => {
 
 export const getUserQuiltros = async ({ userId }) => {
   return await fetch(`${settings.apiUrl}/users/${userId}/quiltros`)
+}
+
+export const getQuiltro = async ({ quiltroId }) => {
+  const response = await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
+  return response
 }
 
 export const getUserNotifications = async ({ userId }) => {

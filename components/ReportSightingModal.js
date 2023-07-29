@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Text, Switch, View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewStatusEvent, sendNotification } from '../api'
+import { saveNewStatusEvent } from '../api'
 import Button from './Button'
 import routes from '../navigation/routes'
 
@@ -16,6 +16,7 @@ const validationSchema = Yup.object().shape({
   body: Yup.string().min(1).label('Message'),
 })
 
+// TODO delete
 const ReportSightingModal = ({
   amigo,
   setReportingAmigo,
@@ -75,8 +76,6 @@ const ReportSightingModal = ({
       from,
       body,
     }
-    const sentNotification = await sendNotification(message)
-
     if (savedStatusEvent.ok && sentNotification) {
       setReportingAmigo(null)
     }

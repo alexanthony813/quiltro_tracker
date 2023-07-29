@@ -3,15 +3,23 @@ import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import ListItem from '../components/lists/ListItem'
+import MisAmigosHeader from '../components/MisAmigosHeader'
 
 import colors from '../config/colors'
 import Text from '../components/Text'
 
 function AmigoDetailsScreen({ route }) {
   const { quiltro } = route.params
+  const { lastStatusEvent } = quiltro
 
   return (
     <Screen>
+      <MisAmigosHeader
+        quiltro={quiltro}
+        setIsModalVisible={() => {
+          setIsModalVisible(!isModalVisible)
+        }}
+      />
       <Image
         style={styles.image}
         preview={{ uri: quiltro.photoUrl }}
@@ -20,12 +28,21 @@ function AmigoDetailsScreen({ route }) {
       />
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{quiltro.name}</Text>
-        <Text>{quiltro.age}</Text>
         <Text>{quiltro.favoriteFoods}</Text>
         <Text>{quiltro.cannotOrWontEat}</Text>
         <Text>{quiltro.location}</Text>
+        <Text>{quiltro.requestedItems}</Text>
+        {lastStatusEvent && (
+          <View>
+            <Text>{quiltro.lastSeenLocation}</Text>
+            <Text>{quiltro.lastSeenDate}</Text>
+          </View>
+        )}
         <View style={styles.userContainer}>
-          <ListItem image={{ uri: quiltro.photoUrl }} title={`Quiero ayudar ${quiltro.name}`} />
+          <ListItem
+            image={{ uri: quiltro.photoUrl }}
+            title={`Quiero ayudar ${quiltro.name}`}
+          />
         </View>
       </View>
     </Screen>

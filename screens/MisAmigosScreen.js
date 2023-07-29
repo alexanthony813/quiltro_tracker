@@ -76,9 +76,6 @@ function MisAmigosScreen() {
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
                   Me llama {quiltro.name}
                 </Text>
-                <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                  Tengo {quiltro.age} de edad
-                </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
                   Prefiero comer {quiltro.favoriteFoods}
                 </Text>

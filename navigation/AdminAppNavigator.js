@@ -8,7 +8,7 @@ import UserNavigator from './UserNavigator'
 import SupportNavigator from './SupportNavigator'
 import { createStackNavigator } from '@react-navigation/stack'
 import AmigoDetailsScreen from '../screens/AmigoDetailsScreen'
- 
+
 const Tab = createBottomTabNavigator()
 
 const Stack = createStackNavigator()
@@ -22,12 +22,19 @@ const MisAmigosStack = () => {
       initalRouteName={routes.MIS_AMIGOS}
     >
       <Stack.Screen name={routes.AMIGO_LIST} component={MisAmigosScreen} />
-      <Stack.Screen name={routes.AMIGO_DETAILS} component={AmigoDetailsScreen} />
+      <Stack.Screen
+        name={routes.AMIGO_DETAILS}
+        component={AmigoDetailsScreen}
+      />
     </Stack.Navigator>
   )
 }
 
-const AdminAppNavigator = () => {
+// TODO rename, admin level will be specific to each quiltro
+const AdminAppNavigator = ({ quiltro }) => {
+  if (quiltro) {
+    console.dir(quiltro)
+  }
   return (
     <Tab.Navigator
       screenOptions={{
@@ -52,7 +59,9 @@ const AdminAppNavigator = () => {
             <MisAmigosButton
               onPress={(e) => {
                 e.preventDefault()
-                navigation.navigate(routes.MIS_AMIGOS)
+                navigation.navigate(routes.MIS_AMIGOS, {
+                  screen: routes.AMIGO_LIST,
+                })
               }}
             />
           ),

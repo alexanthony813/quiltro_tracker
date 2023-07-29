@@ -5,9 +5,12 @@ import AppLoading from 'expo-app-loading'
 
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
-import AdminNavigator from './navigation/AdminNavigator'
 import AuthContext from './auth/context'
 import authStorage from './auth/storage'
+import useApi from './hooks/useApi'
+import { parseInitialURLAsync } from 'expo-linking'
+import AdminAppNavigator from './navigation/AdminAppNavigator'
+import AdminAuthNavigator from './navigation/AdminAuthNavigator'
 
 const hardCodedUser = {
   phoneNumber: '109692896821923',
@@ -17,22 +20,34 @@ const hardCodedUser = {
 }
 
 import { navigationRef } from './navigation/rootNavigation'
+import { getQuiltro } from './api'
 
 export default function App(props) {
-  // console.dir(props.route.params)
-  // const { quiltro_id } = this.props.route.params;
-  // const isAdmin = quiltro_id === null
-  const isAdmin = true
-  const [user, setUser] = useState(null)
-
-  const [error, setError] = useState(null)
   const [isReady, setIsReady] = useState(false)
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
+  const {
+    data: quiltro,
+    error: quiltroFetchError,
+    isLoading,
+    request: loadQuiltro,
+  } = useApi(getQuiltro)
 
   const restoreUser = async () => {
     // let user = await authStorage.getUser()
     // if (user) {
-    setUser(hardCodedUser)
+    // setUser(hardCodedUser)
     // }
+    try {
+      const parsedUrl = await parseInitialURLAsync()
+      const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
+      if (path) {
+        loadQuiltro({ path })
+      }
+    } catch (err) {
+      console.dir(err)
+      setError(error)
+    }
   }
 
   if (!isReady) {
@@ -54,7 +69,11 @@ export default function App(props) {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {isAdmin ? <AdminNavigator /> : <UserNavigator />}
+          {quiltro ? (
+            <AdminAppNavigator quiltro={quiltro} />
+          ) : (
+            <AdminAuthNavigator />
+          )}
         </TailwindProvider>
       </NavigationContainer>
     </AuthContext.Provider>
