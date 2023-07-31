@@ -49,7 +49,7 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
       console.dir('ERROR') // TODO add better error handle in here
     }
     quiltro.photoUrl = presignedUrl.split('?')[0]
-    quiltro.userId = user.userId
+    quiltro.uid = user.uid
 
     const savedQuiltroResponse = await saveNewQuiltro({
       ...quiltro,

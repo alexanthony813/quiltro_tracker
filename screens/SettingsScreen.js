@@ -9,18 +9,14 @@ import Screen from '../components/Screen'
 import useAuth from '../auth/useAuth'
 
 function AccountScreen({ navigation }) {
-  const { user, logOut } = useAuth()
+  const { user } = useAuth()
+  console.dir(user)
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem title={user.phoneNumber} />
         <ListItem title={`Joined on: ${user.joinedOn}`} />
       </View>
-      <ListItem
-        title="Log Out"
-        IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-        onPress={() => logOut()}
-      />
     </Screen>
   )
 }

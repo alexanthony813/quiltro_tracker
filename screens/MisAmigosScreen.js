@@ -15,11 +15,24 @@ import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import useAuth from '../auth/useAuth'
 
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
+
 function MisAmigosScreen() {
+  const auth = getAuth()
   const userLocation = {} // useLocation()
   const navigation = useNavigation()
-  const { user, logOut } = useAuth()
-  const userId = user.userId
+  const { user } = useAuth()
+  if (!user) {
+    signInAnonymously(auth)
+      .then(async ({ user }) => {
+        registerUser(user)
+      })
+      .catch((error) => {
+        setError(error)
+      })
+  }
+
+  const { uid } = user
   const {
     data: quiltros,
     error,
@@ -28,7 +41,7 @@ function MisAmigosScreen() {
   } = useApi(getUserQuiltros)
   const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
-    loadAmigos({ userId })
+    loadAmigos({ uid })
   }, [JSON.stringify(quiltros)])
   return (
     <Screen>

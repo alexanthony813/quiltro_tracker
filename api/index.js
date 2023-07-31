@@ -1,8 +1,8 @@
 import settings from '../config/settings'
 
-export const subscribeUserToAmigo = async (userId, quiltroId) => {
+export const subscribeUserToAmigo = async (uid, quiltroId) => {
   const response = await fetch(
-    `${settings.apiUrl}/users/${userId}/quiltros/${quiltroId}`,
+    `${settings.apiUrl}/users/${uid}/quiltros/${quiltroId}`,
     {
       method: 'PATCH',
       headers: {
@@ -65,8 +65,8 @@ export const loginUser = async (user) => {
   })
 }
 
-export const getUserMessages = async ({ userId }) => {
-  return await fetch(`${settings.apiUrl}/users/${userId}/messages`)
+export const getUserMessages = async ({ uid }) => {
+  return await fetch(`${settings.apiUrl}/users/${uid}/messages`)
 }
 
 export const getPresignedUrl = async () => {
@@ -89,15 +89,15 @@ export const getAmigo = async (amigoId) => {
   return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
 }
 
-export const getUserQuiltros = async ({ userId }) => {
-  return await fetch(`${settings.apiUrl}/users/${userId}/quiltros`)
+export const getUserQuiltros = async ({ uid }) => {
+  return await fetch(`${settings.apiUrl}/users/${uid}/quiltros`)
 }
 
-export const getQuiltro = async ({ quiltroId }) => {
+export const getQuiltro = async (quiltroId) => {
   const response = await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
   return response
 }
 
-export const getUserNotifications = async ({ userId }) => {
-  return await fetch(`${settings.apiUrl}/users/${userId}/messages`)
+export const getUserNotifications = async ({ uid }) => {
+  return await fetch(`${settings.apiUrl}/users/${uid}/messages`)
 }

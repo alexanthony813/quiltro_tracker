@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import AppLoading from 'expo-app-loading'
 
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
@@ -12,11 +11,10 @@ import AdminAuthNavigator from './navigation/AdminAuthNavigator'
 import AuthContext from './auth/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltro, registerUser } from './api'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
 
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { signInAnonymously } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBVL--mWCJkcg_pEX99smeNsyz6eOUI9o0',
@@ -54,16 +52,15 @@ export default function App(props) {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
         if (path) {
-          loadQuiltro({ path })
+          await loadQuiltro(path)
+          signInAnonymously(auth)
+            .then(async ({ user }) => {
+              registerUser(user)
+            })
+            .catch((error) => {
+              setError(error)
+            })
         }
-
-        signInAnonymously(auth)
-          .then(({ user }) => {
-            registerUser(user)
-          })
-          .catch((error) => {
-            setError(error)
-          })
       } catch (err) {
         console.dir(err)
         setError(quiltroFetchError)
@@ -92,7 +89,7 @@ export default function App(props) {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {user || (quiltro && quiltro.length) ? (
+          {user || (quiltro && quiltro._id) ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
             <AdminAuthNavigator />

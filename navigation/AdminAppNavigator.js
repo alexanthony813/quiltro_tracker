@@ -13,16 +13,20 @@ const Tab = createBottomTabNavigator()
 
 const Stack = createStackNavigator()
 
-const MisAmigosStack = () => {
+const MisAmigosStack = ({ route }) => {
+  const { quiltro } = route.params
+  const initialRouteName =
+    quiltro && quiltro._id ? routes.AMIGO_DETAILS : routes.AMIGO_LIST
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initalRouteName={routes.MIS_AMIGOS}
+      initialRouteName={initialRouteName}
     >
       <Stack.Screen name={routes.AMIGO_LIST} component={MisAmigosScreen} />
       <Stack.Screen
+        initialParams={{ quiltro }}
         name={routes.AMIGO_DETAILS}
         component={AmigoDetailsScreen}
       />
@@ -51,6 +55,7 @@ const AdminAppNavigator = ({ quiltro }) => {
       <Tab.Screen
         name={routes.MIS_AMIGOS}
         component={MisAmigosStack}
+        initialParams={{ quiltro }}
         options={({ navigation }) => ({
           tabBarIcon: ({ size, color }) => (
             <MisAmigosButton
