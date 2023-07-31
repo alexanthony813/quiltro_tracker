@@ -14,10 +14,11 @@ import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
-  age: Yup.string().label('Edad'),
+  // age: Yup.string().label('Edad'), who knows/cares
   favoriteFoods: Yup.string().label('Comidas favoritas'),
   cannotOrWontEat: Yup.string().label('Comidas no puede comer'),
-  location: Yup.string().label('Ubicacion'),
+  location: Yup.string().label('Ubicacion'), // casita location may be null
+  requestedItems: Yup.string().label('Realmente necesito'),
 })
 
 const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
@@ -48,13 +49,13 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
       console.dir('ERROR') // TODO add better error handle in here
     }
     quiltro.photoUrl = presignedUrl.split('?')[0]
-    quiltro.userId = user._id // todo make many to many
+    quiltro.userId = user.userId
 
-    const savedQuiltro = await saveNewQuiltro({
+    const savedQuiltroResponse = await saveNewQuiltro({
       ...quiltro,
     })
 
-    if (savedQuiltro.ok) {
+    if (savedQuiltroResponse.ok) {
       navigation.navigate(routes.HOME)
       setIsVisible(false)
     }
@@ -121,22 +122,35 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            <FormField maxLength={255} name="name" placeholder="Nombre" />
-            <FormField maxLength={255} name="age" placeholder="Edad" />
             <FormField
+              style={{ width: '100%' }}
+              maxLength={255}
+              name="name"
+              placeholder="Nombre"
+            />
+            <FormField
+              style={{ width: '100%' }}
               maxLength={255}
               name="favoriteFoods"
               placeholder="Comidas favoritas"
             />
             <FormField
+              style={{ width: '100%' }}
               maxLength={255}
               name="cannotOrWontEat"
-              placeholder="Comidas no puede comer"
+              placeholder="No puedo comer"
             />
             <FormField
+              style={{ width: '100%' }}
               maxLength={255}
               name="location"
               placeholder="Ubicacion"
+            />
+            <FormField
+              style={{ width: '100%' }}
+              maxLength={255}
+              name="requestedItems"
+              placeholder="Necesito"
             />
             <ActivityIndicator animating={isImageUploading} size="small" />
             <View>

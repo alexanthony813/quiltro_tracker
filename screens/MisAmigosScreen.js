@@ -8,18 +8,18 @@ import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
 import NewAmigoModal from '../components/NewAmigoModal'
 import MisAmigosHeader from '../components/MisAmigosHeader'
-import AuthContext from '../auth/context'
 import colors from '../config/colors'
 import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
+import useAuth from '../auth/useAuth'
 
 function MisAmigosScreen() {
   const userLocation = {} // useLocation()
   const navigation = useNavigation()
-  const { user, setUser } = React.useContext(AuthContext)
-  const userId = user._id
+  const { user, logOut } = useAuth()
+  const userId = user.userId
   const {
     data: quiltros,
     error,
@@ -30,7 +30,6 @@ function MisAmigosScreen() {
   useEffect(() => {
     loadAmigos({ userId })
   }, [JSON.stringify(quiltros)])
-  console.dir(quiltros)
   return (
     <Screen>
       <NewAmigoModal
@@ -75,9 +74,6 @@ function MisAmigosScreen() {
               <View style={{ padding: 10 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
                   Me llama {quiltro.name}
-                </Text>
-                <Text style={{ fontSize: 14, marginBottom: 5 }}>
-                  Tengo {quiltro.age} de edad
                 </Text>
                 <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
                   Prefiero comer {quiltro.favoriteFoods}
