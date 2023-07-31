@@ -5,24 +5,35 @@ import AppLoading from 'expo-app-loading'
 
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
-import AuthContext from './auth/context'
-import authStorage from './auth/storage'
 import useApi from './hooks/useApi'
 import { parseInitialURLAsync } from 'expo-linking'
 import AdminAppNavigator from './navigation/AdminAppNavigator'
 import AdminAuthNavigator from './navigation/AdminAuthNavigator'
+import AuthContext from './auth/context'
+import { navigationRef } from './navigation/rootNavigation'
+import { getQuiltro, registerUser } from './api'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
 
-const hardCodedUser = {
-  phoneNumber: '109692896821923',
-  joinedOn: '2023-07-18T18:06:01.481Z',
-  _id: '64b6d489c059ac97b164e971',
-  __v: 0,
+import { getAnalytics } from 'firebase/analytics'
+import { signInAnonymously } from 'firebase/auth'
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBVL--mWCJkcg_pEX99smeNsyz6eOUI9o0',
+  authDomain: 'quiltro-44098.firebaseapp.com',
+  projectId: 'quiltro-44098',
+  storageBucket: 'quiltro-44098.appspot.com',
+  messagingSenderId: '1001073219155',
+  appId: '1:1001073219155:web:e488be8d50bd308a18d8a6',
+  measurementId: 'G-YB5KMHVM76',
 }
 
-import { navigationRef } from './navigation/rootNavigation'
-import { getQuiltro } from './api'
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const analytics = getAnalytics(app)
 
 export default function App(props) {
+  const auth = getAuth()
   const [isReady, setIsReady] = useState(false)
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
@@ -33,32 +44,44 @@ export default function App(props) {
     request: loadQuiltro,
   } = useApi(getQuiltro)
 
-  const restoreUser = async () => {
-    // let user = await authStorage.getUser()
-    // if (user) {
-    // setUser(hardCodedUser)
-    // }
-    try {
-      const parsedUrl = await parseInitialURLAsync()
-      const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
-      if (path) {
-        loadQuiltro({ path })
-      }
-    } catch (err) {
-      console.dir(err)
-      setError(error)
-    }
-  }
+  useEffect(() => {
+    async function asyncHelper() {
+      // let user = await authStorage.getUser()
+      // if (user) {
+      // setUser(hardCodedUser)
+      // }
+      try {
+        const parsedUrl = await parseInitialURLAsync()
+        const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
+        if (path) {
+          loadQuiltro({ path })
+        }
 
-  if (!isReady) {
-    return (
-      <AppLoading
-        onError={setError}
-        startAsync={restoreUser}
-        onFinish={() => setIsReady(true)}
-      />
-    )
-  }
+        signInAnonymously(auth)
+          .then(({ user }) => {
+            registerUser(user)
+          })
+          .catch((error) => {
+            setError(error)
+          })
+      } catch (err) {
+        console.dir(err)
+        setError(quiltroFetchError)
+      }
+    }
+    asyncHelper()
+  }, [])
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      console.dir(user)
+      setUser(user)
+    } else {
+      // ...
+    }
+  })
 
   return (
     <AuthContext.Provider
