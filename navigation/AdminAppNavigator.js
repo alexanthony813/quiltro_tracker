@@ -32,9 +32,6 @@ const MisAmigosStack = () => {
 
 // TODO rename, admin level will be specific to each quiltro
 const AdminAppNavigator = ({ quiltro }) => {
-  if (quiltro) {
-    console.dir(quiltro)
-  }
   return (
     <Tab.Navigator
       screenOptions={{

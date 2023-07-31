@@ -69,7 +69,7 @@ export default function App(props) {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {quiltro ? (
+          {user || (quiltro && quiltro.length) ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
             <AdminAuthNavigator />

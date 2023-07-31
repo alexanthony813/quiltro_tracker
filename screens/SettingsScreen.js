@@ -10,7 +10,6 @@ import useAuth from '../auth/useAuth'
 
 function AccountScreen({ navigation }) {
   const { user, logOut } = useAuth()
-  console.dir(user)
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
