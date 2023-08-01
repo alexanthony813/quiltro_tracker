@@ -7,7 +7,7 @@ import MisAmigosScreen from '../screens/MisAmigosScreen'
 
 const Stack = createStackNavigator()
 
-const AdminAuthNavigator = ({}) => (
+const AdminAuthNavigator = ({firebaseApp}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Welcome"
@@ -15,7 +15,7 @@ const AdminAuthNavigator = ({}) => (
       options={{ headerShown: false }}
     />
     <Stack.Screen name="Login" component={MisAmigosScreen} />
-    <Stack.Screen name="Register" component={RegisterScreen} />
+    <Stack.Screen initialParams={{firebaseApp}} name="Register" component={RegisterScreen} />
   </Stack.Navigator>
 )
 

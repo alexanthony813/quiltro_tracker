@@ -10,9 +10,13 @@ import {
   signInWithCredential,
 } from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 
-function RegisterScreen() {
+function RegisterScreen({ route }) {
   // const auth = getAuth(firebaseApp)
+  const recaptchaVerifierRef = useRef(null)
+  const { firebaseApp } = route.params
+  console.dir(firebaseApp)
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [verificationId, setVerificationId] = useState(null)
@@ -44,6 +48,11 @@ function RegisterScreen() {
   return (
     <Screen>
       <View>
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifierRef}
+          firebaseConfig={firebaseApp.options}
+          attemptInvisibleVerification={true}
+        />
         <View>
           <Text styles={styles.otpText}>Login using OTP</Text>
           <TextInput

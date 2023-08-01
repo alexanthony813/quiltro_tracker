@@ -13,30 +13,22 @@ import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltro, registerUser } from './api'
 
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
-import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
+import firebase from 'firebase/compat/app';
+// import { getAnalytics } from 'firebase/analytics'
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyBVL--mWCJkcg_pEX99smeNsyz6eOUI9o0',
-  authDomain: 'quiltro-44098.firebaseapp.com',
-  projectId: 'quiltro-44098',
-  storageBucket: 'quiltro-44098.appspot.com',
-  messagingSenderId: '1001073219155',
-  appId: '1:1001073219155:web:e488be8d50bd308a18d8a6',
-  measurementId: 'G-YB5KMHVM76',
+import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
+
+let firebaseApp
+// Initialize Firebase only if it hasn't been initialized already
+if (firebase &&!firebase.apps.length) {
+  firebaseApp = firebase.initializeApp(firebaseConfig)
 }
 
-// Initialize Firebase
-
-export default function App(props) {
-  const recaptchaVerifierRef = useRef(null)
-  let firebaseApp
+export default function App() {
   let auth
   try {
-    firebaseApp = initializeApp(firebaseConfig)
-    const analytics = getAnalytics(firebaseApp)
-    auth = getAuth()
+    // const analytics = getAnalytics(firebaseApp)
+    auth = getAuth(firebaseApp)
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -51,7 +43,7 @@ export default function App(props) {
   } catch (error) {
     console.dir(error)
   }
-  const firebaseConfig = firebaseApp ? firebaseApp.options : undefined
+  // const firebaseConfig = firebaseApp ? firebaseApp.options : undefined
   const [isReady, setIsReady] = useState(false)
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
@@ -98,17 +90,10 @@ export default function App(props) {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {firebaseApp ? (
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifierRef}
-              firebaseConfig={firebaseConfig}
-              attemptInvisibleVerification={true}
-            />
-          ) : null}
           {user || (quiltro && quiltro._id) ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
-            <AdminAuthNavigator />
+            <AdminAuthNavigator firebaseApp={firebaseApp} />
           )}
         </TailwindProvider>
       </NavigationContainer>
