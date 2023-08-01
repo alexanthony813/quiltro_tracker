@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import * as Yup from 'yup'
 import Screen from '../components/Screen'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import {
   getAuth,
-  signInWithPhoneNumber,
   PhoneAuthProvider,
   signInWithCredential,
 } from 'firebase/auth'
@@ -13,36 +12,33 @@ import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 
 function RegisterScreen({ route }) {
-  // const auth = getAuth(firebaseApp)
   const recaptchaVerifierRef = useRef(null)
   const { firebaseApp } = route.params
-  console.dir(firebaseApp)
+  const auth = getAuth(firebaseApp)
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [verificationId, setVerificationId] = useState(null)
 
-  // window.recaptchaVerifier = new RecaptchaVerifier(auth, 'captcha-container', {
-  //   size: 'invisible',
-  // })
-
   const sendVerification = () => {
-    const phoneProvider = new PhoneAuthProvider()
+    const phoneProvider = new PhoneAuthProvider(auth)
     phoneProvider
-      .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
+      .verifyPhoneNumber(phoneNumber, recaptchaVerifierRef.current)
       .then(setVerificationId)
     setPhoneNumber('')
   }
 
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
-    signInWithCredential(credential)
-      .then(() => {
+    signInWithCredential(auth, credential)
+      .then((user) => {
         setCode('')
+        console.dir('authed')
+        console.dir(user)
       })
       .catch((error) => {
         // show error
+        console.dir(error)
       })
-    Alert.alert('log in successfulllll')
   }
 
   return (

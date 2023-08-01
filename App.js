@@ -19,7 +19,6 @@ import firebase from 'firebase/compat/app';
 import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
 
 let firebaseApp
-// Initialize Firebase only if it hasn't been initialized already
 if (firebase &&!firebase.apps.length) {
   firebaseApp = firebase.initializeApp(firebaseConfig)
 }
@@ -43,8 +42,7 @@ export default function App() {
   } catch (error) {
     console.dir(error)
   }
-  // const firebaseConfig = firebaseApp ? firebaseApp.options : undefined
-  const [isReady, setIsReady] = useState(false)
+  // const [isReady, setIsReady] = useState(false)
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
   const {
@@ -56,10 +54,6 @@ export default function App() {
 
   useEffect(() => {
     async function asyncHelper() {
-      // let user = await authStorage.getUser()
-      // if (user) {
-      // setUser(hardCodedUser)
-      // }
       try {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
