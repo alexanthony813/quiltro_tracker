@@ -92,7 +92,7 @@ export default function App(props) {
           {user || (quiltro && quiltro._id) ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
-            <AdminAuthNavigator />
+            <AdminAuthNavigator app={app} />
           )}
         </TailwindProvider>
       </NavigationContainer>

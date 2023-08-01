@@ -7,7 +7,7 @@ import MisAmigosScreen from '../screens/MisAmigosScreen'
 
 const Stack = createStackNavigator()
 
-const AdminAuthNavigator = () => (
+const AdminAuthNavigator = ({}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Welcome"
