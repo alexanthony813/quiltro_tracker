@@ -15,6 +15,7 @@ import { getQuiltro, registerUser } from './api'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBVL--mWCJkcg_pEX99smeNsyz6eOUI9o0',
@@ -27,11 +28,30 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
 
 export default function App(props) {
-  const auth = getAuth()
+  const recaptchaVerifierRef = useRef(null)
+  let firebaseApp
+  let auth
+  try {
+    firebaseApp = initializeApp(firebaseConfig)
+    const analytics = getAnalytics(firebaseApp)
+    auth = getAuth()
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        console.dir(user)
+        setUser(user)
+      } else {
+        // ...
+      }
+    })
+  } catch (error) {
+    console.dir(error)
+  }
+  const firebaseConfig = firebaseApp ? firebaseApp.options : undefined
   const [isReady, setIsReady] = useState(false)
   const [user, setUser] = useState(null)
   const [error, setError] = useState(null)
@@ -69,17 +89,6 @@ export default function App(props) {
     asyncHelper()
   }, [])
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      console.dir(user)
-      setUser(user)
-    } else {
-      // ...
-    }
-  })
-
   return (
     <AuthContext.Provider
       value={{
@@ -89,10 +98,17 @@ export default function App(props) {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
+          {firebaseApp ? (
+            <FirebaseRecaptchaVerifierModal
+              ref={recaptchaVerifierRef}
+              firebaseConfig={firebaseConfig}
+              attemptInvisibleVerification={true}
+            />
+          ) : null}
           {user || (quiltro && quiltro._id) ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
-            <AdminAuthNavigator app={app} />
+            <AdminAuthNavigator />
           )}
         </TailwindProvider>
       </NavigationContainer>

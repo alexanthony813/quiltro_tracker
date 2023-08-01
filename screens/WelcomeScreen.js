@@ -7,8 +7,6 @@ import Button from '../components/Button'
 import routes from '../navigation/routes'
 
 function WelcomeScreen({ navigation }) {
-  const auth = getAuth()
-
   return (
     <ImageBackground
       blurRadius={3}
@@ -23,6 +21,7 @@ function WelcomeScreen({ navigation }) {
         <Button
           title="Login Anonimo"
           onPress={() => {
+            const auth = getAuth()
             signInAnonymously(auth).then(async ({ user }) => {
               registerUser(user)
             })
