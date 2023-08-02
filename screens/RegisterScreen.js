@@ -3,17 +3,13 @@ import { StyleSheet } from 'react-native'
 import * as Yup from 'yup'
 import Screen from '../components/Screen'
 import { View, Text, TouchableOpacity, Alert } from 'react-native'
-import {
-  getAuth,
-  PhoneAuthProvider,
-  signInWithCredential,
-} from 'firebase/auth'
+import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
+import { firebaseApp } from '../App'
 
-function RegisterScreen({ route }) {
+function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
-  const { firebaseApp } = route.params
   const auth = getAuth(firebaseApp)
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')

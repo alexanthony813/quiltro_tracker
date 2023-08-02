@@ -13,38 +13,38 @@ import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltro, registerUser } from './api'
 
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
-import firebase from 'firebase/compat/app';
-// import { getAnalytics } from 'firebase/analytics'
+import firebase from 'firebase/compat/app'
 
 import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
 
-let firebaseApp
-if (firebase &&!firebase.apps.length) {
+export let firebaseApp // TODO export
+if (firebase && !firebase.apps.length) {
   firebaseApp = firebase.initializeApp(firebaseConfig)
 }
 
 export default function App() {
   let auth
+  const [user, setUser] = useState(null)
   try {
-    // const analytics = getAnalytics(firebaseApp)
     auth = getAuth(firebaseApp)
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
         console.dir(user)
         setUser(user)
       } else {
-        // ...
+        setUser(null)
       }
     })
   } catch (error) {
     console.dir(error)
   }
-  // const [isReady, setIsReady] = useState(false)
-  const [user, setUser] = useState(null)
+  // const [isReady, setIsReady] = useState(false) TODO
   const [error, setError] = useState(null)
+  if (error) {
+    console.error(error.message)
+  }
+
   const {
     data: quiltro,
     error: quiltroFetchError,
@@ -84,10 +84,10 @@ export default function App() {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {user || (quiltro && quiltro._id) ? (
+          {user ? (
             <AdminAppNavigator quiltro={quiltro} />
           ) : (
-            <AdminAuthNavigator firebaseApp={firebaseApp} />
+            <AdminAuthNavigator />
           )}
         </TailwindProvider>
       </NavigationContainer>
