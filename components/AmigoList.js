@@ -104,7 +104,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
                   }}
                   color={'bg-teal-600'}
                   title={'Reportar'}
-                  // isDisabled={amigo.owner_id === user.userId}, don't want to scare the owner by hiding/disabling the button
+                  // isDisabled={amigo.owner_id === user.uid}, don't want to scare the owner by hiding/disabling the button
                 />
               </View>
             </View>

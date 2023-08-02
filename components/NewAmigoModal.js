@@ -7,10 +7,9 @@ import Button from './Button'
 import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
-import { getPresignedUrl } from '../api'
+import { getUserQuiltros, getPresignedUrl } from '../api'
 import { Form, FormField, SubmitButton } from './forms'
-
-import * as ImageManipulator from 'expo-image-manipulator'
+ import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
@@ -49,14 +48,14 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
       console.dir('ERROR') // TODO add better error handle in here
     }
     quiltro.photoUrl = presignedUrl.split('?')[0]
-    quiltro.userId = user.userId
+    quiltro.uid = user.uid
 
     const savedQuiltroResponse = await saveNewQuiltro({
       ...quiltro,
     })
 
     if (savedQuiltroResponse.ok) {
-      navigation.navigate(routes.HOME)
+      await getUserQuiltros(user.uid)
       setIsVisible(false)
     }
     setIsQuiltroSubmitting(false)

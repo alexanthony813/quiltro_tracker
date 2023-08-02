@@ -1,82 +1,121 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import * as Yup from 'yup'
-import { loginUser, registerUser } from '../api/index'
-import useAuth from '../auth/useAuth'
 import Screen from '../components/Screen'
-import { Form, FormField, SubmitButton } from '../components/forms'
-import useApi from '../hooks/useApi'
-import { View } from 'react-native'
-
-const validationSchema = Yup.object().shape({
-  phoneNumber: Yup.string().required().label('Name'),
-  // password: Yup.string().required().min(7).label('Password'),
-})
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
+import { TextInput } from 'react-native-gesture-handler'
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
+import { firebaseApp } from '../App'
 
 function RegisterScreen() {
-  const registerApi = useApi(registerUser)
-  // const loginApi = useApi(loginUser) TODO fix
-  const auth = useAuth()
-  const [error, setError] = useState()
+  const recaptchaVerifierRef = useRef(null)
+  const auth = getAuth(firebaseApp)
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [code, setCode] = useState('')
+  const [verificationId, setVerificationId] = useState(null)
 
-  const handleSubmit = async (userInfo) => {
-    const result = await registerApi.request(userInfo)
+  const sendVerification = () => {
+    const phoneProvider = new PhoneAuthProvider(auth)
+    phoneProvider
+      .verifyPhoneNumber(phoneNumber, recaptchaVerifierRef.current)
+      .then(setVerificationId)
+    setPhoneNumber('')
+  }
 
-    if (!result.ok) {
-      if (result.data) setError(result.data.error)
-      else {
-        setError('An unexpected error occurred.')
-        console.log(result)
-      }
-      return
-    }
-    const { phoneNumber } = userInfo
-    const loginResponse = await loginUser({
-      phoneNumber,
-    })
-    const data = await loginResponse.json()
-    auth.logIn(data)
+  const confirmCode = () => {
+    const credential = PhoneAuthProvider.credential(verificationId, code)
+    signInWithCredential(auth, credential)
+      .then((user) => {
+        setCode('')
+        console.dir('authed')
+        console.dir(user)
+      })
+      .catch((error) => {
+        // show error
+        console.dir(error)
+      })
   }
 
   return (
-    <>
-      <Screen style={styles.container}>
-        <Form
-          initialValues={{ phoneNumber: '' }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <FormField
-            autoCorrect={false}
-            icon="account"
-            name="phoneNumber"
-            placeholder="PhoneNumber"
+    <Screen>
+      <View>
+        <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifierRef}
+          firebaseConfig={firebaseApp.options}
+          attemptInvisibleVerification={true}
+        />
+        <View>
+          <Text styles={styles.otpText}>Login using OTP</Text>
+          <TextInput
+            placeholder="Phone number with country code"
+            onChangeText={setPhoneNumber}
+            keyboardType="phone-pad"
+            autoCompleteType="tel"
+            style={styles.textInput}
           />
-          {/* <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="password"
-            placeholder="Password"
-            secureTextEntry
-            // textContentType="password"
-          /> */}
-          <View style={styles.buttonsContainer}>
-            <SubmitButton title="Registrar" />
-          </View>
-        </Form>
-      </Screen>
-    </>
+          <TouchableOpacity
+            onPress={sendVerification}
+            styles={styles.sendVerification}
+          >
+            <Text styles={styles.buttonText}>Send Verification</Text>
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Confirm Code"
+            onChangeText={setCode}
+            keyboardType="number-pad"
+            style={styles.textInput}
+          />
+          <TouchableOpacity onPress={confirmCode} styles={styles.sendCode}>
+            <Text styles={styles.buttonText}>Confirm Verification</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Screen>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    flex: 1,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textInput: {
+    paddingTop: 40,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    fontSize: 24,
+    borderBottomColor: '#fff',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#fff',
+  },
+  sendVerification: {
+    padding: 20,
+    backgroundColor: '#3498',
+    borderRadius: 10,
+  },
+  sendCode: {
+    padding: 20,
+    backgroundColor: '#9b59',
+    borderRadius: 10,
   },
   buttonsContainer: {
     padding: 20,
     width: '100%',
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  otpText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    margin: 20,
   },
 })
 

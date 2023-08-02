@@ -59,7 +59,7 @@ const ReportSightingModal = ({
     statusEvent.amigo_id = amigo._id
     statusEvent.status = isSecured ? 'recovered' : 'sighted'
 
-    const from = user.userId
+    const from = user.uid
     const { body } = statusEvent
     statusEvent.details = {
       body,

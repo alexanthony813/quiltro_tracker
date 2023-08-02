@@ -13,13 +13,25 @@ import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
-import useAuth from '../auth/useAuth'
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
+import { firebaseApp } from '../App'
 
-function MisAmigosScreen() {
-  const userLocation = {} // useLocation()
+function MisAmigosScreen({}) {
+  const auth = getAuth(firebaseApp)
+  const { currentUser } = auth
+  const currentUserLocation = {} // useLocation()
   const navigation = useNavigation()
-  const { user, logOut } = useAuth()
-  const userId = user.userId
+  if (!currentUser) {
+    signInAnonymously(auth)
+      .then(async ({ currentUser }) => {
+        registerUser(currentUser)
+      })
+      .catch((error) => {
+        setError(error)
+      })
+  }
+
+  const { uid } = currentUser
   const {
     data: quiltros,
     error,
@@ -28,15 +40,16 @@ function MisAmigosScreen() {
   } = useApi(getUserQuiltros)
   const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
-    loadAmigos({ userId })
+    loadAmigos({ uid })
+    console.dir('loading quiltros')
   }, [JSON.stringify(quiltros)])
   return (
     <Screen>
       <NewAmigoModal
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
-        user={user}
-        userLocation={userLocation}
+        user={currentUser}
+        currentUserLocation={currentUserLocation}
       />
 
       <MisAmigosHeader
