@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MisAmigosButton from '../components/MisAmigosButton'
+import MisQuiltrosButton from '../components/MisQuiltrosButton'
 import routes from './routes'
-import MisAmigosScreen from '../screens/MisAmigosScreen'
+import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
 import UserNavigator from './UserNavigator'
 import SupportNavigator from './SupportNavigator'
 import { createStackNavigator } from '@react-navigation/stack'
-import AmigoDetailsScreen from '../screens/AmigoDetailsScreen'
+import QuiltroDetailsScreen from '../screens/QuiltroDetailsScreen'
 
 const Tab = createBottomTabNavigator()
 
 const Stack = createStackNavigator()
 
-const MisAmigosStack = ({ route }) => {
+const MisQuiltrosStack = ({ route }) => {
   const { quiltro } = route.params
   const initialRouteName =
     quiltro && quiltro._id ? routes.AMIGO_DETAILS : routes.AMIGO_LIST
@@ -24,11 +24,11 @@ const MisAmigosStack = ({ route }) => {
       }}
       initialRouteName={initialRouteName}
     >
-      <Stack.Screen name={routes.AMIGO_LIST} component={MisAmigosScreen} />
+      <Stack.Screen name={routes.AMIGO_LIST} component={MisQuiltrosScreen} />
       <Stack.Screen
         initialParams={{ quiltro }}
         name={routes.AMIGO_DETAILS}
-        component={AmigoDetailsScreen}
+        component={QuiltroDetailsScreen}
       />
     </Stack.Navigator>
   )
@@ -54,11 +54,11 @@ const AdminAppNavigator = ({ quiltro }) => {
       />
       <Tab.Screen
         name={routes.MIS_AMIGOS}
-        component={MisAmigosStack}
+        component={MisQuiltrosStack}
         initialParams={{ quiltro }}
         options={({ navigation }) => ({
           tabBarIcon: ({ size, color }) => (
-            <MisAmigosButton
+            <MisQuiltrosButton
               onPress={(e) => {
                 e.preventDefault()
                 navigation.navigate(routes.MIS_AMIGOS, {

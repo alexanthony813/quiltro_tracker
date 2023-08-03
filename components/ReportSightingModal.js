@@ -18,8 +18,8 @@ const validationSchema = Yup.object().shape({
 
 // TODO delete
 const ReportSightingModal = ({
-  amigo,
-  setReportingAmigo,
+  quiltro,
+  setReportingQuiltro,
   userLocation,
   user,
 }) => {
@@ -56,7 +56,7 @@ const ReportSightingModal = ({
       }
     }
     statusEvent.location = userLocation
-    statusEvent.amigo_id = amigo._id
+    statusEvent.quiltro_id = quiltro._id
     statusEvent.status = isSecured ? 'recovered' : 'sighted'
 
     const from = user.uid
@@ -72,12 +72,12 @@ const ReportSightingModal = ({
 
     const message = {
       to: 'ExponentPushToken[ZODa4cP9q4KF75vId7ZnI0]',
-      title: `${amigo.name} was ${statusEvent.status}!`,
+      title: `${quiltro.name} was ${statusEvent.status}!`,
       from,
       body,
     }
     if (savedStatusEvent.ok && sentNotification) {
-      setReportingAmigo(null)
+      setReportingQuiltro(null)
     }
     setIsSubmitting(false)
     navigation.navigate(routes.HOME)
@@ -108,9 +108,9 @@ const ReportSightingModal = ({
     setIsSecuredEnabled(true)
     setIsImageUploading(false)
   }
-  console.log(amigo)
+  console.log(quiltro)
   return (
-    <Modal visible={!!amigo}>
+    <Modal visible={!!quiltro}>
       <ActivityIndicator animating={isSubmitting} size="small" />
       <View
         style={{
@@ -122,7 +122,7 @@ const ReportSightingModal = ({
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-          Reportar un Amigo
+          Reportar un Quiltro
         </Text>
         <View style={{ paddingTop: 5, paddingBottom: 50 }}>
           <Form
@@ -173,7 +173,7 @@ const ReportSightingModal = ({
               <Button
                 color="medium"
                 title="Cancel"
-                onPress={() => setReportingAmigo(null)}
+                onPress={() => setReportingQuiltro(null)}
               />
             </View>
           </Form>

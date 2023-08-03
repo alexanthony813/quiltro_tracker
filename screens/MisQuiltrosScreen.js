@@ -6,8 +6,8 @@ import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
-import NewAmigoModal from '../components/NewAmigoModal'
-import MisAmigosHeader from '../components/MisAmigosHeader'
+import NewQuiltroModal from '../components/NewQuiltroModal'
+import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import colors from '../config/colors'
 import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
 import { firebaseApp } from '../App'
 
-function MisAmigosScreen({}) {
+function MisQuiltrosScreen({}) {
   const auth = getAuth(firebaseApp)
   const { currentUser } = auth
   const currentUserLocation = {} // useLocation()
@@ -36,23 +36,23 @@ function MisAmigosScreen({}) {
     data: quiltros,
     error,
     isLoading,
-    request: loadAmigos,
+    request: loadQuiltros,
   } = useApi(getUserQuiltros)
   const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
-    loadAmigos({ uid })
+    loadQuiltros({ uid })
     console.dir('loading quiltros')
   }, [JSON.stringify(quiltros)])
   return (
     <Screen>
-      <NewAmigoModal
+      <NewQuiltroModal
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
         user={currentUser}
         currentUserLocation={currentUserLocation}
       />
 
-      <MisAmigosHeader
+      <MisQuiltrosHeader
         setIsModalVisible={() => {
           setIsModalVisible(!isModalVisible)
         }}
@@ -131,4 +131,4 @@ function MisAmigosScreen({}) {
   )
 }
 
-export default MisAmigosScreen
+export default MisQuiltrosScreen

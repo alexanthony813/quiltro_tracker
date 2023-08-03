@@ -3,7 +3,7 @@ import { View, Pressable } from 'react-native'
 import Text from './Text'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 
-function MisAmigosHeader({ quiltro, setIsModalVisible }) {
+function MisQuiltrosHeader({ quiltro, setIsModalVisible }) {
   const headerText = quiltro
     ? `MisQuiltrosSeguidos ${quiltro.name}`
     : `MisQuiltrosSeguidos`
@@ -29,4 +29,4 @@ function MisAmigosHeader({ quiltro, setIsModalVisible }) {
   )
 }
 
-export default MisAmigosHeader
+export default MisQuiltrosHeader
