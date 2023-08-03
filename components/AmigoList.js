@@ -9,12 +9,12 @@ import { calculateDaysPassed } from '../utility/helpers'
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
-const AmigoList = ({ user, amigos, setReportingAmigo }) => {
+const QuiltroList = ({ user, quiltros, setReportingQuiltro }) => {
   const now = new Date()
 
   return (
     <FlatList
-      data={amigos}
+      data={quiltros}
       horizontal={true}
       contentContainerStyle={{
         paddingHorizontal: 15,
@@ -24,7 +24,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
       }}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(_, index) => String(index)}
-      renderItem={({ item: amigo, index }) => {
+      renderItem={({ item: quiltro, index }) => {
         const {
           lastStatusEvent,
           lastSeenDate,
@@ -33,7 +33,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
           user,
           status,
           description,
-        } = amigo
+        } = quiltro
         let daysElapsedSinceLastSeen
         if (lastStatusEvent && lastStatusEvent.status === 'sighted') {
           daysElapsedSinceLastSeen = calculateDaysPassed(
@@ -42,7 +42,7 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
           )
         } else {
           daysElapsedSinceLastSeen = calculateDaysPassed(
-            new Date(amigo.lastSeenDate),
+            new Date(quiltro.lastSeenDate),
             now
           )
         }
@@ -96,15 +96,15 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
               </View>
               <View
                 style={{ alignItems: 'center' }}
-                className="status-action-container flex amigos-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600"
+                className="status-action-container flex quiltros-center justify-center w-1/3 h-1/5 rounded absolute top-3.5 right-2.5 bg-teal-600"
               >
                 <Button
                   onPress={() => {
-                    setReportingAmigo(amigo)
+                    setReportingQuiltro(quiltro)
                   }}
                   color={'bg-teal-600'}
                   title={'Reportar'}
-                  // isDisabled={amigo.owner_id === user.uid}, don't want to scare the owner by hiding/disabling the button
+                  // isDisabled={quiltro.owner_id === user.uid}, don't want to scare the owner by hiding/disabling the button
                 />
               </View>
             </View>
@@ -115,4 +115,4 @@ const AmigoList = ({ user, amigos, setReportingAmigo }) => {
   )
 }
 
-export default AmigoList
+export default QuiltroList

@@ -18,7 +18,7 @@ function HomeSearchHeader({
     <View className="mx-1 mb-5">
       <View className="flex-row justify-between items-center ml-5 ">
         <View>
-          <Text className="font-bold text-2xl -mx-1.5">AmigosPerdidos</Text>
+          <Text className="font-bold text-2xl -mx-1.5">QuiltrosPerdidos</Text>
         </View>
         <View className="flex-row space-x-2 p-3 items-end">
           <Pressable

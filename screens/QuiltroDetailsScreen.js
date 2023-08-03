@@ -3,18 +3,18 @@ import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import ListItem from '../components/lists/ListItem'
-import MisAmigosHeader from '../components/MisAmigosHeader'
+import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 
 import colors from '../config/colors'
 import Text from '../components/Text'
 
-function AmigoDetailsScreen({ route }) {
+function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
   const { lastStatusEvent } = quiltro
 
   return (
     <Screen>
-      <MisAmigosHeader
+      <MisQuiltrosHeader
         quiltro={quiltro}
         setIsModalVisible={() => {
           setIsModalVisible(!isModalVisible)
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default AmigoDetailsScreen
+export default QuiltroDetailsScreen

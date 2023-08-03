@@ -1,6 +1,6 @@
 import settings from '../config/settings'
 
-export const subscribeUserToAmigo = async (uid, quiltroId) => {
+export const subscribeUserToQuiltro = async (uid, quiltroId) => {
   const response = await fetch(
     `${settings.apiUrl}/users/${uid}/quiltros/${quiltroId}`,
     {
@@ -30,7 +30,7 @@ export const saveNewQuiltro = async (quiltro) => {
 
 export const saveNewStatusEvent = async (statusEvent) => {
   const response = await fetch(
-    `${settings.apiUrl}/amigos/${statusEvent.amigoId}/event`,
+    `${settings.apiUrl}/quiltros/${statusEvent.quiltroId}/event`,
     {
       method: 'POST',
       headers: {
@@ -73,20 +73,16 @@ export const getPresignedUrl = async () => {
   return await fetch(`${settings.apiUrl}/s3`)
 }
 
-export const getAmigos = async () => {
-  return await fetch(`${settings.apiUrl}/amigos`)
+export const getQuiltros = async () => {
+  return await fetch(`${settings.apiUrl}/quiltros`)
 }
 
-export const getAmigoEvents = async (amigoId) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigoId}/events`)
+export const getQuiltroEvents = async (quiltroId) => {
+  return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}/events`)
 }
 
 export const getEvents = async () => {
   return await fetch(`${settings.apiUrl}/events`)
-}
-
-export const getAmigo = async (amigoId) => {
-  return await fetch(`${settings.apiUrl}/amigos/${amigoId}`)
 }
 
 export const getUserQuiltros = async ({ uid }) => {

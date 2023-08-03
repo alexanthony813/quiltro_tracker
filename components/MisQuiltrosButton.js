@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import colors from '../config/colors'
 
-function MisAmigosButton({ onPress }) {
+function MisQuiltrosButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MisAmigosButton
+export default MisQuiltrosButton
