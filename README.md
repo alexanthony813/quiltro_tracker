@@ -38,3 +38,4 @@ Plan for refactoring:
   - report a problem (should require a photo rather than relying on auth, don't want to create barriers if someone sees something and wants to do the right thing)
   - follow! this is fun and engaging and actually requires non anonymous, so this will be where we try to convert to non anonymous users (but should require phone number? can worry about that later)
 
+

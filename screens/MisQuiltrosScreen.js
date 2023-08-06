@@ -13,16 +13,14 @@ import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
-import { firebaseApp } from '../App'
+import useAuth from '../auth/useAuth'
 
 function MisQuiltrosScreen({}) {
-  const auth = getAuth(firebaseApp)
-  const { currentUser } = auth
+  const { user } = useAuth()
   const currentUserLocation = {} // useLocation()
   const navigation = useNavigation()
 
-  const { uid } = currentUser
+  const { uid, isAdmin } = user
   const {
     data: quiltros,
     error,
@@ -39,7 +37,7 @@ function MisQuiltrosScreen({}) {
       <NewQuiltroModal
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
-        user={currentUser}
+        user={user}
         currentUserLocation={currentUserLocation}
       />
 
@@ -47,7 +45,7 @@ function MisQuiltrosScreen({}) {
         setIsModalVisible={() => {
           setIsModalVisible(!isModalVisible)
         }}
-        user={currentUser}
+        user={user}
       />
       {quiltros && quiltros.length ? (
         <FlatList
@@ -67,7 +65,7 @@ function MisQuiltrosScreen({}) {
               }}
               onPress={(e) => {
                 e.preventDefault()
-                navigation.navigate(routes.AMIGO_DETAILS, {
+                navigation.navigate(routes.QUILTRO_DETAILS, {
                   quiltro,
                 })
               }}
@@ -102,12 +100,17 @@ function MisQuiltrosScreen({}) {
       {!quiltros || !quiltros.length ? (
         <View className="flex h-full">
           <View className={'flex flex-1 justify-center quiltros-center'}>
-            {user}
-            <Text className={'text-center text-xl font-bold italic'}>
-              No has agregado quiltros perdidos, usa el botón
-              <PlusCircleIcon color="#00CCBB" />
-              para crear anuncio
-            </Text>
+            {isAdmin ? (
+              <Text className={'text-center text-xl font-bold italic'}>
+                No has agregado quiltros perdidos, usa el botón
+                <PlusCircleIcon color="#00CCBB" />
+                para crear anuncio
+              </Text>
+            ) : (
+              <Text className={'text-center text-xl font-bold italic'}>
+                Necesitas seguir mas quiltros!
+              </Text>
+            )}
           </View>
           <View className="flex">
             <Button

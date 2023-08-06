@@ -2,9 +2,8 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
-import ListItem from '../components/lists/ListItem'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
-
+import Button from '../components/Button'
 import colors from '../config/colors'
 import Text from '../components/Text'
 
@@ -38,10 +37,21 @@ function QuiltroDetailsScreen({ route }) {
             <Text>{quiltro.lastSeenDate}</Text>
           </View>
         )}
-        <View style={styles.userContainer}>
-          <ListItem
-            image={{ uri: quiltro.photoUrl }}
-            title={`Quiero ayudar ${quiltro.name}`}
+        <View>
+          <Button
+            color="primary"
+            title="Seguir"
+            onPress={() => setIsVisible(false)}
+          />
+          <Button
+            color="medium"
+            title="Donar"
+            onPress={() => setIsVisible(false)}
+          />
+          <Button
+            color="secondary"
+            title="Reportar Problema"
+            onPress={() => setIsVisible(false)}
           />
         </View>
       </View>

@@ -6,16 +6,16 @@ import colors from '../config/colors'
 import Icon from '../components/Icon'
 import routes from '../navigation/routes'
 import Screen from '../components/Screen'
-import { getAuth, signOut } from 'firebase/auth'
-import { firebaseApp } from '../App'
+import { signOut } from 'firebase/auth'
+import useAuth from '../auth/useAuth'
 
-function AccountScreen({}) {
-  const auth = getAuth(firebaseApp)
-  const { currentUser } = auth
+function AccountScreen() {
+  const { user } = useAuth()
+  const { phoneNumber } = user
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        <ListItem title={currentUser.phoneNumber || 'Anonimo'} />
+        <ListItem title={phoneNumber || 'Anonimo'} />
         <ListItem
           title="Log Out"
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}

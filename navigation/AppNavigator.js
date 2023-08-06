@@ -6,8 +6,8 @@ import routes from './routes'
 import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
 import UserNavigator from './UserNavigator'
 import SupportNavigator from './SupportNavigator'
+import QuiltroNavigator from './QuiltroNavigator'
 import { createStackNavigator } from '@react-navigation/stack'
-import QuiltroDetailsScreen from '../screens/QuiltroDetailsScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -16,7 +16,7 @@ const Stack = createStackNavigator()
 const MisQuiltrosStack = ({ route }) => {
   const { quiltro } = route.params
   const initialRouteName =
-    quiltro && quiltro.quiltroId ? routes.AMIGO_DETAILS : routes.AMIGO_LIST
+    quiltro && quiltro.quiltroId ? routes.QUILTRO_DETAILS : routes.QUILTRO_LIST
   return (
     <Stack.Navigator
       screenOptions={{
@@ -24,24 +24,24 @@ const MisQuiltrosStack = ({ route }) => {
       }}
       initialRouteName={initialRouteName}
     >
-      <Stack.Screen name={routes.AMIGO_LIST} component={MisQuiltrosScreen} />
+      <Stack.Screen name={routes.QUILTRO_LIST} component={MisQuiltrosScreen} />
       <Stack.Screen
         initialParams={{ quiltro }}
-        name={routes.AMIGO_DETAILS}
-        component={QuiltroDetailsScreen}
+        name={routes.QUILTRO}
+        component={QuiltroNavigator}
       />
     </Stack.Navigator>
   )
 }
 
 // TODO rename, admin level will be specific to each quiltro
-const AdminAppNavigator = ({ quiltro }) => {
+const AppNavigator = ({ quiltro }) => {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={routes.MIS_AMIGOS}
+      initialRouteName={routes.MIS_QUILTROS}
     >
       <Tab.Screen
         name={routes.SUPPORT}
@@ -53,7 +53,7 @@ const AdminAppNavigator = ({ quiltro }) => {
         }}
       />
       <Tab.Screen
-        name={routes.MIS_AMIGOS}
+        name={routes.MIS_QUILTROS}
         component={MisQuiltrosStack}
         initialParams={{ quiltro }}
         options={({ navigation }) => ({
@@ -61,8 +61,8 @@ const AdminAppNavigator = ({ quiltro }) => {
             <MisQuiltrosButton
               onPress={(e) => {
                 e.preventDefault()
-                navigation.navigate(routes.MIS_AMIGOS, {
-                  screen: routes.AMIGO_LIST,
+                navigation.navigate(routes.MIS_QUILTROS, {
+                  screen: routes.QUILTRO_LIST,
                 })
               }}
             />
@@ -82,4 +82,4 @@ const AdminAppNavigator = ({ quiltro }) => {
   )
 }
 
-export default AdminAppNavigator
+export default AppNavigator

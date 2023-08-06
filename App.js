@@ -6,8 +6,8 @@ import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
 import useApi from './hooks/useApi'
 import { parseInitialURLAsync } from 'expo-linking'
-import AdminAppNavigator from './navigation/AdminAppNavigator'
-import AdminAuthNavigator from './navigation/AdminAuthNavigator'
+import AppNavigator from './navigation/AppNavigator'
+import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './auth/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltro, registerUser } from './api'
@@ -25,14 +25,25 @@ if (firebase && !firebase.apps.length) {
 export default function App() {
   let auth
   const [user, setUser] = useState(null)
+
+  const {
+    data: quiltro,
+    error: quiltroFetchError,
+    isLoading,
+    request: loadQuiltro,
+  } = useApi(getQuiltro)
+
   try {
     auth = getAuth(firebaseApp)
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.dir('onAuthStateChanged!!')
-        setUser(user)
-        registerUser(user) // better to have it in one place and get 409s
+    onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // in retrospect might have been better to have admin collection but i'd rather duplicate the data then have it fragmented, using mongo as source of truth
+        const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
+        const registerUserResponseJson = await registerUserResponse.json()
+        if (user === null) {
+          setUser(registerUserResponseJson)
+        }
       } else {
         setUser(null)
       }
@@ -46,13 +57,6 @@ export default function App() {
     console.error(error.message)
   }
 
-  const {
-    data: quiltro,
-    error: quiltroFetchError,
-    isLoading,
-    request: loadQuiltro,
-  } = useApi(getQuiltro)
-
   useEffect(() => {
     async function asyncHelper() {
       try {
@@ -61,12 +65,6 @@ export default function App() {
         if (path) {
           await loadQuiltro(path)
           signInAnonymously(auth)
-          // .then(async ({ user }) => {
-          //   registerUser(user)
-          // })
-          // .catch((error) => {
-          //   setError(error)
-          // })
         }
       } catch (err) {
         console.dir(err)
@@ -85,11 +83,7 @@ export default function App() {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <TailwindProvider>
-          {user ? (
-            <AdminAppNavigator quiltro={quiltro} />
-          ) : (
-            <AdminAuthNavigator />
-          )}
+          {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
         </TailwindProvider>
       </NavigationContainer>
     </AuthContext.Provider>
