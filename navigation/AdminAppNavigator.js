@@ -16,7 +16,7 @@ const Stack = createStackNavigator()
 const MisQuiltrosStack = ({ route }) => {
   const { quiltro } = route.params
   const initialRouteName =
-    quiltro && quiltro._id ? routes.AMIGO_DETAILS : routes.AMIGO_LIST
+    quiltro && quiltro.quiltroId ? routes.AMIGO_DETAILS : routes.AMIGO_LIST
   return (
     <Stack.Navigator
       screenOptions={{

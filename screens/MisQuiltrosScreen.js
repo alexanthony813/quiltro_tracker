@@ -42,7 +42,7 @@ function MisQuiltrosScreen({}) {
   useEffect(() => {
     loadQuiltros({ uid })
     console.dir('loading quiltros')
-  }, [JSON.stringify(quiltros)])
+  }, [JSON.stringify(quiltros), isModalVisible])
   return (
     <Screen>
       <NewQuiltroModal
@@ -62,7 +62,7 @@ function MisQuiltrosScreen({}) {
           data={quiltros}
           className="align-center"
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(quiltro) => quiltro._id.toString()}
+          keyExtractor={(quiltro) => quiltro.quiltroId.toString()}
           renderItem={({ item: quiltro }) => (
             <TouchableOpacity
               style={{

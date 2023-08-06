@@ -7,9 +7,9 @@ import Button from './Button'
 import routes from '../navigation/routes'
 
 import * as Yup from 'yup'
-import { getUserQuiltros, getPresignedUrl } from '../api'
+import { getPresignedUrl } from '../api'
 import { Form, FormField, SubmitButton } from './forms'
- import * as ImageManipulator from 'expo-image-manipulator'
+import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
@@ -55,7 +55,8 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     })
 
     if (savedQuiltroResponse.ok) {
-      await getUserQuiltros(user.uid)
+      console.log(user)
+      const { uid } = user
       setIsVisible(false)
     }
     setIsQuiltroSubmitting(false)
