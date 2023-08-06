@@ -6,10 +6,13 @@ import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
 import colors from '../config/colors'
 import Text from '../components/Text'
+import routes from '../navigation/routes'
+import { useNavigation } from '@react-navigation/native'
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
   const { lastStatusEvent } = quiltro
+  const navigation = useNavigation()
 
   return (
     <Screen>
@@ -41,17 +44,23 @@ function QuiltroDetailsScreen({ route }) {
           <Button
             color="primary"
             title="Seguir"
-            onPress={() => setIsVisible(false)}
+            onPress={() => {
+              // TODO
+            }}
           />
           <Button
             color="medium"
             title="Donar"
-            onPress={() => setIsVisible(false)}
+            onPress={() => {
+              navigation.navigate(routes.QUILTRO_DONATE)
+            }}
           />
           <Button
             color="secondary"
             title="Reportar Problema"
-            onPress={() => setIsVisible(false)}
+            onPress={() => {
+              navigation.navigate(routes.QUILTRO_REPORT)
+            }}
           />
         </View>
       </View>

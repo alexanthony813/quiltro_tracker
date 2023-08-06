@@ -79,8 +79,7 @@ export const getUserQuiltros = async ({ uid }) => {
 }
 
 export const getQuiltro = async (quiltroId) => {
-  const response = await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
-  return response
+  return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
 }
 
 export const getUserNotifications = async ({ uid }) => {

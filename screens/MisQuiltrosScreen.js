@@ -13,7 +13,7 @@ import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
-import useAuth from '../auth/useAuth'
+import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
   const { user } = useAuth()
@@ -65,7 +65,7 @@ function MisQuiltrosScreen({}) {
               }}
               onPress={(e) => {
                 e.preventDefault()
-                navigation.navigate(routes.QUILTRO_DETAILS, {
+                navigation.navigate(routes.QUILTRO, {
                   quiltro,
                 })
               }}

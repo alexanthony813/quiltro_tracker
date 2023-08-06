@@ -6,8 +6,9 @@ import colors from '../config/colors'
 import Icon from '../components/Icon'
 import routes from '../navigation/routes'
 import Screen from '../components/Screen'
-import { signOut } from 'firebase/auth'
-import useAuth from '../auth/useAuth'
+import { signOut, getAuth } from 'firebase/auth'
+import useAuth from '../contexts/auth/useAuth'
+import { firebaseApp } from '../App'
 
 function AccountScreen() {
   const { user } = useAuth()
@@ -19,7 +20,9 @@ function AccountScreen() {
         <ListItem
           title="Log Out"
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-          onPress={() =>
+          onPress={() => {
+            const auth = getAuth(firebaseApp)
+
             signOut(auth)
               .then((success) => {
                 console.dir(success)
@@ -27,7 +30,7 @@ function AccountScreen() {
               .catch((error) => {
                 console.dir(error)
               })
-          }
+          }}
         />
       </View>
     </Screen>

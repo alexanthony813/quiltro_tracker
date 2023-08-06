@@ -20,7 +20,6 @@ function QuiltroDonateScreen({ route }) {
         }}
       />
       <Image
-        style={styles.image}
         preview={{ uri: quiltro.photoUrl }}
         tint="light"
         uri={quiltro.photoUrl}

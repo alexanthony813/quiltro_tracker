@@ -8,7 +8,8 @@ import useApi from './hooks/useApi'
 import { parseInitialURLAsync } from 'expo-linking'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
-import AuthContext from './auth/context'
+import AuthContext from './contexts/auth/context'
+import QuiltroContext from './contexts/auth/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltro, registerUser } from './api'
 
@@ -24,10 +25,11 @@ if (firebase && !firebase.apps.length) {
 
 export default function App() {
   let auth
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null) // TODO should this be set here?
+  const [quiltro, setQuiltro] = useState(null)
 
   const {
-    data: quiltro,
+    data: loadedQuiltro,
     error: quiltroFetchError,
     isLoading,
     request: loadQuiltro,
@@ -63,7 +65,10 @@ export default function App() {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
         if (path) {
-          await loadQuiltro(path)
+          const loadedQuiltroResponse = await getQuiltro(path) // TODO fix to use hook
+          const loadedQuiltro = await loadedQuiltroResponse.json()
+          console.dir(loadedQuiltro)
+          setQuiltro(loadedQuiltro)
           signInAnonymously(auth)
         }
       } catch (err) {
@@ -75,17 +80,24 @@ export default function App() {
   }, [])
 
   return (
-    <AuthContext.Provider
+    <QuiltroContext.Provider
       value={{
-        user,
-        setUser,
+        quiltro,
+        setQuiltro,
       }}
     >
-      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-        <TailwindProvider>
-          {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
-        </TailwindProvider>
-      </NavigationContainer>
-    </AuthContext.Provider>
+      <AuthContext.Provider
+        value={{
+          user,
+          setUser,
+        }}
+      >
+        <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+          <TailwindProvider>
+            {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
+          </TailwindProvider>
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </QuiltroContext.Provider>
   )
 }
