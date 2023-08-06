@@ -22,9 +22,7 @@ function WelcomeScreen({ navigation }) {
           title="Login Anonimo"
           onPress={() => {
             const auth = getAuth()
-            signInAnonymously(auth).then(async ({ user }) => {
-              registerUser(user)
-            })
+            signInAnonymously(auth)
           }}
         />
         <Button

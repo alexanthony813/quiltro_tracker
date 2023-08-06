@@ -15,7 +15,7 @@ function AccountScreen({}) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
-        <ListItem title={currentUser.phoneNumber} />
+        <ListItem title={currentUser.phoneNumber || 'Anonimo'} />
         <ListItem
           title="Log Out"
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}

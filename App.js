@@ -30,8 +30,9 @@ export default function App() {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.dir(user)
+        console.dir('onAuthStateChanged!!')
         setUser(user)
+        registerUser(user) // better to have it in one place and get 409s
       } else {
         setUser(null)
       }
@@ -60,12 +61,12 @@ export default function App() {
         if (path) {
           await loadQuiltro(path)
           signInAnonymously(auth)
-            .then(async ({ user }) => {
-              registerUser(user)
-            })
-            .catch((error) => {
-              setError(error)
-            })
+          // .then(async ({ user }) => {
+          //   registerUser(user)
+          // })
+          // .catch((error) => {
+          //   setError(error)
+          // })
         }
       } catch (err) {
         console.dir(err)

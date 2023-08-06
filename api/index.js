@@ -54,17 +54,6 @@ export const registerUser = async (user) => {
   })
 }
 
-export const loginUser = async (user) => {
-  return await fetch(`${settings.apiUrl}/auth`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-}
-
 export const getUserMessages = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/messages`)
 }

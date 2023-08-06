@@ -3,10 +3,8 @@ import { View, Pressable } from 'react-native'
 import Text from './Text'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 
-function MisQuiltrosHeader({ quiltro, setIsModalVisible }) {
-  const headerText = quiltro
-    ? `MisQuiltrosSeguidos ${quiltro.name}`
-    : `MisQuiltrosSeguidos`
+function MisQuiltrosHeader({ quiltro, setIsModalVisible, user }) {
+  const headerText = quiltro ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
   return (
     <View className="mx-1">
       <View className="flex-row justify-between items-center ml-5 ">
@@ -14,7 +12,7 @@ function MisQuiltrosHeader({ quiltro, setIsModalVisible }) {
           <Text className="font-bold text-2xl -mx-1.5">{headerText}</Text>
         </View>
         <View className="flex-row space-x-2 p-3 items-end">
-          {quiltro ? null : (
+          {quiltro || !user.isAdmin ? null : (
             <Pressable
               onPress={() => {
                 setIsModalVisible(true)

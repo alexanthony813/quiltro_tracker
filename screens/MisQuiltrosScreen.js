@@ -21,15 +21,6 @@ function MisQuiltrosScreen({}) {
   const { currentUser } = auth
   const currentUserLocation = {} // useLocation()
   const navigation = useNavigation()
-  if (!currentUser) {
-    signInAnonymously(auth)
-      .then(async ({ currentUser }) => {
-        registerUser(currentUser)
-      })
-      .catch((error) => {
-        setError(error)
-      })
-  }
 
   const { uid } = currentUser
   const {
@@ -56,6 +47,7 @@ function MisQuiltrosScreen({}) {
         setIsModalVisible={() => {
           setIsModalVisible(!isModalVisible)
         }}
+        user={currentUser}
       />
       {quiltros && quiltros.length ? (
         <FlatList
@@ -110,6 +102,7 @@ function MisQuiltrosScreen({}) {
       {!quiltros || !quiltros.length ? (
         <View className="flex h-full">
           <View className={'flex flex-1 justify-center quiltros-center'}>
+            {user}
             <Text className={'text-center text-xl font-bold italic'}>
               No has agregado quiltros perdidos, usa el botón
               <PlusCircleIcon color="#00CCBB" />
