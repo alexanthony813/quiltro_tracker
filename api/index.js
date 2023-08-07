@@ -54,17 +54,6 @@ export const registerUser = async (user) => {
   })
 }
 
-export const loginUser = async (user) => {
-  return await fetch(`${settings.apiUrl}/auth`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-}
-
 export const getUserMessages = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/messages`)
 }
@@ -90,8 +79,7 @@ export const getUserQuiltros = async ({ uid }) => {
 }
 
 export const getQuiltro = async (quiltroId) => {
-  const response = await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
-  return response
+  return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
 }
 
 export const getUserNotifications = async ({ uid }) => {

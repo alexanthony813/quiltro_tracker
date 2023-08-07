@@ -7,7 +7,7 @@ import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
 
 const Stack = createStackNavigator()
 
-const AdminAuthNavigator = ({ firebaseApp }) => (
+const AuthNavigator = ({ firebaseApp }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Welcome"
@@ -23,4 +23,4 @@ const AdminAuthNavigator = ({ firebaseApp }) => (
   </Stack.Navigator>
 )
 
-export default AdminAuthNavigator
+export default AuthNavigator

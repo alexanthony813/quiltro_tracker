@@ -103,9 +103,7 @@ const QuiltroList = ({ user, quiltros, setReportingQuiltro }) => {
                     setReportingQuiltro(quiltro)
                   }}
                   color={'bg-teal-600'}
-                  title={'Reportar'}
-                  // isDisabled={quiltro.owner_id === user.uid}, don't want to scare the owner by hiding/disabling the button
-                />
+                  title={'Reportar'}                />
               </View>
             </View>
           </TouchableOpacity>

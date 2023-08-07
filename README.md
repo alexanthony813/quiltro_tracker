@@ -2,9 +2,9 @@
 
 Quiltros, it’s not yesterday anymore
 
-QuiltrosPerdidos seems ill-fated. There are already enough things for this and it could have turned into a forever project. Maybe creating a standardized webpage/forumn for Santiago would work, but it could just be a facebook page...
+AmigosPerdidos seems ill-fated. There are already enough things for this and it could have turned into a forever project. Maybe creating a standardized webpage/forumn for Santiago would work, but it could just be a facebook page...
 
-Regardless of whether QuiltrosPerdidos is revisited (it might make sense to do in the spring when the flyers go back up), going to learn from my mistakes to iterate quicker on this one.
+Regardless of whether AmigosPerdidos is revisited (it might make sense to do in the spring when the flyers go back up), going to learn from my mistakes to iterate quicker on this one.
 
 # Mission
 
@@ -32,9 +32,10 @@ This app will help by:
   12. casita location
 
 Plan for refactoring:
-
 - Admin view will be list of associated, with option to add one
 - User view will always just be that one, and read only with MPV?
-  - option to donate with call to action near medicine
-  - report a problem (should require a photo)
-- ENSURE ROUTES ARE WORKING
+  - option to donate with call to action near medicine (can be anonymous, no barriers necessary)
+  - report a problem (should require a photo rather than relying on auth, don't want to create barriers if someone sees something and wants to do the right thing)
+  - follow! this is fun and engaging and actually requires non anonymous, so this will be where we try to convert to non anonymous users (but should require phone number? can worry about that later)
+
+

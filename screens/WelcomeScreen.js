@@ -2,7 +2,6 @@ import React from 'react'
 import { ImageBackground, StyleSheet, View, Text } from 'react-native'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
 
-import { registerUser } from '../api'
 import Button from '../components/Button'
 import routes from '../navigation/routes'
 
@@ -22,9 +21,7 @@ function WelcomeScreen({ navigation }) {
           title="Login Anonimo"
           onPress={() => {
             const auth = getAuth()
-            signInAnonymously(auth).then(async ({ user }) => {
-              registerUser(user)
-            })
+            signInAnonymously(auth)
           }}
         />
         <Button

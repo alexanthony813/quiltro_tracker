@@ -56,7 +56,7 @@ const ReportSightingModal = ({
       }
     }
     statusEvent.location = userLocation
-    statusEvent.quiltro_id = quiltro._id
+    statusEvent.quiltroId = quiltro.quiltroId
     statusEvent.status = isSecured ? 'recovered' : 'sighted'
 
     const from = user.uid

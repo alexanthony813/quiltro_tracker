@@ -13,25 +13,14 @@ import useLocation from '../hooks/useLocation'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
-import { firebaseApp } from '../App'
+import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
-  const auth = getAuth(firebaseApp)
-  const { currentUser } = auth
+  const { user } = useAuth()
   const currentUserLocation = {} // useLocation()
   const navigation = useNavigation()
-  if (!currentUser) {
-    signInAnonymously(auth)
-      .then(async ({ currentUser }) => {
-        registerUser(currentUser)
-      })
-      .catch((error) => {
-        setError(error)
-      })
-  }
 
-  const { uid } = currentUser
+  const { uid, isAdmin } = user
   const {
     data: quiltros,
     error,
@@ -42,13 +31,13 @@ function MisQuiltrosScreen({}) {
   useEffect(() => {
     loadQuiltros({ uid })
     console.dir('loading quiltros')
-  }, [JSON.stringify(quiltros)])
+  }, [JSON.stringify(quiltros), isModalVisible])
   return (
     <Screen>
       <NewQuiltroModal
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
-        user={currentUser}
+        user={user}
         currentUserLocation={currentUserLocation}
       />
 
@@ -56,13 +45,14 @@ function MisQuiltrosScreen({}) {
         setIsModalVisible={() => {
           setIsModalVisible(!isModalVisible)
         }}
+        user={user}
       />
       {quiltros && quiltros.length ? (
         <FlatList
           data={quiltros}
           className="align-center"
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(quiltro) => quiltro._id.toString()}
+          keyExtractor={(quiltro) => quiltro.quiltroId.toString()}
           renderItem={({ item: quiltro }) => (
             <TouchableOpacity
               style={{
@@ -75,7 +65,7 @@ function MisQuiltrosScreen({}) {
               }}
               onPress={(e) => {
                 e.preventDefault()
-                navigation.navigate(routes.AMIGO_DETAILS, {
+                navigation.navigate(routes.QUILTRO, {
                   quiltro,
                 })
               }}
@@ -110,11 +100,17 @@ function MisQuiltrosScreen({}) {
       {!quiltros || !quiltros.length ? (
         <View className="flex h-full">
           <View className={'flex flex-1 justify-center quiltros-center'}>
-            <Text className={'text-center text-xl font-bold italic'}>
-              No has agregado quiltros perdidos, usa el botón
-              <PlusCircleIcon color="#00CCBB" />
-              para crear anuncio
-            </Text>
+            {isAdmin ? (
+              <Text className={'text-center text-xl font-bold italic'}>
+                No has agregado quiltros perdidos, usa el botón
+                <PlusCircleIcon color="#00CCBB" />
+                para crear anuncio
+              </Text>
+            ) : (
+              <Text className={'text-center text-xl font-bold italic'}>
+                Necesitas seguir mas quiltros!
+              </Text>
+            )}
           </View>
           <View className="flex">
             <Button

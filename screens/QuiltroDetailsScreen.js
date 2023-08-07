@@ -2,15 +2,17 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
-import ListItem from '../components/lists/ListItem'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
-
+import Button from '../components/Button'
 import colors from '../config/colors'
 import Text from '../components/Text'
+import routes from '../navigation/routes'
+import { useNavigation } from '@react-navigation/native'
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
   const { lastStatusEvent } = quiltro
+  const navigation = useNavigation()
 
   return (
     <Screen>
@@ -38,10 +40,27 @@ function QuiltroDetailsScreen({ route }) {
             <Text>{quiltro.lastSeenDate}</Text>
           </View>
         )}
-        <View style={styles.userContainer}>
-          <ListItem
-            image={{ uri: quiltro.photoUrl }}
-            title={`Quiero ayudar ${quiltro.name}`}
+        <View>
+          <Button
+            color="primary"
+            title="Seguir"
+            onPress={() => {
+              // TODO
+            }}
+          />
+          <Button
+            color="medium"
+            title="Donar"
+            onPress={() => {
+              navigation.navigate(routes.QUILTRO_DONATE)
+            }}
+          />
+          <Button
+            color="secondary"
+            title="Reportar Problema"
+            onPress={() => {
+              navigation.navigate(routes.QUILTRO_REPORT)
+            }}
           />
         </View>
       </View>
