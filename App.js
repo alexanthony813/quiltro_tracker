@@ -37,13 +37,15 @@ export default function App() {
 
   try {
     auth = getAuth(firebaseApp)
-
+    let isRegisteringUser = false
     onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // in retrospect might have been better to have admin collection but i'd rather duplicate the data then have it fragmented, using mongo as source of truth
-        const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
-        const registerUserResponseJson = await registerUserResponse.json()
-        if (user === null) {
+        if (!user && !isRegisteringUser) {
+          isRegisteringUser = true
+          const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
+          const registerUserResponseJson = await registerUserResponse.json()
+          console.log('um')
           setUser(registerUserResponseJson)
         }
       } else {
