@@ -8,6 +8,7 @@ import colors from '../config/colors'
 import Text from '../components/Text'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
+import QuiltroDetails from '../components/QuiltroDetails'
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
@@ -29,39 +30,40 @@ function QuiltroDetailsScreen({ route }) {
         uri={quiltro.photoUrl}
       />
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{quiltro.name}</Text>
-        <Text>{quiltro.favoriteFoods}</Text>
-        <Text>{quiltro.cannotOrWontEat}</Text>
-        <Text>{quiltro.location}</Text>
-        <Text>{quiltro.requestedItems}</Text>
-        {lastStatusEvent && (
-          <View>
-            <Text>{quiltro.lastSeenLocation}</Text>
-            <Text>{quiltro.lastSeenDate}</Text>
-          </View>
-        )}
-        <View>
+        <QuiltroDetails quiltro={quiltro} />
+        <View style={styles.quiltroActions}>
           <Button
-            color="primary"
+            styles={{
+              marginBottom: '0.5em',
+              borderRadius: '10%',
+              width: '30%',
+            }}
+            color="secondary"
             title="Seguir"
             onPress={() => {
               // TODO
             }}
           />
           <Button
-            color="medium"
-            title="Donar"
-            onPress={() => {
-              navigation.navigate(routes.QUILTRO_DONATE)
+            styles={{
+              marginBottom: '0.5em',
+              borderRadius: '10%',
+              width: '50%',
             }}
-          />
-          <Button
-            color="secondary"
+            color="primary"
             title="Reportar Problema"
             onPress={() => {
               navigation.navigate(routes.QUILTRO_REPORT)
             }}
           />
+          {/* <Button
+            styles={styles.quiltroAction}
+            color="medium"
+            title="Donar"
+            onPress={() => {
+              navigation.navigate(routes.QUILTRO_DONATE)
+            }}
+          /> */}
         </View>
       </View>
     </Screen>
@@ -69,6 +71,14 @@ function QuiltroDetailsScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  quiltroActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'space-around',
+    // width: '100%',
+    // marginLeft: '20%',
+  },
   detailsContainer: {
     padding: 20,
   },

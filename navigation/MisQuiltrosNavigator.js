@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MisQuiltrosButton from '../components/MisQuiltrosButton'
+import React from 'react'
 import routes from './routes'
 import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
 import QuiltroNavigator from './QuiltroNavigator'
 import { createStackNavigator } from '@react-navigation/stack'
-
-const Tab = createBottomTabNavigator()
 
 const Stack = createStackNavigator()
 

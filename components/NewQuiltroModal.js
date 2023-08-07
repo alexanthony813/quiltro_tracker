@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
   // age: Yup.string().label('Edad'), who knows/cares
   favoriteFoods: Yup.string().label('Comidas favoritas'),
-  cannotOrWontEat: Yup.string().label('Comidas no puede comer'),
+  allergies: Yup.string().label('Alergias'),
   location: Yup.string().label('Ubicacion'), // casita location may be null
   requestedItems: Yup.string().label('Realmente necesito'),
 })
@@ -55,8 +55,6 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     })
 
     if (savedQuiltroResponse.ok) {
-      console.log(user)
-      const { uid } = user
       setIsVisible(false)
     }
     setIsQuiltroSubmitting(false)
@@ -111,7 +109,7 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
               name: '',
               age: '',
               favoriteFoods: '',
-              cannotOrWontEat: '',
+              allergies: '',
               location: '',
               // requested_items: '',
               // medical_issues: '',
@@ -137,7 +135,7 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             <FormField
               style={{ width: '100%' }}
               maxLength={255}
-              name="cannotOrWontEat"
+              name="allergies"
               placeholder="No puedo comer"
             />
             <FormField

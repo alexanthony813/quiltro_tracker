@@ -11,7 +11,12 @@ const QuiltroNavigator = ({ route }) => {
   const { quiltro } = route.params
 
   return (
-    <Stack.Navigator initialRouteName={routes.QUILTRO_DETAILS}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName={routes.QUILTRO_DETAILS}
+    >
       <Stack.Screen
         initialParams={{ quiltro }}
         name={routes.QUILTRO_DETAILS}

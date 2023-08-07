@@ -45,7 +45,6 @@ export default function App() {
           isRegisteringUser = true
           const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
           const registerUserResponseJson = await registerUserResponse.json()
-          console.log('um')
           setUser(registerUserResponseJson)
         }
       } else {
@@ -55,7 +54,6 @@ export default function App() {
   } catch (error) {
     console.dir(error)
   }
-  // const [isReady, setIsReady] = useState(false) TODO
   const [error, setError] = useState(null)
   if (error) {
     console.error(error.message)
