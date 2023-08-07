@@ -5,23 +5,21 @@ import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
 import colors from '../config/colors'
-import Text from '../components/Text'
+
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
+import QuiltroRequestList from '../components/QuiltroRequestList'
+
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
-  const { lastStatusEvent } = quiltro
   const navigation = useNavigation()
 
   return (
     <Screen>
       <MisQuiltrosHeader
         quiltro={quiltro}
-        setIsModalVisible={() => {
-          setIsModalVisible(!isModalVisible)
-        }}
       />
       <Image
         style={styles.image}
@@ -56,15 +54,8 @@ function QuiltroDetailsScreen({ route }) {
               navigation.navigate(routes.QUILTRO_REPORT)
             }}
           />
-          {/* <Button
-            styles={styles.quiltroAction}
-            color="medium"
-            title="Donar"
-            onPress={() => {
-              navigation.navigate(routes.QUILTRO_DONATE)
-            }}
-          /> */}
         </View>
+        <QuiltroRequestList />
       </View>
     </Screen>
   )

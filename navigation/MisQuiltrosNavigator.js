@@ -1,6 +1,7 @@
 import React from 'react'
 import routes from './routes'
 import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
+import NewQuiltroScreen from '../screens/NewQuiltroScreen'
 import QuiltroNavigator from './QuiltroNavigator'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -18,6 +19,7 @@ const MisQuiltrosNavigator = ({ route }) => {
       initialRouteName={initialRouteName}
     >
       <Stack.Screen name={routes.QUILTRO_LIST} component={MisQuiltrosScreen} />
+      <Stack.Screen name={routes.NEW_QUILTRO} component={NewQuiltroScreen} />
       <Stack.Screen
         initialParams={{ quiltro }}
         name={routes.QUILTRO}

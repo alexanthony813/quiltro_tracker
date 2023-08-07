@@ -4,8 +4,9 @@ import Text from './Text'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import Button from '../components/Button'
+import routes from '../navigation/routes'
 
-function MisQuiltrosHeader({ quiltro, setIsModalVisible, user }) {
+function MisQuiltrosHeader({ quiltro, user }) {
   const navigation = useNavigation()
   const headerText = quiltro ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
   return (
@@ -21,15 +22,15 @@ function MisQuiltrosHeader({ quiltro, setIsModalVisible, user }) {
           <Text className="font-bold text-2xl -mx-1.5">{headerText}</Text>
         </View>
         <View className="flex-row space-x-2 p-3 items-end">
-          {quiltro || user.isAdmin ? null : (
+          {user.isAdmin && !quiltro ? (
             <Pressable
               onPress={() => {
-                setIsModalVisible(true)
+                navigation.navigate(routes.NEW_QUILTRO)
               }}
             >
               <PlusCircleIcon color="#00CCBB" />
             </Pressable>
-          )}
+          ) : null}
         </View>
       </View>
     </View>

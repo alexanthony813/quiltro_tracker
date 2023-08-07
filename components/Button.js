@@ -10,15 +10,16 @@ function AppButton({
   color = 'secondary',
   isDisabled,
 }) {
+  const validatedOnPress = isDisabled ? () => {} : onPress
+  const backgroundColor = isDisabled ? 'gray' : colors[color] || 'medium'
   return (
     <TouchableOpacity
       style={{
         ...styles,
         button: defaultStyles.button,
-        backgroundColor: isDisabled ? 'medium' : colors[color],
+        backgroundColor,
       }}
-      onPress={onPress}
-      isDisabled={isDisabled}
+      onPress={validatedOnPress}
     >
       <Text style={defaultStyles.text}>{title}</Text>
     </TouchableOpacity>

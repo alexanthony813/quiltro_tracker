@@ -1,29 +1,36 @@
 import React, { useState } from 'react'
-import { Modal, Text, View, ActivityIndicator } from 'react-native'
+import { Text, View, ActivityIndicator } from 'react-native'
+import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewQuiltro } from '../api'
-import Button from './Button'
-import routes from '../navigation/routes'
-
+import { saveNewQuiltro, saveNewRequestedItems } from '../api'
+import Button from '../components/Button'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
-import { Form, FormField, SubmitButton } from './forms'
+import { Form, FormField } from '../components/forms'
 import * as ImageManipulator from 'expo-image-manipulator'
+import NewRequestedItemModal from '../components/NewRequestedItemModal'
+import useAuth from '../contexts/auth/useAuth'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
-  // age: Yup.string().label('Edad'), who knows/cares
   favoriteFoods: Yup.string().label('Comidas favoritas'),
-  allergies: Yup.string().label('Alergias'),
   location: Yup.string().label('Ubicacion'), // casita location may be null
-  requestedItems: Yup.string().label('Realmente necesito'),
 })
 
-const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
+function NewQuiltroScreen({ route }) {
+  const { user } = useAuth()
   const [imageUpload, setImageUpload] = useState(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const [isQuiltroSubmitting, setIsQuiltroSubmitting] = useState(false)
+  const [requestedItems, setRequestedItems] = useState([])
+
+  const appendRequestedItem = (newRequestedItem) => {
+    const newRequestedItems = requestedItems.slice()
+    newRequestedItems.push(newRequestedItem)
+    setRequestedItems(newRequestedItems)
+  }
 
   const handleSubmit = async (quiltro, { resetForm }) => {
     setIsQuiltroSubmitting(true)
@@ -55,7 +62,7 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     })
 
     if (savedQuiltroResponse.ok) {
-      setIsVisible(false)
+      await saveNewRequestedItems(quiltroId, requestedItems) //TODO check this response
     }
     setIsQuiltroSubmitting(false)
   }
@@ -85,11 +92,13 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
     setIsImageUploading(false)
   }
 
-  /*
-
-*/
   return (
-    <Modal visible={isVisible}>
+    <Screen>
+      <NewRequestedItemModal
+        visible={isVisible}
+        setIsVisible={setIsVisible}
+        appendRequestedItem={appendRequestedItem}
+      />
       <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
       <View
         style={{
@@ -109,7 +118,7 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
               name: '',
               age: '',
               favoriteFoods: '',
-              allergies: '',
+              // allergies: '',
               location: '',
               // requested_items: '',
               // medical_issues: '',
@@ -135,39 +144,39 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
             <FormField
               style={{ width: '100%' }}
               maxLength={255}
-              name="allergies"
-              placeholder="No puedo comer"
-            />
-            <FormField
-              style={{ width: '100%' }}
-              maxLength={255}
               name="location"
               placeholder="Ubicacion"
             />
-            <FormField
-              style={{ width: '100%' }}
-              maxLength={255}
-              name="requestedItems"
-              placeholder="Necesito"
-            />
             <ActivityIndicator animating={isImageUploading} size="small" />
             <View>
-              <View className="flex justify-between">
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  textAlign: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <Button
+                  styles={{
+                    marginBottom: '0.5em',
+                    borderRadius: '10%',
+                    width: '50%',
+                  }}
                   isDisabled={imageUpload}
                   onPress={handleImageUpload}
                   color="secondary"
-                  title="Upload Image"
+                  title="Cargar un Imagen"
                 />
-                <SubmitButton
+                <Button
+                  styles={{
+                    marginBottom: '0.5em',
+                    borderRadius: '10%',
+                    width: '30%',
+                  }}
                   isDisabled={!imageUpload}
                   className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
                   title="Save"
-                />
-                <Button
-                  color="medium"
-                  title="Cancel"
-                  onPress={() => setIsVisible(false)}
                 />
               </View>
             </View>
@@ -175,8 +184,8 @@ const NewQuiltroModal = ({ isVisible, setIsVisible, user, userLocation }) => {
         </View>
         {imageUpload && <Text>Image Uploaded</Text>}
       </View>
-    </Modal>
+    </Screen>
   )
 }
 
-export default NewQuiltroModal
+export default NewQuiltroScreen

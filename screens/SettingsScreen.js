@@ -1,16 +1,15 @@
 import React from 'react'
-import { StyleSheet, View, Text, FlatList } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import { ListItem, ListItemSeparator } from '../components/lists'
+import { ListItem } from '../components/lists'
 import colors from '../config/colors'
 import Icon from '../components/Icon'
-import routes from '../navigation/routes'
 import Screen from '../components/Screen'
 import { signOut, getAuth } from 'firebase/auth'
 import useAuth from '../contexts/auth/useAuth'
 import { firebaseApp } from '../App'
 
-function AccountScreen() {
+function SettingsScreen() {
   const { user } = useAuth()
   const { phoneNumber } = user
   return (
@@ -46,4 +45,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default AccountScreen
+export default SettingsScreen

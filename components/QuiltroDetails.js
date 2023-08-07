@@ -12,12 +12,12 @@ function QuiltroDetails({ quiltro }) {
         <Text style={{ fontWeight: 'bold' }}>{'Prefiero comer: '}</Text>
         {quiltro.favoriteFoods}
       </Text>
-      {quiltro.allergies ? (
+      {/* {quiltro.allergies ? (
         <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
           <Text style={{ fontWeight: 'bold' }}>{'Alergias: '}</Text>
           {quiltro.allergies}
         </Text>
-      ) : null}
+      ) : null} */}
       <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
         <Text style={{ fontWeight: 'bold', color: 'red' }}>
           {'No me des: '}

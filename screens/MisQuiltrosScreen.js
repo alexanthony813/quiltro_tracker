@@ -6,9 +6,7 @@ import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
-import NewQuiltroModal from '../components/NewQuiltroModal'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
-import colors from '../config/colors'
 import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
@@ -17,7 +15,6 @@ import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
   const { user } = useAuth()
-  const currentUserLocation = {} // useUserLocation()
   const navigation = useNavigation()
   const route = useRoute()
   const { uid, isAdmin } = user
@@ -27,28 +24,13 @@ function MisQuiltrosScreen({}) {
     isLoading,
     request: loadQuiltros,
   } = useApi(getUserQuiltros)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  console.dir('rerenderd')
   useEffect(() => {
     loadQuiltros({ uid })
-    console.dir('loading quiltros')
-  }, [JSON.stringify(quiltros), isModalVisible, route])
+  }, [JSON.stringify(quiltros), route])
 
   return (
     <Screen>
-      <NewQuiltroModal
-        isVisible={isModalVisible}
-        setIsVisible={setIsModalVisible}
-        user={user}
-        currentUserLocation={currentUserLocation}
-      />
-
-      <MisQuiltrosHeader
-        setIsModalVisible={() => {
-          setIsModalVisible(!isModalVisible)
-        }}
-        user={user}
-      />
+      <MisQuiltrosHeader user={user} />
       {quiltros && quiltros.length ? (
         <FlatList
           data={quiltros}
@@ -97,15 +79,6 @@ function MisQuiltrosScreen({}) {
                 Necesitas seguir mas quiltros!
               </Text>
             )}
-          </View>
-          <View className="flex">
-            <Button
-              title="Agregar Nuevo"
-              className="w-50%"
-              onPress={() => {
-                setIsModalVisible(!isModalVisible)
-              }}
-            />
           </View>
         </View>
       ) : null}
