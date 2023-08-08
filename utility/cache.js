@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import dayjs from 'dayjs'
 
+// TODO delete
 const prefix = 'cache'
 const expiryInMinutes = 5
 

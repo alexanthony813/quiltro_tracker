@@ -14,7 +14,7 @@ function AppFormField({ name, width, ...otherProps }) {
         onBlur={() => setFieldTouched(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}
-        width={width}
+        style={{ width: '100%' }}
         {...otherProps}
       />
       <ErrorMessage error={errors[name]} visible={touched[name]} />
