@@ -1,74 +1,86 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
 import colors from '../config/colors'
-import Text from '../components/Text'
+
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
+import QuiltroDetails from '../components/QuiltroDetails'
+import QuiltroRequestList from '../components/QuiltroRequestList'
+import { getQuiltroDetails } from '../api/index'
+import useApi from '../hooks/useApi'
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
-  const { lastStatusEvent } = quiltro
+  const { quiltroId } = quiltro
   const navigation = useNavigation()
+  const {
+    data: quiltroDetails,
+    error,
+    isLoading,
+    request: loadQuiltroDetails,
+  } = useApi(getQuiltroDetails)
+  useEffect(() => {
+    loadQuiltroDetails(quiltroId)
+  }, [JSON.stringify(quiltroDetails)])
 
   return (
     <Screen>
-      <MisQuiltrosHeader
-        quiltro={quiltro}
-        setIsModalVisible={() => {
-          setIsModalVisible(!isModalVisible)
-        }}
-      />
+      <MisQuiltrosHeader quiltro={quiltroDetails} />
       <Image
         style={styles.image}
-        preview={{ uri: quiltro.photoUrl }}
+        preview={{ uri: quiltroDetails.photoUrl }}
         tint="light"
-        uri={quiltro.photoUrl}
+        uri={quiltroDetails.photoUrl}
       />
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{quiltro.name}</Text>
-        <Text>{quiltro.favoriteFoods}</Text>
-        <Text>{quiltro.cannotOrWontEat}</Text>
-        <Text>{quiltro.location}</Text>
-        <Text>{quiltro.requestedItems}</Text>
-        {lastStatusEvent && (
-          <View>
-            <Text>{quiltro.lastSeenLocation}</Text>
-            <Text>{quiltro.lastSeenDate}</Text>
-          </View>
-        )}
-        <View>
+        <QuiltroDetails quiltro={quiltro} />
+        <View style={styles.quiltroActions}>
           <Button
-            color="primary"
+            styles={{
+              marginBottom: '0.5em',
+              borderRadius: '10%',
+              width: '30%',
+            }}
+            color="secondary"
             title="Seguir"
             onPress={() => {
               // TODO
             }}
           />
           <Button
-            color="medium"
-            title="Donar"
-            onPress={() => {
-              navigation.navigate(routes.QUILTRO_DONATE)
+            styles={{
+              marginBottom: '0.5em',
+              borderRadius: '10%',
+              width: '50%',
             }}
-          />
-          <Button
-            color="secondary"
+            color="primary"
             title="Reportar Problema"
             onPress={() => {
               navigation.navigate(routes.QUILTRO_REPORT)
             }}
           />
         </View>
+        {quiltroDetails && quiltroDetails.requestedItems ? (
+          <QuiltroRequestList requestedItems={quiltroDetails.requestedItems} />
+        ) : null}
       </View>
     </Screen>
   )
 }
 
 const styles = StyleSheet.create({
+  quiltroActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'space-around',
+    // width: '100%',
+    // marginLeft: '20%',
+  },
   detailsContainer: {
     padding: 20,
   },

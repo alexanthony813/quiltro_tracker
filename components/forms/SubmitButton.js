@@ -3,12 +3,13 @@ import { useFormikContext } from 'formik'
 
 import Button from '../Button'
 
-function SubmitButton({ id, title, isDisabled }) {
+function SubmitButton({ id, styles, title, isDisabled }) {
   const { handleSubmit } = useFormikContext()
 
   return (
     <Button
       id={id}
+      styles={styles}
       isDisabled={isDisabled}
       title={title}
       onPress={handleSubmit}

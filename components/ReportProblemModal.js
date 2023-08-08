@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 })
 
 // TODO delete
-const ReportSightingModal = ({
+const ReportProblemModal = ({
   quiltro,
   setReportingQuiltro,
   userLocation,
@@ -29,6 +29,7 @@ const ReportSightingModal = ({
   const [isSecuredEnabled, setIsSecuredEnabled] = useState(false)
   const [isSecured, setIsSecured] = useState(false)
   const [showImageUploadWarning, setImageUploadWarning] = useState(false)
+  const navigation = useNavigation()
 
   const handleSubmit = async (statusEvent) => {
     setIsSubmitting(true)
@@ -184,4 +185,4 @@ const ReportSightingModal = ({
   )
 }
 
-export default ReportSightingModal
+export default ReportProblemModal

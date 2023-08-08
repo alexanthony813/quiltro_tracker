@@ -28,6 +28,19 @@ export const saveNewQuiltro = async (quiltro) => {
   return response
 }
 
+export const saveNewRequestedItems = async (quiltroId, requestedItems) => {
+  const response = await fetch(`${settings.apiUrl}/quiltros/${quiltroId}/requested-items`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestedItems),
+  })
+
+  return response
+}
+
 export const saveNewStatusEvent = async (statusEvent) => {
   const response = await fetch(
     `${settings.apiUrl}/quiltros/${statusEvent.quiltroId}/event`,
@@ -78,7 +91,7 @@ export const getUserQuiltros = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/quiltros`)
 }
 
-export const getQuiltro = async (quiltroId) => {
+export const getQuiltroDetails = async (quiltroId) => {
   return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
 }
 

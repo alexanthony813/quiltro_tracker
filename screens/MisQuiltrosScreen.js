@@ -6,20 +6,17 @@ import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
 import useApi from '../hooks/useApi'
-import NewQuiltroModal from '../components/NewQuiltroModal'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
-import colors from '../config/colors'
-import useLocation from '../hooks/useLocation'
+import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
   const { user } = useAuth()
-  const currentUserLocation = {} // useLocation()
   const navigation = useNavigation()
-
+  const route = useRoute()
   const { uid, isAdmin } = user
   const {
     data: quiltros,
@@ -27,26 +24,13 @@ function MisQuiltrosScreen({}) {
     isLoading,
     request: loadQuiltros,
   } = useApi(getUserQuiltros)
-  const [isModalVisible, setIsModalVisible] = useState(false)
   useEffect(() => {
     loadQuiltros({ uid })
-    console.dir('loading quiltros')
-  }, [JSON.stringify(quiltros), isModalVisible])
+  }, [JSON.stringify(quiltros), route])
+
   return (
     <Screen>
-      <NewQuiltroModal
-        isVisible={isModalVisible}
-        setIsVisible={setIsModalVisible}
-        user={user}
-        currentUserLocation={currentUserLocation}
-      />
-
-      <MisQuiltrosHeader
-        setIsModalVisible={() => {
-          setIsModalVisible(!isModalVisible)
-        }}
-        user={user}
-      />
+      <MisQuiltrosHeader user={user} />
       {quiltros && quiltros.length ? (
         <FlatList
           data={quiltros}
@@ -59,8 +43,8 @@ function MisQuiltrosScreen({}) {
                 backgroundColor: 'white',
                 borderRadius: 8,
                 overflow: 'hidden',
-                marginHorizontal: 5,
-                width: '100%',
+                marginLeft: '2.5%',
+                width: '95%',
                 marginBottom: 30,
               }}
               onPress={(e) => {
@@ -74,24 +58,8 @@ function MisQuiltrosScreen({}) {
                 source={{ uri: quiltro.photoUrl }}
                 style={{ width: '100%', aspectRatio: 1 }}
               />
-              <View style={{ padding: 10 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                  Me llama {quiltro.name}
-                </Text>
-                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  Prefiero comer {quiltro.favoriteFoods}
-                </Text>
-                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  No puedo comer {quiltro.cannotOrWontEat}
-                </Text>
-                <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-                  Vivo en {quiltro.location}
-                </Text>
 
-                <View style={{ flexDirection: 'row', alignquiltros: 'center' }}>
-                  {/* <MapPinIcon color={colors[colors.icon]} size={16} /> */}
-                </View>
-              </View>
+              <QuiltroDetails quiltro={quiltro} />
             </TouchableOpacity>
           )}
         />
@@ -111,15 +79,6 @@ function MisQuiltrosScreen({}) {
                 Necesitas seguir mas quiltros!
               </Text>
             )}
-          </View>
-          <View className="flex">
-            <Button
-              title="Agregar Nuevo"
-              className="w-50%"
-              onPress={() => {
-                setIsModalVisible(!isModalVisible)
-              }}
-            />
           </View>
         </View>
       ) : null}

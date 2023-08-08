@@ -9,15 +9,11 @@ import Text from '../components/Text'
 
 function QuiltroReportScreen({ route }) {
   const { quiltro } = route.params
-  const { lastStatusEvent } = quiltro
 
   return (
     <Screen>
       <MisQuiltrosHeader
         quiltro={quiltro}
-        setIsModalVisible={() => {
-          setIsModalVisible(!isModalVisible)
-        }}
       />
       <Image
         preview={{ uri: quiltro.photoUrl }}

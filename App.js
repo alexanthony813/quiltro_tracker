@@ -11,7 +11,7 @@ import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './contexts/auth/context'
 import QuiltroContext from './contexts/auth/context'
 import { navigationRef } from './navigation/rootNavigation'
-import { getQuiltro, registerUser } from './api'
+import { getQuiltroDetails, registerUser } from './api'
 
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
 import firebase from 'firebase/compat/app'
@@ -33,7 +33,7 @@ export default function App() {
     error: quiltroFetchError,
     isLoading,
     request: loadQuiltro,
-  } = useApi(getQuiltro)
+  } = useApi(getQuiltroDetails)
 
   try {
     auth = getAuth(firebaseApp)
@@ -45,7 +45,6 @@ export default function App() {
           isRegisteringUser = true
           const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
           const registerUserResponseJson = await registerUserResponse.json()
-          console.log('um')
           setUser(registerUserResponseJson)
         }
       } else {
@@ -55,7 +54,6 @@ export default function App() {
   } catch (error) {
     console.dir(error)
   }
-  // const [isReady, setIsReady] = useState(false) TODO
   const [error, setError] = useState(null)
   if (error) {
     console.error(error.message)
@@ -67,7 +65,7 @@ export default function App() {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
         if (path) {
-          const loadedQuiltroResponse = await getQuiltro(path) // TODO fix to use hook
+          const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO fix to use hook
           const loadedQuiltro = await loadedQuiltroResponse.json()
           console.dir(loadedQuiltro)
           setQuiltro(loadedQuiltro)
