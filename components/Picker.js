@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
   View,
-  StyleSheet,
   TouchableWithoutFeedback,
   Modal,
   Button,
@@ -29,19 +28,32 @@ function AppPicker({
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={[styles.container, { width }]}>
+        <View style={[{
+    backgroundColor: defaultStyles.colors.light,
+    borderRadius: 25,
+    flexDirection: 'row',
+    padding: 15,
+    marginVertical: 10,
+  }, { width }]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
               size={20}
               color={defaultStyles.colors.medium}
-              style={styles.icon}
+              style={{
+                marginRight: 10,
+              }}
             />
           )}
           {selectedItem ? (
-            <Text style={styles.text}>{selectedItem.label}</Text>
+            <Text style={{
+              flex: 1,
+            }}>{selectedItem.label}</Text>
           ) : (
-            <Text style={styles.placeholder}>{placeholder}</Text>
+            <Text style={{
+              color: defaultStyles.colors.medium,
+              flex: 1,
+            }}>{placeholder}</Text>
           )}
 
           <MaterialCommunityIcons
@@ -75,25 +87,5 @@ function AppPicker({
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: defaultStyles.colors.light,
-    borderRadius: 25,
-    flexDirection: 'row',
-    padding: 15,
-    marginVertical: 10,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  placeholder: {
-    color: defaultStyles.colors.medium,
-    flex: 1,
-  },
-  text: {
-    flex: 1,
-  },
-})
 
 export default AppPicker

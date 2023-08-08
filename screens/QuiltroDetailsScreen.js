@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
-import colors from '../config/colors'
 
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
@@ -59,14 +58,28 @@ function QuiltroDetailsScreen({ route }) {
     <Screen>
       <MisQuiltrosHeader quiltro={quiltroDetails} />
       <Image
-        style={styles.image}
+        style={{
+          width: '100%',
+          height: 300,
+        }}
         preview={{ uri: quiltroDetails.photoUrl }}
         tint="light"
         uri={quiltroDetails.photoUrl}
       />
-      <View style={styles.detailsContainer}>
+      <View
+        style={{
+          padding: 20,
+        }}
+      >
         <QuiltroDetails quiltro={quiltro} />
-        <View style={styles.quiltroActions}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            textAlign: 'center',
+            justifyContent: 'space-around',
+          }}
+        >
           <Button
             styles={{
               marginBottom: '0.5em',
@@ -111,36 +124,5 @@ function QuiltroDetailsScreen({ route }) {
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  quiltroActions: {
-    display: 'flex',
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-around',
-    // width: '100%',
-    // marginLeft: '20%',
-  },
-  detailsContainer: {
-    padding: 20,
-  },
-  image: {
-    width: '100%',
-    height: 300,
-  },
-  price: {
-    color: colors.secondary,
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginVertical: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '500',
-  },
-  userContainer: {
-    marginVertical: 40,
-  },
-})
 
 export default QuiltroDetailsScreen

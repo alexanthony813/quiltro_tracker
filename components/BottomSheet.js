@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, Text, View } from 'react-native'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
@@ -64,8 +64,29 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
   }
   return (
     <GestureDetector gesture={panGesture}>
-      <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
-        <View style={styles.line} />
+      <Animated.View
+        style={[
+          {
+            height: SCREEN_HEIGHT,
+            width: '100%',
+            backgroundColor: 'white',
+            position: 'absolute',
+            top: SCREEN_HEIGHT / 1.5,
+            borderRadius: 25,
+          },
+          rBottomSheetStyle,
+        ]}
+      >
+        <View
+          style={{
+            width: 75,
+            height: 4,
+            backgroundColor: 'grey',
+            alignSelf: 'center',
+            marginVertical: 15,
+            borderRadius: 2,
+          }}
+        />
         {bottomSheetContentMode && bottomSheetContentMode === 'filters' && (
           <View>
             <Text>Filters</Text>
@@ -75,24 +96,5 @@ const BottomSheet = ({ bottomSheetContentMode }) => {
     </GestureDetector>
   )
 }
-const styles = StyleSheet.create({
-  bottomSheetContainer: {
-    height: SCREEN_HEIGHT,
-    width: '100%',
-    backgroundColor: 'white',
-    position: 'absolute',
-    top: SCREEN_HEIGHT / 1.5,
-    borderRadius: 25,
-  },
-  line: {
-    width: 75,
-    height: 4,
-    backgroundColor: 'grey',
-    alignSelf: 'center',
-    marginVertical: 15,
-    borderRadius: 2,
-  },
-})
 
-// )
 export default BottomSheet
