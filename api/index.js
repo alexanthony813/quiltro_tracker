@@ -91,7 +91,7 @@ export const getUserQuiltros = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/quiltros`)
 }
 
-export const getQuiltro = async (quiltroId) => {
+export const getQuiltroDetails = async (quiltroId) => {
   return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
 }
 

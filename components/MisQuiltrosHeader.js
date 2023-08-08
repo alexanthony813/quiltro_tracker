@@ -5,19 +5,23 @@ import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
 import Button from '../components/Button'
 import routes from '../navigation/routes'
+import useAuth from '../contexts/auth/useAuth'
 
-function MisQuiltrosHeader({ quiltro, user }) {
+function MisQuiltrosHeader({ quiltro }) {
+  const { user } = useAuth()
   const navigation = useNavigation()
   const headerText = quiltro ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
   return (
     <View className="mx-1">
       <View className="flex-row justify-between items-center ml-5 ">
-        <Button
-          title="←"
-          onPress={() => {
-            navigation.goBack()
-          }}
-        />
+        {navigation.canGoBack() ? (
+          <Button
+            title="←"
+            onPress={() => {
+              navigation.goBack()
+            }}
+          />
+        ) : null}
         <View>
           <Text className="font-bold text-2xl -mx-1.5">{headerText}</Text>
         </View>

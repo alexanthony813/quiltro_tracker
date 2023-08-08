@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
@@ -10,22 +10,31 @@ import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
 import QuiltroRequestList from '../components/QuiltroRequestList'
-
+import { getQuiltroDetails } from '../api/index'
+import useApi from '../hooks/useApi'
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
+  const { quiltroId } = quiltro
   const navigation = useNavigation()
+  const {
+    data: quiltroDetails,
+    error,
+    isLoading,
+    request: loadQuiltroDetails,
+  } = useApi(getQuiltroDetails)
+  useEffect(() => {
+    loadQuiltroDetails(quiltroId)
+  }, [JSON.stringify(quiltroDetails)])
 
   return (
     <Screen>
-      <MisQuiltrosHeader
-        quiltro={quiltro}
-      />
+      <MisQuiltrosHeader quiltro={quiltroDetails} />
       <Image
         style={styles.image}
-        preview={{ uri: quiltro.photoUrl }}
+        preview={{ uri: quiltroDetails.photoUrl }}
         tint="light"
-        uri={quiltro.photoUrl}
+        uri={quiltroDetails.photoUrl}
       />
       <View style={styles.detailsContainer}>
         <QuiltroDetails quiltro={quiltro} />
@@ -55,7 +64,9 @@ function QuiltroDetailsScreen({ route }) {
             }}
           />
         </View>
-        <QuiltroRequestList />
+        {quiltroDetails && quiltroDetails.requestedItems ? (
+          <QuiltroRequestList requestedItems={quiltroDetails.requestedItems} />
+        ) : null}
       </View>
     </Screen>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
 import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
@@ -11,6 +11,10 @@ import { Form, FormField } from '../components/forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 import NewRequestedItemModal from '../components/NewRequestedItemModal'
 import useAuth from '../contexts/auth/useAuth'
+import SubmitButton from '../components/forms/SubmitButton'
+import QuiltroRequestList from '../components/QuiltroRequestList'
+import { useNavigation } from '@react-navigation/native'
+import routes from '../navigation/routes'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
@@ -20,11 +24,15 @@ const validationSchema = Yup.object().shape({
 
 function NewQuiltroScreen({ route }) {
   const { user } = useAuth()
+  const navigation = useNavigation()
   const [imageUpload, setImageUpload] = useState(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const [isQuiltroSubmitting, setIsQuiltroSubmitting] = useState(false)
   const [requestedItems, setRequestedItems] = useState([])
+  const [displayName, setDisplayName] = useState(null)
+
+  useEffect(() => {}, [isModalVisible])
 
   const appendRequestedItem = (newRequestedItem) => {
     const newRequestedItems = requestedItems.slice()
@@ -62,9 +70,12 @@ function NewQuiltroScreen({ route }) {
     })
 
     if (savedQuiltroResponse.ok) {
+      const quiltro = await savedQuiltroResponse.json()
+      const { quiltroId } = quiltro
       await saveNewRequestedItems(quiltroId, requestedItems) //TODO check this response
+      setIsQuiltroSubmitting(false)
+      navigation.navigate(routes.QUILTRO_LIST)
     }
-    setIsQuiltroSubmitting(false)
   }
 
   const handleImageUpload = async (event) => {
@@ -95,8 +106,8 @@ function NewQuiltroScreen({ route }) {
   return (
     <Screen>
       <NewRequestedItemModal
-        visible={isVisible}
-        setIsVisible={setIsVisible}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
         appendRequestedItem={appendRequestedItem}
       />
       <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
@@ -110,30 +121,28 @@ function NewQuiltroScreen({ route }) {
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-          Agregar un Quiltro
+          {isModalVisible
+            ? 'Agregar un Quiltro'
+            : `Agregar Aporte por ${displayName}`}
         </Text>
         <View style={{ paddingTop: 5, paddingBottom: 50 }}>
           <Form
             initialValues={{
               name: '',
-              age: '',
               favoriteFoods: '',
-              // allergies: '',
               location: '',
-              // requested_items: '',
-              // medical_issues: '',
-              // medical_history: '',
-              // health_issues: '',
-              // chip_id: '',
             }}
-            onSubmit={handleSubmit}
             validationSchema={validationSchema}
+            onSubmit={handleSubmit}
           >
             <FormField
               style={{ width: '100%' }}
               maxLength={255}
               name="name"
               placeholder="Nombre"
+              onBlur={(e) => {
+                setDisplayName(e.target.value)
+              }}
             />
             <FormField
               style={{ width: '100%' }}
@@ -148,41 +157,67 @@ function NewQuiltroScreen({ route }) {
               placeholder="Ubicacion"
             />
             <ActivityIndicator animating={isImageUploading} size="small" />
-            <View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  textAlign: 'center',
-                  justifyContent: 'space-between',
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                textAlign: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Button
+                styles={{
+                  marginBottom: '0.5em',
+                  borderRadius: '10%',
+                  width: '50%',
                 }}
-              >
-                <Button
-                  styles={{
-                    marginBottom: '0.5em',
-                    borderRadius: '10%',
-                    width: '50%',
-                  }}
-                  isDisabled={imageUpload}
-                  onPress={handleImageUpload}
-                  color="secondary"
-                  title="Cargar un Imagen"
-                />
-                <Button
-                  styles={{
-                    marginBottom: '0.5em',
-                    borderRadius: '10%',
-                    width: '30%',
-                  }}
-                  isDisabled={!imageUpload}
-                  className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
-                  title="Save"
-                />
-              </View>
+                isDisabled={imageUpload}
+                onPress={handleImageUpload}
+                color="secondary"
+                title="Cargar un Imagen"
+              />
+              <SubmitButton
+                styles={{
+                  marginBottom: '0.5em',
+                  borderRadius: '10%',
+                  width: '30%',
+                }}
+                isDisabled={!imageUpload}
+                className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
+                title="Save"
+              />
             </View>
           </Form>
+          {displayName ? (
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+            >
+              <Text style={{ fontWeight: 'bold', fontSize: 'x-large' }}>
+                {displayName} necesita algo?
+              </Text>
+              <Button
+                styles={{
+                  marginBottom: '0.5em',
+                  borderRadius: '10%',
+                  width: '30%',
+                  textAlign: 'center',
+                }}
+                color="primary"
+                title="Agregar Aporte"
+                onPress={() => {
+                  setIsModalVisible(true)
+                }}
+              />
+            </View>
+          ) : null}
         </View>
         {imageUpload && <Text>Image Uploaded</Text>}
+        {requestedItems ? (
+          <QuiltroRequestList requestedItems={requestedItems} />
+        ) : null}
       </View>
     </Screen>
   )
