@@ -10,13 +10,13 @@ import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
   const { user } = useAuth()
   const navigation = useNavigation()
-  const route = useRoute()
+  const isFocused = useIsFocused()
   const { uid, isAdmin } = user
   const {
     data: quiltros,
@@ -24,9 +24,10 @@ function MisQuiltrosScreen({}) {
     isLoading,
     request: loadQuiltros,
   } = useApi(getUserQuiltros)
+
   useEffect(() => {
     loadQuiltros({ uid })
-  }, [JSON.stringify(quiltros), route])
+  }, [JSON.stringify(quiltros), isFocused])
 
   return (
     <Screen>
