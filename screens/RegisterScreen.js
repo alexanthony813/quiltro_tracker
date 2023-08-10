@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { StyleSheet } from 'react-native'
-import * as Yup from 'yup'
 import Screen from '../components/Screen'
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
 import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
@@ -20,103 +18,129 @@ function RegisterScreen() {
     phoneProvider
       .verifyPhoneNumber(phoneNumber, recaptchaVerifierRef.current)
       .then(setVerificationId)
-    setPhoneNumber('')
   }
 
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
     signInWithCredential(auth, credential)
       .then((user) => {
-        setCode('')
-        console.dir('authed')
-        console.dir(user)
+        console.dir('code confirmed')
       })
       .catch((error) => {
         // show error
-        console.dir(error)
+        console.error(error)
       })
   }
 
   return (
     <Screen>
-      <View>
-        <FirebaseRecaptchaVerifierModal
-          ref={recaptchaVerifierRef}
-          firebaseConfig={firebaseApp.options}
-          attemptInvisibleVerification={true}
-        />
-        <View>
-          <Text styles={styles.otpText}>Login using OTP</Text>
-          <TextInput
-            placeholder="Phone number with country code"
-            onChangeText={setPhoneNumber}
-            keyboardType="phone-pad"
-            autoCompleteType="tel"
-            style={styles.textInput}
+      <ImageBackground
+        blurRadius={3}
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+        source={require('../assets/background.jpeg')}
+      >
+        <View
+          style={{
+            background: 'rgb(0, 0, 0, 0.5)',
+            bottom: '10%',
+            width: '100%',
+          }}
+        >
+          <FirebaseRecaptchaVerifierModal
+            ref={recaptchaVerifierRef}
+            firebaseConfig={firebaseApp.options}
+            attemptInvisibleVerification={true}
           />
-          <TouchableOpacity
-            onPress={sendVerification}
-            styles={styles.sendVerification}
-          >
-            <Text styles={styles.buttonText}>Send Verification</Text>
-          </TouchableOpacity>
-          <TextInput
-            placeholder="Confirm Code"
-            onChangeText={setCode}
-            keyboardType="number-pad"
-            style={styles.textInput}
-          />
-          <TouchableOpacity onPress={confirmCode} styles={styles.sendCode}>
-            <Text styles={styles.buttonText}>Confirm Verification</Text>
-          </TouchableOpacity>
+          <View>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#fff',
+                margin: 20,
+              }}
+            >
+              Login using OTP
+            </Text>
+            <TextInput
+              placeholder="Numero con codigo del pais"
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
+              autoCompleteType="tel"
+              style={{
+                paddingTop: 40,
+                paddingBottom: 20,
+                paddingHorizontal: 20,
+                fontSize: 24,
+                borderBottomColor: '#fff',
+                marginBottom: 20,
+                textAlign: 'center',
+                color: '#fff',
+              }}
+            />
+            <TouchableOpacity
+              onPress={sendVerification}
+              style={{
+                padding: 20,
+                backgroundColor: '#3498',
+                borderRadius: 10,
+                marginLeft: '0.25em',
+                marginRight: '0.25em',
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                }}
+              >
+                Send Verification
+              </Text>
+            </TouchableOpacity>
+            <TextInput
+              placeholder="Confirmar Codigo"
+              onChangeText={setCode}
+              keyboardType="number-pad"
+              style={{
+                paddingTop: 40,
+                paddingBottom: 20,
+                paddingHorizontal: 20,
+                fontSize: 24,
+                borderBottomColor: '#fff',
+                color: '#fff',
+                marginBottom: 20,
+                textAlign: 'center',
+              }}
+            />
+            <TouchableOpacity
+              onPress={confirmCode}
+              style={{
+                padding: 20,
+                backgroundColor: '#9b59',
+                borderRadius: 10,
+                marginLeft: '0.25em',
+                marginRight: '0.25em',
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}
+              >
+                Confirm Verification
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ImageBackground>
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textInput: {
-    paddingTop: 40,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-    fontSize: 24,
-    borderBottomColor: '#fff',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fff',
-  },
-  sendVerification: {
-    padding: 20,
-    backgroundColor: '#3498',
-    borderRadius: 10,
-  },
-  sendCode: {
-    padding: 20,
-    backgroundColor: '#9b59',
-    borderRadius: 10,
-  },
-  buttonsContainer: {
-    padding: 20,
-    width: '100%',
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  otpText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    margin: 20,
-  },
-})
 
 export default RegisterScreen

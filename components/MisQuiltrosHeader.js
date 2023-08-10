@@ -6,16 +6,18 @@ import { useNavigation } from '@react-navigation/native'
 import Button from '../components/Button'
 import routes from '../navigation/routes'
 import useAuth from '../contexts/auth/useAuth'
+import BackButton from '../components/BackButton'
 
 function MisQuiltrosHeader({ quiltro }) {
   const { user } = useAuth()
   const navigation = useNavigation()
-  const headerText = quiltro ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
+  const headerText =
+    quiltro && quiltro.name ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
   return (
     <View className="mx-1">
       <View className="flex-row justify-between items-center ml-5 ">
         {navigation.canGoBack() ? (
-          <Button
+          <BackButton
             title="←"
             onPress={() => {
               navigation.goBack()

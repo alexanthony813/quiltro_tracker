@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-
+import { View } from 'react-native'
 import { ListItem } from '../components/lists'
 import colors from '../config/colors'
 import Icon from '../components/Icon'
@@ -13,8 +12,12 @@ function SettingsScreen() {
   const { user } = useAuth()
   const { phoneNumber } = user
   return (
-    <Screen style={styles.screen}>
-      <View style={styles.container}>
+    <Screen style={{
+      backgroundColor: colors.light,
+    }}>
+      <View style={{
+    marginVertical: 20,
+  }}>
         <ListItem title={phoneNumber || 'Anonimo'} />
         <ListItem
           title="Log Out"
@@ -35,14 +38,5 @@ function SettingsScreen() {
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: colors.light,
-  },
-  container: {
-    marginVertical: 20,
-  },
-})
 
 export default SettingsScreen

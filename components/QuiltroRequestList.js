@@ -4,11 +4,15 @@ import Icon from '../components/Icon'
 
 function QuiltroRequestList({ requestedItems }) {
   return (
-    <View>
+    <View
+      style={{
+        top: '-12%',
+      }}
+    >
       {requestedItems.map((item) => {
         return (
           <ListItem
-            title={item.title}
+            title={`Ha pedido una ${item.title}`}
             IconComponent={
               <Icon name="gift" backgroundColor="rgb(252, 92, 101)" />
             }

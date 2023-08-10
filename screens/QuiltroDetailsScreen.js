@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
-import colors from '../config/colors'
 
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
@@ -12,34 +11,6 @@ import QuiltroDetails from '../components/QuiltroDetails'
 import QuiltroRequestList from '../components/QuiltroRequestList'
 import { getQuiltroDetails } from '../api/index'
 import useApi from '../hooks/useApi'
-
-function timeSince(time) {
-  const date = new Date(time)
-  let seconds = Math.floor((new Date() - date) / 1000)
-
-  let interval = seconds / 31536000
-
-  if (interval > 1) {
-    return Math.floor(interval) + ' years'
-  }
-  interval = seconds / 2592000
-  if (interval > 1) {
-    return Math.floor(interval) + ' months'
-  }
-  interval = seconds / 86400
-  if (interval > 1) {
-    return Math.floor(interval) + ' days'
-  }
-  interval = seconds / 3600
-  if (interval > 1) {
-    return Math.floor(interval) + ' hours'
-  }
-  interval = seconds / 60
-  if (interval > 1) {
-    return Math.floor(interval) + ' minutes'
-  }
-  return Math.floor(seconds) + ' seconds'
-}
 
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
@@ -59,17 +30,30 @@ function QuiltroDetailsScreen({ route }) {
     <Screen>
       <MisQuiltrosHeader quiltro={quiltroDetails} />
       <Image
-        style={styles.image}
+        style={{
+          width: '100%',
+          height: 300,
+        }}
         preview={{ uri: quiltroDetails.photoUrl }}
         tint="light"
         uri={quiltroDetails.photoUrl}
       />
-      <View style={styles.detailsContainer}>
+      <View>
         <QuiltroDetails quiltro={quiltro} />
-        <View style={styles.quiltroActions}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            textAlign: 'center',
+            justifyContent: 'space-around',
+            height: '30%',
+            top: '-6%',
+          }}
+        >
           <Button
             styles={{
-              marginBottom: '0.5em',
+              marginLeft: '0.5em',
+              marginRight: '0.5em',
               borderRadius: '10%',
               width: '30%',
             }}
@@ -81,7 +65,8 @@ function QuiltroDetailsScreen({ route }) {
           />
           <Button
             styles={{
-              marginBottom: '0.5em',
+              marginLeft: '0.5em',
+              marginRight: '0.5em',
               borderRadius: '10%',
               width: '50%',
             }}
@@ -95,15 +80,6 @@ function QuiltroDetailsScreen({ route }) {
             }}
           />
         </View>
-        {quiltroDetails.lastStatusEvent ? (
-          <View>
-            <Text>
-              Has visto problema? Uno estuvo reportado desde hace
-              {` ${timeSince(quiltroDetails.lastStatusEvent.time)}`}
-            </Text>
-          </View>
-        ) : null}
-
         {quiltroDetails && quiltroDetails.requestedItems ? (
           <QuiltroRequestList requestedItems={quiltroDetails.requestedItems} />
         ) : null}
@@ -111,36 +87,5 @@ function QuiltroDetailsScreen({ route }) {
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  quiltroActions: {
-    display: 'flex',
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-around',
-    // width: '100%',
-    // marginLeft: '20%',
-  },
-  detailsContainer: {
-    padding: 20,
-  },
-  image: {
-    width: '100%',
-    height: 300,
-  },
-  price: {
-    color: colors.secondary,
-    fontWeight: 'bold',
-    fontSize: 20,
-    marginVertical: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '500',
-  },
-  userContainer: {
-    marginVertical: 40,
-  },
-})
 
 export default QuiltroDetailsScreen

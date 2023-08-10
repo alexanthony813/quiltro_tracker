@@ -49,7 +49,6 @@ function MisQuiltrosScreen({}) {
                 marginBottom: 30,
               }}
               onPress={(e) => {
-                e.preventDefault()
                 navigation.navigate(routes.QUILTRO, {
                   quiltro,
                 })

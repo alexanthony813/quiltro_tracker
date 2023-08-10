@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import colors from '../config/colors'
+import { timeSince } from '../utility/helpers'
 
 function QuiltroDetails({ quiltro }) {
   return (
@@ -12,12 +13,6 @@ function QuiltroDetails({ quiltro }) {
         <Text style={{ fontWeight: 'bold' }}>{'Prefiero comer: '}</Text>
         {quiltro.favoriteFoods}
       </Text>
-      {/* {quiltro.allergies ? (
-        <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-          <Text style={{ fontWeight: 'bold' }}>{'Alergias: '}</Text>
-          {quiltro.allergies}
-        </Text>
-      ) : null} */}
       <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
         <Text style={{ fontWeight: 'bold', color: 'red' }}>
           {'No me des: '}
@@ -28,6 +23,19 @@ function QuiltroDetails({ quiltro }) {
         <Text style={{ fontWeight: 'bold' }}>{'Vivo en: '}</Text>
         {quiltro.location}
       </Text>
+      {quiltro.lastStatusEvent ? (
+        <View
+          style={{
+            marginBottom: '0.25em',
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>
+            Has visto problema? Uno estuvo reportado desde hace
+            {` ${timeSince(quiltro.lastStatusEvent.time)}`}
+          </Text>
+          <Text></Text>
+        </View>
+      ) : null}
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import colors from '../config/colors'
@@ -7,15 +7,7 @@ import colors from '../config/colors'
 function MisQuiltrosButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.container}>
-        <MaterialCommunityIcons name="paw" color={colors.white} size={40} />
-      </View>
-    </TouchableOpacity>
-  )
-}
-
-const styles = StyleSheet.create({
-  container: {
+      <View style={{
     alignItems: 'center',
     backgroundColor: colors.primary,
     borderColor: colors.white,
@@ -25,7 +17,11 @@ const styles = StyleSheet.create({
     height: 75,
     justifyContent: 'center',
     width: 75,
-  },
-})
+  }}>
+        <MaterialCommunityIcons name="paw" color={colors.white} size={40} />
+      </View>
+    </TouchableOpacity>
+  )
+}
 
 export default MisQuiltrosButton
