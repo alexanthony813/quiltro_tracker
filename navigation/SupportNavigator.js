@@ -5,8 +5,8 @@ import UserScreen from '../screens/SettingsScreen'
 const Stack = createStackNavigator()
 
 const SupportNavigator = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Configuracion" component={UserScreen} />
+  <Stack.Navigator options={{ headerShown: false }}>
+    <Stack.Screen name="Apoyo" component={UserScreen} />
   </Stack.Navigator>
 )
 

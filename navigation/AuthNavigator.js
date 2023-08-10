@@ -8,12 +8,8 @@ import MisQuiltrosScreen from '../screens/MisQuiltrosScreen'
 const Stack = createStackNavigator()
 
 const AuthNavigator = ({ firebaseApp }) => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Welcome"
-      component={WelcomeScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Welcome" component={WelcomeScreen} />
     <Stack.Screen name="Login" component={MisQuiltrosScreen} />
     <Stack.Screen
       initialParams={{ firebaseApp }}

@@ -12,34 +12,6 @@ import QuiltroRequestList from '../components/QuiltroRequestList'
 import { getQuiltroDetails } from '../api/index'
 import useApi from '../hooks/useApi'
 
-function timeSince(time) {
-  const date = new Date(time)
-  let seconds = Math.floor((new Date() - date) / 1000)
-
-  let interval = seconds / 31536000
-
-  if (interval > 1) {
-    return Math.floor(interval) + ' years'
-  }
-  interval = seconds / 2592000
-  if (interval > 1) {
-    return Math.floor(interval) + ' months'
-  }
-  interval = seconds / 86400
-  if (interval > 1) {
-    return Math.floor(interval) + ' days'
-  }
-  interval = seconds / 3600
-  if (interval > 1) {
-    return Math.floor(interval) + ' hours'
-  }
-  interval = seconds / 60
-  if (interval > 1) {
-    return Math.floor(interval) + ' minutes'
-  }
-  return Math.floor(seconds) + ' seconds'
-}
-
 function QuiltroDetailsScreen({ route }) {
   const { quiltro } = route.params
   const { quiltroId } = quiltro
@@ -66,11 +38,7 @@ function QuiltroDetailsScreen({ route }) {
         tint="light"
         uri={quiltroDetails.photoUrl}
       />
-      <View
-        style={{
-          padding: 20,
-        }}
-      >
+      <View>
         <QuiltroDetails quiltro={quiltro} />
         <View
           style={{
@@ -78,11 +46,14 @@ function QuiltroDetailsScreen({ route }) {
             flexDirection: 'row',
             textAlign: 'center',
             justifyContent: 'space-around',
+            height: '30%',
+            top: '-6%',
           }}
         >
           <Button
             styles={{
-              marginBottom: '0.5em',
+              marginLeft: '0.5em',
+              marginRight: '0.5em',
               borderRadius: '10%',
               width: '30%',
             }}
@@ -94,7 +65,8 @@ function QuiltroDetailsScreen({ route }) {
           />
           <Button
             styles={{
-              marginBottom: '0.5em',
+              marginLeft: '0.5em',
+              marginRight: '0.5em',
               borderRadius: '10%',
               width: '50%',
             }}
@@ -108,15 +80,6 @@ function QuiltroDetailsScreen({ route }) {
             }}
           />
         </View>
-        {quiltroDetails.lastStatusEvent ? (
-          <View>
-            <Text>
-              Has visto problema? Uno estuvo reportado desde hace
-              {` ${timeSince(quiltroDetails.lastStatusEvent.time)}`}
-            </Text>
-          </View>
-        ) : null}
-
         {quiltroDetails && quiltroDetails.requestedItems ? (
           <QuiltroRequestList requestedItems={quiltroDetails.requestedItems} />
         ) : null}

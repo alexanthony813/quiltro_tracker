@@ -17,32 +17,47 @@ function ListItem({
   return (
     <Swipeable renderRightActions={renderRightActions}>
       <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-        <View style={ {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 15,
-    backgroundColor: colors.white,
-  }}>
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            padding: 15,
+            backgroundColor: colors.white,
+          }}
+        >
           {IconComponent}
-          {image && <Image style={{
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-  }} source={image} />}
-          <View style={{
-    flex: 1,
-    marginLeft: 10,
-    justifyContent: 'center',
-  }}>
-            <Text style={{
-    fontWeight: '500',
-  }} numberOfLines={1}>
+          {image && (
+            <Image
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+              }}
+              source={image}
+            />
+          )}
+          <View
+            style={{
+              flex: 1,
+              marginLeft: 10,
+              justifyContent: 'center',
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: '500',
+              }}
+              numberOfLines={1}
+            >
               {title}
             </Text>
             {subTitle && (
-              <Text style={{
-                color: colors.medium,
-              }} numberOfLines={2}>
+              <Text
+                style={{
+                  color: colors.medium,
+                }}
+                numberOfLines={2}
+              >
                 {subTitle}
               </Text>
             )}
