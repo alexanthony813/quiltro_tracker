@@ -10,4 +10,5 @@ export default Object.freeze({
   LOGIN: 'Login',
   REGISTER: 'Register',
   SUPPORT: 'Support',
+  WELCOME: 'Welcome'
 })

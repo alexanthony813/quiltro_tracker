@@ -12,7 +12,7 @@ function QuiltroRequestList({ requestedItems }) {
       {requestedItems.map((item) => {
         return (
           <ListItem
-            title={`Ha pedido una ${item.title}`}
+            title={`Ha pedido una ${item.title} 🥺`}
             IconComponent={
               <Icon name="gift" backgroundColor="rgb(252, 92, 101)" />
             }

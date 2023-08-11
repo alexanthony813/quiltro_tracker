@@ -5,6 +5,7 @@ import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
+import { registerUser } from '../api/index'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
@@ -22,14 +23,21 @@ function RegisterScreen() {
 
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
-    signInWithCredential(auth, credential)
-      .then((user) => {
-        console.dir('code confirmed')
+    if (onboardingUser) {
+      onboardingUser.linkWithCredential(credential).then((user) => {
+        // TODO i think creates new user in the db, make sure to dedupe if so
+        registerUser(user)
       })
-      .catch((error) => {
-        // show error
-        console.error(error)
-      })
+    } else {
+      signInWithCredential(auth, credential)
+        .then((user) => {
+          console.dir('code confirmed')
+        })
+        .catch((error) => {
+          // show error
+          console.error(error)
+        })
+    }
   }
 
   return (
