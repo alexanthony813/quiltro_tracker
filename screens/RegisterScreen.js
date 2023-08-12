@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Screen from '../components/Screen'
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
-import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+  linkWithCredential,
+} from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
 import { registerUser } from '../api/index'
+import useOnboarding from '../contexts/onboarding/useOnboarding'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
+  const { onboardingUser, setOnboardingUser } = useOnboarding()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [verificationId, setVerificationId] = useState(null)
@@ -24,9 +31,10 @@ function RegisterScreen() {
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
     if (onboardingUser) {
-      onboardingUser.linkWithCredential(credential).then((user) => {
+      linkWithCredential(auth.currentUser, credential).then((user) => {
         // TODO i think creates new user in the db, make sure to dedupe if so
         registerUser(user)
+        setOnboardingUser(null)
       })
     } else {
       signInWithCredential(auth, credential)

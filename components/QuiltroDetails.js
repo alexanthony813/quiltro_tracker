@@ -30,7 +30,7 @@ function QuiltroDetails({ quiltro }) {
           }}
         >
           <Text style={{ fontWeight: 'bold' }}>
-            Has visto problema? Uno estuvo reportado desde hace
+            Has visto algo incorrecto? Se informó un problema desde hace
             {` ${timeSince(quiltro.lastStatusEvent.time)}`}
           </Text>
           <Text></Text>

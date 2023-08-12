@@ -3,7 +3,7 @@ import { Text, View, ActivityIndicator } from 'react-native'
 import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewQuiltro, saveNewRequestedItems } from '../api'
+import { saveNewQuiltro, saveNewRequestedItems, getUserQuiltros } from '../api'
 import Button from '../components/Button'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
@@ -74,6 +74,7 @@ function NewQuiltroScreen({ route }) {
       const { quiltroId } = quiltro
       await saveNewRequestedItems(quiltroId, requestedItems) //TODO check this response
       setIsQuiltroSubmitting(false)
+      getUserQuiltros()
       navigation.navigate(routes.QUILTRO_LIST)
     }
   }
@@ -121,9 +122,7 @@ function NewQuiltroScreen({ route }) {
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-          {isModalVisible
-            ? 'Agregar un Quiltro'
-            : `Agregar Aporte por ${displayName}`}
+          {'Agregar un Perro'}
         </Text>
         <View style={{ paddingTop: 5, paddingBottom: 50 }}>
           <Form

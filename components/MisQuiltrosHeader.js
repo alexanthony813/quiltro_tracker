@@ -12,7 +12,7 @@ function MisQuiltrosHeader({ quiltro }) {
   const { user } = useAuth()
   const navigation = useNavigation()
   const headerText =
-    quiltro && quiltro.name ? `Mi ${quiltro.name}` : `Mis Quiltros Seguidos`
+    quiltro && quiltro.name ? `Mi ${quiltro.name}` : `Mis Perros Seguidos`
   return (
     <View className="mx-1">
       <View className="flex-row justify-between items-center ml-5 ">
