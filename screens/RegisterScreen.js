@@ -1,14 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Screen from '../components/Screen'
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
-import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+  linkWithCredential,
+} from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
+import { convertAnonymousUser, subscribeUserToQuiltro } from '../api/index'
+import useOnboarding from '../contexts/onboarding/useOnboarding'
+import useQuiltro from '../contexts/quiltro/useQuiltro'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
+  const { quiltro, setQuiltro } = useQuiltro()
+  const { onboardingUser, setOnboardingUser } = useOnboarding()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [verificationId, setVerificationId] = useState(null)
@@ -22,14 +32,30 @@ function RegisterScreen() {
 
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
-    signInWithCredential(auth, credential)
-      .then((user) => {
-        console.dir('code confirmed')
+    if (onboardingUser) {
+      linkWithCredential(auth.currentUser, credential).then(async (auth) => {
+        const { user } = auth
+        // TODO i think creates new user in the db, make sure to dedupe if so
+        const convertResponse = await convertAnonymousUser(user)
+        if (convertResponse.ok) {
+          const { uid } = user
+          const { quiltroId } = quiltro
+          const subscribeResponse = await subscribeUserToQuiltro(uid, quiltroId)
+          if (subscribeResponse.ok) {
+            setOnboardingUser(null)
+          }
+        }
       })
-      .catch((error) => {
-        // show error
-        console.error(error)
-      })
+    } else {
+      signInWithCredential(auth, credential)
+        .then((user) => {
+          console.dir('code confirmed')
+        })
+        .catch((error) => {
+          // show error
+          console.error(error)
+        })
+    }
   }
 
   return (

@@ -9,7 +9,8 @@ import { parseInitialURLAsync } from 'expo-linking'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
 import AuthContext from './contexts/auth/context'
-import QuiltroContext from './contexts/auth/context'
+import QuiltroContext from './contexts/quiltro/context'
+import OnboardingContext from './contexts/onboarding/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltroDetails, registerUser } from './api'
 
@@ -25,8 +26,9 @@ if (firebase && !firebase.apps.length) {
 
 export default function App() {
   let auth
-  const [user, setUser] = useState(null) // TODO should this be set here?
   const [quiltro, setQuiltro] = useState(null)
+  const [user, setUser] = useState(null)
+  const [onboardingUser, setOnboardingUser] = useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
 
   const {
     data: loadedQuiltro,
@@ -41,7 +43,7 @@ export default function App() {
     onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // in retrospect might have been better to have admin collection but i'd rather duplicate the data then have it fragmented, using mongo as source of truth
-        if (!user && !isRegisteringUser) {
+        if (!user && !isRegisteringUser && !onboardingUser) {
           isRegisteringUser = true
           const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
           const registerUserResponseJson = await registerUserResponse.json()
@@ -80,23 +82,17 @@ export default function App() {
   }, [])
 
   return (
-    <QuiltroContext.Provider
-      value={{
-        quiltro,
-        setQuiltro,
-      }}
-    >
-      <AuthContext.Provider
-        value={{
-          user,
-          setUser,
-        }}
-      >
-        <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-          <TailwindProvider>
-            {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
-          </TailwindProvider>
-        </NavigationContainer>
+    <QuiltroContext.Provider value={{ quiltro, setQuiltro }}>
+      <AuthContext.Provider value={{ user, setUser }}>
+        <OnboardingContext.Provider
+          value={{ onboardingUser, setOnboardingUser }}
+        >
+          <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+            <TailwindProvider>
+              {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
+            </TailwindProvider>
+          </NavigationContainer>
+        </OnboardingContext.Provider>
       </AuthContext.Provider>
     </QuiltroContext.Provider>
   )

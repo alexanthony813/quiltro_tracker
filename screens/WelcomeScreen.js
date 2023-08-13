@@ -4,6 +4,7 @@ import { getAuth, signInAnonymously } from 'firebase/auth'
 
 import Button from '../components/Button'
 import routes from '../navigation/routes'
+import { firebaseApp } from '../App'
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -16,35 +17,43 @@ function WelcomeScreen({ navigation }) {
       }}
       source={require('../assets/background.jpeg')}
     >
-      <View style={{
-    position: 'absolute',
-    top: 70,
-    alignItems: 'center',
-  }}>
-        {/* TODO add paw in place of logo */}
-        <Text style={{
-    fontSize: 25,
-    fontWeight: '600',
-    paddingVertical: 20,
-    color: 'white',
-  }}>Tu puedes ayudar ahora!</Text>
-      </View>
-      <View style={{
-    padding: 20,
-    width: '100%',
-  }}>
-        <Button
-          title="Login Anonimo"
-          onPress={() => {
-            const auth = getAuth()
-            signInAnonymously(auth)
+      <View
+        style={{
+          bottom: '15%',
+          alignItems: 'center',
+          background: 'rgb(0, 0, 0, 0.5)',
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 25,
+            fontWeight: '600',
+            paddingVertical: 20,
+            color: 'white',
           }}
-        />
-        <Button
-          title="Registrar como Adminstrativo"
-          color="secondary"
-          onPress={() => navigation.navigate(routes.REGISTER)}
-        />
+        >
+          Tu puedes ayudar{' '}
+          <Text style={{ textDecorationLine: 'underline' }}>ahora!</Text>
+        </Text>
+        <View
+          style={{
+            padding: 20,
+            width: '100%',
+          }}
+        >
+          <Button
+            title="Login Anonimo"
+            onPress={() => {
+              const auth = getAuth(firebaseApp)
+              signInAnonymously(auth)
+            }}
+          />
+          <Button
+            title="Registrar como Adminstrativo"
+            color="secondary"
+            onPress={() => navigation.navigate(routes.REGISTER)}
+          />
+        </View>
       </View>
     </ImageBackground>
   )

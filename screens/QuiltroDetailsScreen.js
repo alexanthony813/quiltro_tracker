@@ -11,11 +11,17 @@ import QuiltroDetails from '../components/QuiltroDetails'
 import QuiltroRequestList from '../components/QuiltroRequestList'
 import { getQuiltroDetails } from '../api/index'
 import useApi from '../hooks/useApi'
+import useAuth from '../contexts/auth/useAuth'
+import useOnboarding from '../contexts/onboarding/useOnboarding'
+import useQuiltro from '../contexts/quiltro/useQuiltro'
 
 function QuiltroDetailsScreen({ route }) {
-  const { quiltro } = route.params
+  const { quiltro } = route.params // TODO remove before merge, just use hooks
   const { quiltroId } = quiltro
   const navigation = useNavigation()
+  const { user, setUser } = useAuth()
+  const { setOnboardingUser } = useOnboarding()
+  const { setQuiltro } = useQuiltro()
   const {
     data: quiltroDetails,
     error,
@@ -25,6 +31,12 @@ function QuiltroDetailsScreen({ route }) {
   useEffect(() => {
     loadQuiltroDetails(quiltroId)
   }, [JSON.stringify(quiltroDetails)])
+
+  const handleStartConvertAnonymous = () => {
+    setOnboardingUser(user)
+    setUser(null)
+    setQuiltro(quiltroDetails)
+  }
 
   return (
     <Screen>
@@ -60,7 +72,11 @@ function QuiltroDetailsScreen({ route }) {
             color="secondary"
             title="Seguir"
             onPress={() => {
-              // TODO
+              if (
+                window.confirm('Para seguir necesitas crear cuenta con numero')
+              ) {
+                handleStartConvertAnonymous()
+              }
             }}
           />
           <Button
@@ -73,7 +89,6 @@ function QuiltroDetailsScreen({ route }) {
             color="primary"
             title="Reportar Problema"
             onPress={() => {
-              console.dir(quiltroDetails)
               navigation.navigate(routes.QUILTRO_REPORT, {
                 quiltro: quiltroDetails,
               })
