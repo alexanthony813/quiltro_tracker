@@ -10,12 +10,14 @@ import {
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
-import { registerUser } from '../api/index'
+import { convertAnonymousUser, subscribeUserToQuiltro } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
+import useQuiltro from '../contexts/quiltro/useQuiltro'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
+  const { quiltro, setQuiltro } = useQuiltro()
   const { onboardingUser, setOnboardingUser } = useOnboarding()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
@@ -31,10 +33,18 @@ function RegisterScreen() {
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
     if (onboardingUser) {
-      linkWithCredential(auth.currentUser, credential).then((user) => {
+      linkWithCredential(auth.currentUser, credential).then(async (auth) => {
+        const { user } = auth
         // TODO i think creates new user in the db, make sure to dedupe if so
-        registerUser(user)
-        setOnboardingUser(null)
+        const convertResponse = await convertAnonymousUser(user)
+        if (convertResponse.ok) {
+          const { uid } = user
+          const { quiltroId } = quiltro
+          const subscribeResponse = await subscribeUserToQuiltro(uid, quiltroId)
+          if (subscribeResponse.ok) {
+            setOnboardingUser(null)
+          }
+        }
       })
     } else {
       signInWithCredential(auth, credential)

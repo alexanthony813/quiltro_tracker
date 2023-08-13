@@ -1,20 +1,5 @@
 import settings from '../config/settings'
 
-export const subscribeUserToQuiltro = async (uid, quiltroId) => {
-  const response = await fetch(
-    `${settings.apiUrl}/users/${uid}/quiltros/${quiltroId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }
-  )
-
-  return response
-}
-
 export const saveNewQuiltro = async (quiltro) => {
   const response = await fetch(`${settings.apiUrl}/quiltros`, {
     method: 'POST',
@@ -65,6 +50,32 @@ export const registerUser = async (user) => {
     },
     body: JSON.stringify(user),
   })
+}
+
+export const convertAnonymousUser = async (user) => {
+  return await fetch(`${settings.apiUrl}/users/${user.uid}`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+}
+
+export const subscribeUserToQuiltro = async (uid, quiltroId) => {
+  const response = await fetch(
+    `${settings.apiUrl}/users/${uid}/quiltros/${quiltroId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  return response
 }
 
 export const getUserMessages = async ({ uid }) => {
