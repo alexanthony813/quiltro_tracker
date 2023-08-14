@@ -41,6 +41,9 @@
       }
     },
     "web": {
+      "build": {
+        "output": "dist/quiltros"
+      },
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
