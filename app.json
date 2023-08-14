@@ -41,6 +41,9 @@
       }
     },
     "web": {
+      "build": {
+        "output": "dist"
+      },
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
