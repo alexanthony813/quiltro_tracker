@@ -13,12 +13,14 @@ import { firebaseApp } from '../App'
 import { convertAnonymousUser, subscribeUserToQuiltro } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
+import useAuth from '../contexts/auth/useAuth'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
   const { quiltro, setQuiltro } = useQuiltro()
   const { onboardingUser, setOnboardingUser } = useOnboarding()
+  const { user, setUser } = useAuth()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [verificationId, setVerificationId] = useState(null)
@@ -38,11 +40,13 @@ function RegisterScreen() {
         // TODO i think creates new user in the db, make sure to dedupe if so
         const convertResponse = await convertAnonymousUser(user)
         if (convertResponse.ok) {
-          const { uid } = user
+          const updatedUser = await convertResponse.json()
+          const { uid } = updatedUser
           const { quiltroId } = quiltro
           const subscribeResponse = await subscribeUserToQuiltro(uid, quiltroId)
           if (subscribeResponse.ok) {
             setOnboardingUser(null)
+            setUser(updatedUser)
           }
         }
       })

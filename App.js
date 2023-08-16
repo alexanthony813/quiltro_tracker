@@ -29,6 +29,8 @@ export default function App() {
   const [quiltro, setQuiltro] = useState(null)
   const [user, setUser] = useState(null)
   const [onboardingUser, setOnboardingUser] = useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
+  const [error, setError] = useState(null)
+  const [isRegisteringUser, setIsRegisteringUser] = useState(false)
 
   const {
     data: loadedQuiltro,
@@ -37,26 +39,6 @@ export default function App() {
     request: loadQuiltro,
   } = useApi(getQuiltroDetails)
 
-  try {
-    auth = getAuth(firebaseApp)
-    let isRegisteringUser = false
-    onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // in retrospect might have been better to have admin collection but i'd rather duplicate the data then have it fragmented, using mongo as source of truth
-        if (!user && !isRegisteringUser && !onboardingUser) {
-          isRegisteringUser = true
-          const registerUserResponse = await registerUser(firebaseUser) // better to have it in one place and get 409s, will return user
-          const registerUserResponseJson = await registerUserResponse.json()
-          setUser(registerUserResponseJson)
-        }
-      } else {
-        setUser(null)
-      }
-    })
-  } catch (error) {
-    console.dir(error)
-  }
-  const [error, setError] = useState(null)
   if (error) {
     console.error(error.message)
   }
@@ -64,12 +46,25 @@ export default function App() {
   useEffect(() => {
     async function asyncHelper() {
       try {
+        auth = getAuth(firebaseApp)
+        onAuthStateChanged(auth, async (firebaseUser) => {
+          if (firebaseUser) {
+            if (!user && !isRegisteringUser && !onboardingUser) {
+              setIsRegisteringUser(true)
+              const registerUserResponse = await registerUser(firebaseUser) // returns 201 with user if exists
+              const registerUserResponseJson = await registerUserResponse.json()
+              setUser(registerUserResponseJson)
+            }
+          } else {
+            setUser(null)
+          }
+        })
+
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
         if (path) {
           const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO fix to use hook
           const loadedQuiltro = await loadedQuiltroResponse.json()
-          console.dir(loadedQuiltro)
           setQuiltro(loadedQuiltro)
           signInAnonymously(auth)
         }
