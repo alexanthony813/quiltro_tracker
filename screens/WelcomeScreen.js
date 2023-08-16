@@ -42,7 +42,7 @@ function WelcomeScreen({ navigation }) {
           }}
         >
           <Button
-            title="Login Anonimo"
+            title="Login Anónimamente"
             onPress={() => {
               const auth = getAuth(firebaseApp)
               signInAnonymously(auth)
