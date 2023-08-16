@@ -1,16 +1,17 @@
 import Constants from 'expo-constants'
 
-const localhost = 'localhost'
+// const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://quiltro-637d7.web.app'
 
 const settings = {
   dev: {
-    apiUrl: `http://${localhost}:3000`,
+    apiUrl: `${baseUrl}`,
   },
   staging: {
-    apiUrl: `http://${localhost}:3000`,
+    apiUrl: `${baseUrl}`,
   },
   prod: {
-    apiUrl: `http://${localhost}:3000`,
+    apiUrl: `${baseUrl}`,
   },
 }
 

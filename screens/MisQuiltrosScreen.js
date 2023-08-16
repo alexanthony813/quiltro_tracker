@@ -76,7 +76,8 @@ function MisQuiltrosScreen({}) {
               </Text>
             ) : (
               <Text className={'text-center text-xl font-bold italic'}>
-                Necesitas seguir mas quiltros!
+                Necesitas seguir mas quiltros! Escanear un codigo QR para
+                empezar
               </Text>
             )}
           </View>
