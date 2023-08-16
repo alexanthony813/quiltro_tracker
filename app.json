@@ -16,30 +16,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyACL8w_nMf6LmcZXxzNHcGA6-npnkZTCzM"
-      },
-      "bundleIdentifier": "com.alexanderlee.amigosperdidos",
-      "buildNumber": "1.0.0",
-      "googleServicesFile": "./GoogleService-Info.plist",
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "fetch",
-          "remote-notification"
-        ]
-      }
-    },
-    "android": {
-      "googleServicesFile": "./google-services.json",
-      "package": "com.alexanderlee.amigosperdidos",
-      "versionCode": 1,
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
     "web": {
       "build": {
         "output": "dist/quiltros"
