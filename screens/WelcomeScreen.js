@@ -49,7 +49,7 @@ function WelcomeScreen({ navigation }) {
             }}
           />
           <Button
-            title="Registrar como Adminstrativo"
+            title="Registrar como Administrador"
             color="secondary"
             onPress={() => navigation.navigate(routes.REGISTER)}
           />

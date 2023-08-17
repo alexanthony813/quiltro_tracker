@@ -67,7 +67,7 @@ function NewRequestedItemModal({
                 width: '30%',
               }}
               className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
-              title="Save"
+              title="Guardar"
             />
           </Form>
         </View>

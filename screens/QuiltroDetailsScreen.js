@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
@@ -8,7 +8,6 @@ import Button from '../components/Button'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
-import QuiltroRequestList from '../components/QuiltroRequestList'
 import { getQuiltroDetails } from '../api/index'
 import useApi from '../hooks/useApi'
 import useAuth from '../contexts/auth/useAuth'
@@ -58,19 +57,20 @@ function QuiltroDetailsScreen({ route }) {
             flexDirection: 'row',
             textAlign: 'center',
             justifyContent: 'space-around',
-            height: '30%',
-            top: '-6%',
+            height: '15%',
           }}
         >
           <Button
             styles={{
               marginLeft: '0.5em',
               marginRight: '0.5em',
-              borderRadius: '10%',
               width: '30%',
+              marginVertical: '0',
+              height: '100%',
             }}
             color="secondary"
-            title="Seguir"
+            textStyles={{ width: '105%' }}
+            title="Seguir novedades y problemas"
             onPress={() => {
               if (
                 window.confirm('Para seguir necesitas crear cuenta con numero')
@@ -83,8 +83,9 @@ function QuiltroDetailsScreen({ route }) {
             styles={{
               marginLeft: '0.5em',
               marginRight: '0.5em',
-              borderRadius: '10%',
               width: '50%',
+              marginVertical: '0',
+              height: '100%',
             }}
             color="primary"
             title="Reportar Problema"
@@ -95,8 +96,31 @@ function QuiltroDetailsScreen({ route }) {
             }}
           />
         </View>
-        {quiltroDetails && quiltroDetails.requestedItems ? (
-          <QuiltroRequestList requestedItems={quiltroDetails.requestedItems} />
+        {quiltro.isAdoptable ? (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              textAlign: 'center',
+              justifyContent: 'space-around',
+              width: '96%',
+              left: '2%',
+            }}
+          >
+            <Button
+              styles={{
+                backgroundColor: 'rgb(70, 130, 180)',
+              }}
+              title="Consultar Adopción"
+              onPress={() => {
+                if (
+                  window.confirm('Para seguir necesitas crear cuenta con numero')
+                ) {
+                  handleStartConvertAnonymous()
+                }
+              }}
+            />
+          </View>
         ) : null}
       </View>
     </Screen>

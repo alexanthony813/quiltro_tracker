@@ -9,13 +9,13 @@ function AppButton({
   onPress,
   color = 'secondary',
   isDisabled,
+  textStyles
 }) {
   const validatedOnPress = isDisabled ? () => {} : onPress
   const backgroundColor = isDisabled ? 'gray' : colors[color] || 'medium'
   return (
     <TouchableOpacity
       style={{
-        ...styles,
         backgroundColor: colors.primary,
         borderRadius: 10,
         justifyContent: 'center',
@@ -26,6 +26,7 @@ function AppButton({
         marginVertical: 10,
         flex: 1,
         backgroundColor,
+        ...styles,
       }}
       onPress={validatedOnPress}
     >
@@ -35,6 +36,7 @@ function AppButton({
           fontSize: 14,
           textTransform: 'uppercase',
           fontWeight: 'bold',
+          ...textStyles
         }}
       >
         {title}

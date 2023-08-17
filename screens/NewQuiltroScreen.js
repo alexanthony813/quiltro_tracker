@@ -7,7 +7,7 @@ import { saveNewQuiltro, saveNewRequestedItems, getUserQuiltros } from '../api'
 import Button from '../components/Button'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
-import { Form, FormField } from '../components/forms'
+import { Form, FormField, FormTextArea, FormSwitch } from '../components/forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 import NewRequestedItemModal from '../components/NewRequestedItemModal'
 import useAuth from '../contexts/auth/useAuth'
@@ -19,7 +19,10 @@ import routes from '../navigation/routes'
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
   favoriteFoods: Yup.string().label('Comidas favoritas'),
-  location: Yup.string().label('Ubicacion'), // casita location may be null
+  allergies: Yup.string().label('Alergias'),
+  location: Yup.string().label('Ubicación'), // casita location, good to record but unnecessary to show on profile
+  description: Yup.string().label('Descripción'),
+  isAdoptable: Yup.boolean().label('Adoptable'),
 })
 
 function NewQuiltroScreen({ route }) {
@@ -152,8 +155,25 @@ function NewQuiltroScreen({ route }) {
             <FormField
               style={{ width: '100%' }}
               maxLength={255}
+              name="allergies"
+              placeholder="Alergias"
+            />
+            <FormField
+              style={{ width: '100%' }}
+              maxLength={255}
               name="location"
-              placeholder="Ubicacion"
+              placeholder="Ubicación"
+            />
+            <FormTextArea
+              style={{ width: '100%' }}
+              maxLength={255}
+              name="description"
+              placeholder="Descripción"
+            />
+            <FormSwitch
+              name="isAdoptable"
+              title="¿Está en adopción?"
+              placeholder="Adoptable"
             />
             <ActivityIndicator animating={isImageUploading} size="small" />
             <View
@@ -168,7 +188,9 @@ function NewQuiltroScreen({ route }) {
                 styles={{
                   marginBottom: '0.5em',
                   borderRadius: '10%',
-                  width: '50%',
+                  marginLeft: '0.5em',
+                  marginRight: '0.5em',
+                  width: '30%',
                 }}
                 isDisabled={imageUpload}
                 onPress={handleImageUpload}
@@ -179,41 +201,18 @@ function NewQuiltroScreen({ route }) {
                 styles={{
                   marginBottom: '0.5em',
                   borderRadius: '10%',
+                  marginLeft: '0.5em',
+                  marginRight: '0.5em',
                   width: '30%',
                 }}
                 isDisabled={!imageUpload}
                 className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
-                title="Save"
+                title="Guardar"
               />
             </View>
           </Form>
-          {displayName ? (
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <Text style={{ fontWeight: 'bold', fontSize: 'x-large' }}>
-                {displayName} necesita algo?
-              </Text>
-              <Button
-                styles={{
-                  marginBottom: '0.5em',
-                  borderRadius: '10%',
-                  width: '30%',
-                  textAlign: 'center',
-                }}
-                color="primary"
-                title="Agregar Aporte"
-                onPress={() => {
-                  setIsModalVisible(true)
-                }}
-              />
-            </View>
-          ) : null}
         </View>
-        {imageUpload && <Text>Image Uploaded</Text>}
+        {imageUpload && <Text>Imagen Cargada</Text>}
         {requestedItems ? (
           <QuiltroRequestList requestedItems={requestedItems} />
         ) : null}

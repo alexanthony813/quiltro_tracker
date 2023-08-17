@@ -94,7 +94,7 @@ function RegisterScreen() {
                 margin: 20,
               }}
             >
-              Login using OTP
+              Iniciar sesión
             </Text>
             <TextInput
               placeholder="Numero con codigo del pais"

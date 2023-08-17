@@ -9,19 +9,22 @@ function QuiltroDetails({ quiltro }) {
       <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
         Hola! Me llamo {quiltro.name}
       </Text>
+      <Text>{quiltro.description}</Text>
       <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-        <Text style={{ fontWeight: 'bold' }}>{'Prefiero comer: '}</Text>
+        <Text style={{ fontWeight: 'bold' }}>{'Prefiero Comer: '}</Text>
         {quiltro.favoriteFoods}
       </Text>
+      {quiltro.allergies ? (
+        <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
+          <Text style={{ fontWeight: 'bold' }}>{'Mis Alergias: '}</Text>
+          {quiltro.allergies}
+        </Text>
+      ) : null}
       <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
         <Text style={{ fontWeight: 'bold', color: 'red' }}>
-          {'No me des: '}
+          {'NO ME DES: '}
         </Text>
-        cebollas, nueces, chocolat, lecheo, palta
-      </Text>
-      <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
-        <Text style={{ fontWeight: 'bold' }}>{'Vivo en: '}</Text>
-        {quiltro.location}
+        CEBOLLAS, NUECES, CHOCOLAT, PALTA
       </Text>
       {quiltro.lastStatusEvent ? (
         <View
