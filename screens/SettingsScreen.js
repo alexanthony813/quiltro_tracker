@@ -20,7 +20,7 @@ function SettingsScreen() {
   }}>
         <ListItem title={phoneNumber || 'Anonimo'} />
         <ListItem
-          title="Log Out"
+          title="Cerrar Sesión"
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
           onPress={() => {
             const auth = getAuth(firebaseApp)

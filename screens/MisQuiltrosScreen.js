@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Image, Text, FlatList, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Image,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native'
 
 import Button from '../components/Button'
 import { getUserQuiltros } from '../api/index'
@@ -71,7 +78,18 @@ function MisQuiltrosScreen({}) {
             {isAdmin ? (
               <Text className={'text-center text-xl font-bold italic'}>
                 No has agregado quiltros perdidos, usa el botón
-                <PlusCircleIcon color="#00CCBB" />
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate(routes.NEW_QUILTRO)
+                  }}
+                  style={{
+                    bottom: '-0.3em',
+                    paddingLeft: '0.2em',
+                    paddingRight: '0.2em',
+                  }}
+                >
+                  <PlusCircleIcon color="#00CCBB" />
+                </Pressable>
                 para crear anuncio
               </Text>
             ) : (

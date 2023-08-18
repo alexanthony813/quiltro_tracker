@@ -6,9 +6,9 @@ export default Object.freeze({
   QUILTRO_DETAILS: 'QuiltroDetails',
   QUILTRO_REPORT: 'QuiltroReport',
   QUILTRO_DONATE: 'QuiltroDonate',
-  USER: 'User',
+  USER: 'Usuario',
   LOGIN: 'Login',
   REGISTER: 'Register',
-  SUPPORT: 'Support',
+  SUPPORT: 'Apoyo',
   WELCOME: 'Welcome'
 })

@@ -13,7 +13,7 @@ import { Form, FormField, SubmitButton } from './forms'
 import * as ImageManipulator from 'expo-image-manipulator'
 
 const validationSchema = Yup.object().shape({
-  body: Yup.string().min(1).label('Message'),
+  body: Yup.string().min(1).label('Mensaje'),
 })
 
 // TODO delete
@@ -161,7 +161,7 @@ const ReportProblemModal = ({
                   }
                 }}
                 color="secondary"
-                title="Upload Image"
+                title="Subir Imagen"
                 isDisabled={!isSecured}
               />
               <SubmitButton
@@ -169,7 +169,7 @@ const ReportProblemModal = ({
                 //   saveNewStatusEvent()
                 // }}
                 className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
-                title="Save"
+                title="Guardar"
               />
               <Button
                 color="medium"
@@ -179,7 +179,7 @@ const ReportProblemModal = ({
             </View>
           </Form>
         </View>
-        {imageUpload && <Text>Image Uploaded</Text>}
+        {imageUpload && <Text>Imagen Cargada</Text>}
       </View>
     </Modal>
   )

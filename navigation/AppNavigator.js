@@ -45,7 +45,7 @@ const AppNavigator = ({ quiltro, setQuiltro }) => {
         })}
       />
       <Tab.Screen
-        name="User"
+        name="Usuario"
         component={UserNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (

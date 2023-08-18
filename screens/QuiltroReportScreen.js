@@ -129,12 +129,12 @@ function QuiltroReportScreen({ route }) {
               <Button
                 onPress={handleImageUpload}
                 color="secondary"
-                title="Upload Image"
+                title="Subir Imagen"
                 isDisabled={imageUpload}
               />
               <SubmitButton
                 className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
-                title="Save"
+                title="Guardar"
                 isDisabled={!imageUpload}
               />
               <Button
@@ -149,7 +149,7 @@ function QuiltroReportScreen({ route }) {
             </View>
           </Form>
         </View>
-        {imageUpload && <Text>Image Uploaded</Text>}
+        {imageUpload && <Text>Imagen Cargada</Text>}
       </View>
     </Screen>
   )
