@@ -1,4 +1,3 @@
-import React from 'react'
 import { View } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'

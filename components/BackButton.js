@@ -1,4 +1,3 @@
-import React from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 
 const BackButton = ({ onPress }) => {

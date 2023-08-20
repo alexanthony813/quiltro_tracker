@@ -1,7 +1,5 @@
-import React from 'react'
 import { ImageBackground, View, Text } from 'react-native'
 import { getAuth, signInAnonymously } from 'firebase/auth'
-
 import Button from '../components/Button'
 import routes from '../navigation/routes'
 import { firebaseApp } from '../App'

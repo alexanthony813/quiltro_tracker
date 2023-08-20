@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   View,
   Image,
@@ -8,7 +8,6 @@ import {
   Pressable,
 } from 'react-native'
 
-import Button from '../components/Button'
 import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
@@ -17,7 +16,7 @@ import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
