@@ -77,7 +77,7 @@ function MisQuiltrosScreen({}) {
           <View className={'flex flex-1 justify-center quiltros-center'}>
             {isAdmin ? (
               <Text className={'text-center text-xl font-bold italic'}>
-                No has agregado quiltros perdidos, usa el botón
+                No has agregado tus perros, usa el botón
                 <Pressable
                   onPress={() => {
                     navigation.navigate(routes.NEW_QUILTRO)
@@ -94,7 +94,7 @@ function MisQuiltrosScreen({}) {
               </Text>
             ) : (
               <Text className={'text-center text-xl font-bold italic'}>
-                Necesitas seguir mas quiltros! Escanear un codigo QR para
+                Necesitas seguir mas perros en las casitas! Escanear un codigo QR para
                 empezar
               </Text>
             )}
