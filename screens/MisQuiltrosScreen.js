@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   View,
   Image,
@@ -8,7 +8,6 @@ import {
   Pressable,
 } from 'react-native'
 
-import Button from '../components/Button'
 import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
@@ -17,7 +16,7 @@ import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
+import { useNavigation, useIsFocused } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
 
 function MisQuiltrosScreen({}) {
@@ -77,7 +76,7 @@ function MisQuiltrosScreen({}) {
           <View className={'flex flex-1 justify-center quiltros-center'}>
             {isAdmin ? (
               <Text className={'text-center text-xl font-bold italic'}>
-                No has agregado quiltros perdidos, usa el botón
+                No has agregado tus perros, usa el botón
                 <Pressable
                   onPress={() => {
                     navigation.navigate(routes.NEW_QUILTRO)
@@ -94,7 +93,7 @@ function MisQuiltrosScreen({}) {
               </Text>
             ) : (
               <Text className={'text-center text-xl font-bold italic'}>
-                Necesitas seguir mas quiltros! Escanear un codigo QR para
+                Necesitas seguir mas perros en las casitas! Escanear un codigo QR para
                 empezar
               </Text>
             )}

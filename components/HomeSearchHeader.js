@@ -1,4 +1,3 @@
-import React from 'react'
 import { View, Pressable, ActivityIndicator } from 'react-native'
 import Text from './Text'
 import {

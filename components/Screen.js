@@ -1,4 +1,3 @@
-import React from 'react'
 import Constants from 'expo-constants'
 import { SafeAreaView, View } from 'react-native'
 

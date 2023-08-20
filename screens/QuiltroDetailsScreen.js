@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
@@ -40,6 +40,7 @@ function QuiltroDetailsScreen({ route }) {
   return (
     <Screen>
       <MisQuiltrosHeader quiltro={quiltroDetails} />
+      {/* TODO why is this using preview? image not loading immediately */}
       <Image
         style={{
           width: '100%',

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useFormikContext } from 'formik'
 import { Switch, Text, View } from 'react-native'
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
 import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
