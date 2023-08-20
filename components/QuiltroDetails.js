@@ -1,4 +1,3 @@
-import React from 'react'
 import { View, Text } from 'react-native'
 import colors from '../config/colors'
 import { timeSince } from '../utility/helpers'

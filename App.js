@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
-
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
 import useApi from './hooks/useApi'

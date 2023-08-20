@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import Screen from '../components/Screen'
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
 import {
