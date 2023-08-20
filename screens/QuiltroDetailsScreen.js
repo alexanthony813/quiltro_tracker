@@ -40,6 +40,7 @@ function QuiltroDetailsScreen({ route }) {
   return (
     <Screen>
       <MisQuiltrosHeader quiltro={quiltroDetails} />
+      {/* TODO why is this using preview? image not loading immediately */}
       <Image
         style={{
           width: '100%',

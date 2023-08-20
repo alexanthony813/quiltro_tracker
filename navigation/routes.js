@@ -1,5 +1,5 @@
 export default Object.freeze({
-  MIS_QUILTROS: 'MisQuiltros',
+  MIS_QUILTROS: 'MisPerros',
   QUILTRO_LIST: 'QuiltroList',
   QUILTRO: 'Quiltro',
   NEW_QUILTRO: 'NewQuiltro',
