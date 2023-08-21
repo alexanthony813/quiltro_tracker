@@ -1,3 +1,7 @@
+[QuiltroFlow.pdf](https://github.com/alexanthony813/quiltro_tracker/files/12402001/QuiltroFlow.pdf)
+
+
+
 Demo here: https://www.youtube.com/watch?v=HSD7SpSLJ4o
 React Native frontend deployed here: https://quiltro-44098.web.app/
 Node/Express backend deployed here: https://quiltro-637d7.web.app/
