@@ -1,5 +1,6 @@
 
-![QuiltroFlow](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/24cfa43d-7f7f-4c72-b33c-9bc9af03dc15?raw=true)
+![Quiltro Tracker Espangolo](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/b8bfb1bc-13ba-40f0-9091-2b581f66a95b?raw=true)
+
 
 Demo here: https://www.youtube.com/watch?v=HSD7SpSLJ4o
 React Native frontend deployed here: https://quiltro-44098.web.app/
