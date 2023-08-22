@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
-import { View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { View, TouchableOpacity, Text } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
-
+import { saveNewStatusEvent } from '../api'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
@@ -16,12 +16,13 @@ import useQuiltro from '../contexts/quiltro/useQuiltro'
 import { timeSince } from '../utility/helpers'
 
 function QuiltroDetailsScreen({ route }) {
-  const { quiltro } = route.params // TODO remove before merge, just use hooks
+  const { quiltro } = route.params
+  const { setQuiltro } = useQuiltro()
   const { quiltroId } = quiltro
   const navigation = useNavigation()
   const { user, setUser } = useAuth()
   const { setOnboardingUser } = useOnboarding()
-  const { setQuiltro } = useQuiltro()
+  const [isNoProblem, setIsNoProblem] = useState(false)
   const {
     data: quiltroDetails,
     error,
@@ -38,16 +39,20 @@ function QuiltroDetailsScreen({ route }) {
     setQuiltro(quiltroDetails)
   }
 
-  // if (quiltro.lastStatusEvent) {
-  //   const text = `Has visto algo incorrecto? Se informó un problema desde hace ${timeSince(
-  //     quiltro.lastStatusEvent.time
-  //   )}`
-  //   if (window.confirm(text)) {
-  //     window.confirm('Quisieras confirmar el problema con un foto?')
-  //   } else {
-  //     window.confirm('Quisieras confirmar que no hay problema con un foto?')
-  //   }
-  // }
+  const recordNoProblemHandler = async () => {
+    const statusEvent = {}
+    statusEvent.status = 'problem_denied'
+    statusEvent.quiltroId = quiltro.quiltroId
+    const from = user.uid
+    statusEvent.details = {
+      body: `Se reportó que no hay problema`,
+      from,
+    }
+    saveNewStatusEvent({
+      ...statusEvent,
+    })
+    setIsNoProblem(true)
+  }
 
   return (
     <Screen>
@@ -143,6 +148,67 @@ function QuiltroDetailsScreen({ route }) {
                 }
               }}
             />
+          </View>
+        ) : null}
+        {quiltro.lastReportedProblem ? (
+          <View
+            style={{
+              paddingLeft: '1em',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            {isNoProblem ? (
+              <Text>Gracias por tu respuesta!</Text>
+            ) : (
+              <>
+                <Text>
+                  Ves algo? Se reportó problema hace{' '}
+                  {timeSince(quiltro.lastReportedProblem.time)}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    marginVertical: 5,
+                  }}
+                  onPress={() => {
+                    navigation.navigate(routes.QUILTRO_REPORT, {
+                      quiltro: quiltroDetails,
+                    })
+                  }}
+                >
+                  <Text
+                    style={{
+                      textDecorationLine: 'underline',
+                      color: 'blue',
+                    }}
+                  >
+                    Sí
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    marginVertical: 5,
+                  }}
+                  onPress={recordNoProblemHandler}
+                >
+                  <Text
+                    style={{
+                      textDecorationLine: 'underline',
+                      color: 'blue',
+                    }}
+                  >
+                    No
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         ) : null}
       </View>

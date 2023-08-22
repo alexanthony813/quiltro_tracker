@@ -5,7 +5,7 @@ function QuiltroDetails({ quiltro }) {
   return (
     <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
       <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-        Hola! Me llamo {quiltro.name}
+        ¡Hola! Me llamo {quiltro.name}
       </Text>
       <Text>{quiltro.description}</Text>
       <Text style={{ fontSize: 12, color: colors[colors.icon] }}>
