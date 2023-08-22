@@ -1,10 +1,9 @@
 import { View, Text } from 'react-native'
 import colors from '../config/colors'
-import { timeSince } from '../utility/helpers'
 
 function QuiltroDetails({ quiltro }) {
   return (
-    <View style={{ padding: 10 }}>
+    <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
       <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
         Hola! Me llamo {quiltro.name}
       </Text>
@@ -25,19 +24,6 @@ function QuiltroDetails({ quiltro }) {
         </Text>
         CEBOLLAS, NUECES, CHOCOLAT, PALTA
       </Text>
-      {quiltro.lastStatusEvent ? (
-        <View
-          style={{
-            marginBottom: '0.25em',
-          }}
-        >
-          <Text style={{ fontWeight: 'bold' }}>
-            Has visto algo incorrecto? Se informó un problema desde hace
-            {` ${timeSince(quiltro.lastStatusEvent.time)}`}
-          </Text>
-          <Text></Text>
-        </View>
-      ) : null}
     </View>
   )
 }

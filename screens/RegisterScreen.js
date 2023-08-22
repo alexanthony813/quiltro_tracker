@@ -129,7 +129,7 @@ function RegisterScreen() {
                   fontWeight: 'bold',
                 }}
               >
-                Send Verification
+                Enviar Verificación
               </Text>
             </TouchableOpacity>
             <TextInput
@@ -163,7 +163,7 @@ function RegisterScreen() {
                   fontWeight: 'bold',
                 }}
               >
-                Confirm Verification
+                Confirmar Verificación
               </Text>
             </TouchableOpacity>
           </View>
