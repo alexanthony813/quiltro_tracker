@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
   favoriteFoods: Yup.string().label('Comidas favoritas'),
   allergies: Yup.string().label('Alergias'),
-  location: Yup.string().label('Ubicación'), // casita location, good to record but unnecessary to show on profile
+  // location: Yup.string().label('Ubicación'), // casita location, good to record but unnecessary to show on profile
   description: Yup.string().label('Descripción'),
   isAdoptable: Yup.boolean().label('Adoptable'),
 })
@@ -109,18 +109,12 @@ function NewQuiltroScreen({ route }) {
 
   return (
     <Screen>
-      <NewRequestedItemModal
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        appendRequestedItem={appendRequestedItem}
-      />
-      <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
       <View
         style={{
           backgroundColor: 'white',
           borderRadius: 8,
+          paddingTop: 8,
           paddingHorizontal: 24,
-          paddingVertical: 16,
           height: '100%',
         }}
       >
@@ -158,12 +152,12 @@ function NewQuiltroScreen({ route }) {
               name="allergies"
               placeholder="Alergias"
             />
-            <FormField
+            {/* <FormField this seems pretty silly to have
               style={{ width: '100%' }}
               maxLength={255}
               name="location"
               placeholder="Ubicación"
-            />
+            /> */}
             <FormTextArea
               style={{ width: '100%' }}
               maxLength={255}
@@ -211,6 +205,7 @@ function NewQuiltroScreen({ route }) {
               />
             </View>
           </Form>
+          <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
         </View>
         {imageUpload && <Text>Imagen Cargada</Text>}
         {requestedItems ? (

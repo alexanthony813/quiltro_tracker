@@ -15,10 +15,9 @@ import * as ImageManipulator from 'expo-image-manipulator'
 import useAuth from '../contexts/auth/useAuth'
 
 const validationSchema = Yup.object().shape({
-  body: Yup.string().min(1).label('Message'),
+  body: Yup.string().min(1).label('Mensaje'),
 })
 
-// TODO delete
 function QuiltroReportScreen({ route }) {
   const { user } = useAuth()
   const { quiltro } = route.params
@@ -26,16 +25,13 @@ function QuiltroReportScreen({ route }) {
   const [isImageUploading, setIsImageUploading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigation = useNavigation()
-  console.log('-------')
-  console.dir(quiltro)
-  console.log('-------')
   const handleSubmit = async (statusEvent) => {
     setIsSubmitting(true)
     if (imageUpload) {
       const presignedUrlRequest = await getPresignedUrl()
       const presignedUrlJSON = await presignedUrlRequest.json()
       const presignedUrl = presignedUrlJSON.url
-      statusEvent.photo_url = presignedUrl.split('?')[0]
+      statusEvent.photoUrl = presignedUrl.split('?')[0]
       const rawBase64 = imageUpload.base64
       var buffer = Buffer.from(
         rawBase64.replace(/^data:image\/\w+;base64,/, ''),
@@ -55,7 +51,6 @@ function QuiltroReportScreen({ route }) {
       }
     }
     statusEvent.quiltroId = quiltro.quiltroId
-
     const from = user.uid
     const { body } = statusEvent
     statusEvent.details = {
@@ -123,7 +118,7 @@ function QuiltroReportScreen({ route }) {
             }}
             validationSchema={validationSchema}
           >
-            <FormField maxLength={255} name="body" placeholder="Message" />
+            <FormField maxLength={255} name="body" placeholder="Mensaje" />
             <ActivityIndicator animating={isImageUploading} size="small" />
             <View className="flex justify-between">
               <Button
@@ -139,7 +134,7 @@ function QuiltroReportScreen({ route }) {
               />
               <Button
                 color="medium"
-                title="Cancel"
+                title="Cancelar"
                 onPress={() => {
                   navigation.navigate(routes.QUILTRO_DETAILS, {
                     quiltro,
