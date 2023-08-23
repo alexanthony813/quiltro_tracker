@@ -18,7 +18,7 @@ import firebase from 'firebase/compat/app'
 
 import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
 
-export let firebaseApp // TODO export
+export let firebaseApp 
 if (firebase && !firebase.apps.length) {
   firebaseApp = firebase.initializeApp(firebaseConfig)
 }
@@ -60,7 +60,7 @@ export default function App() {
         })
 
         const parsedUrl = await parseInitialURLAsync()
-        const { path } = parsedUrl // TODO remember to reformat, assuming quiltroId from QR code
+        const { path } = parsedUrl
         if (path) {
           const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO fix to use hook
           const loadedQuiltro = await loadedQuiltroResponse.json()
@@ -83,7 +83,7 @@ export default function App() {
         >
           <NavigationContainer ref={navigationRef} theme={navigationTheme}>
             <TailwindProvider>
-              {user ? <AppNavigator quiltro={quiltro} /> : <AuthNavigator />}
+              {user ? <AppNavigator user={user} quiltro={quiltro} /> : <AuthNavigator />}
             </TailwindProvider>
           </NavigationContainer>
         </OnboardingContext.Provider>

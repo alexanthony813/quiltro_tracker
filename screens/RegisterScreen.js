@@ -37,7 +37,6 @@ function RegisterScreen() {
     if (onboardingUser) {
       linkWithCredential(auth.currentUser, credential).then(async (auth) => {
         const { user } = auth
-        // TODO i think creates new user in the db, make sure to dedupe if so
         const convertResponse = await convertAnonymousUser(user)
         if (convertResponse.ok) {
           const updatedUser = await convertResponse.json()

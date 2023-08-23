@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MisQuiltrosButton from '../components/MisQuiltrosButton'
@@ -9,12 +9,12 @@ import MisQuiltrosNavigator from './MisQuiltrosNavigator'
 
 const Tab = createBottomTabNavigator()
 
-// TODO rename, admin level will be specific to each quiltro
-const AppNavigator = ({ quiltro, setQuiltro }) => {
+const AppNavigator = ({ quiltro, user }) => {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarStyle: user.isAnonymous ? { display: 'none' } : {},
       }}
       initialRouteName={routes.MIS_QUILTROS}
     >
@@ -30,7 +30,7 @@ const AppNavigator = ({ quiltro, setQuiltro }) => {
       <Tab.Screen
         name={routes.MIS_QUILTROS}
         component={MisQuiltrosNavigator}
-        initialParams={{ quiltro, setQuiltro }}
+        initialParams={{ quiltro }}
         options={({ navigation }) => ({
           tabBarIcon: ({ size, color }) => (
             <MisQuiltrosButton

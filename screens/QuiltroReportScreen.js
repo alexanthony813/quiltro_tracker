@@ -51,6 +51,7 @@ function QuiltroReportScreen({ route }) {
       }
     }
     statusEvent.quiltroId = quiltro.quiltroId
+    statusEvent.status = 'problem_reported'
     const from = user.uid
     const { body } = statusEvent
     statusEvent.details = {
@@ -106,7 +107,7 @@ function QuiltroReportScreen({ route }) {
         }}
       >
         <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>
-          Reportar un Quiltro
+          Reportar un Problema
         </Text>
         <View style={{ paddingTop: 5, paddingBottom: 50 }}>
           <Form
