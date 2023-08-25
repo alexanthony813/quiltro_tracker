@@ -8,7 +8,7 @@ import { saveNewStatusEvent } from '../api'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
-import { getQuiltroDetails } from '../api/index'
+import { getQuiltroDetails, getQuiltroPdf } from '../api/index'
 import useApi from '../hooks/useApi'
 import useAuth from '../contexts/auth/useAuth'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
@@ -37,6 +37,18 @@ function QuiltroDetailsScreen({ route }) {
     setOnboardingUser(user)
     setUser(null)
     setQuiltro(quiltroDetails)
+  }
+
+  const handleDownloadPDF = async () => {
+    const pdfResponse = await getQuiltroPdf(quiltro.quiltroId)
+    const blob = await pdfResponse.blob()
+    const blobUrl = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = `${quiltro.name}-volante.pdf`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(blobUrl)
   }
 
   const recordNoProblemHandler = async () => {
@@ -77,52 +89,9 @@ function QuiltroDetailsScreen({ route }) {
       </View>
       <View>
         <QuiltroDetails quiltro={quiltro} />
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            textAlign: 'center',
-            justifyContent: 'space-around',
-            height: '15%',
-          }}
-        >
-          <Button
-            styles={{
-              marginLeft: '0.5em',
-              marginRight: '0.5em',
-              width: '30%',
-              marginVertical: '0',
-              height: '105%',
-            }}
-            color="secondary"
-            textStyles={{ width: '105%' }}
-            title="Seguir novedades y problemas"
-            onPress={() => {
-              if (
-                window.confirm('Para seguir necesitas crear cuenta con numero')
-              ) {
-                handleStartConvertAnonymous()
-              }
-            }}
-          />
-          <Button
-            styles={{
-              marginLeft: '0.5em',
-              marginRight: '0.5em',
-              width: '50%',
-              marginVertical: '0',
-              height: '105%',
-            }}
-            color="primary"
-            title="Reportar Problema"
-            onPress={() => {
-              navigation.navigate(routes.QUILTRO_REPORT, {
-                quiltro: quiltroDetails,
-              })
-            }}
-          />
-        </View>
-        {quiltro.isAdoptable ? (
+        {/* todo break into separate component plz*/}
+        {/* <QuiltroActions /> */}
+        {user.isAdmin ? (
           <View
             style={{
               display: 'flex',
@@ -134,22 +103,86 @@ function QuiltroDetailsScreen({ route }) {
             }}
           >
             <Button
-              styles={{
-                backgroundColor: 'rgb(70, 130, 180)',
-              }}
-              title="Consultar Adopción"
-              onPress={() => {
-                if (
-                  window.confirm(
-                    'Para seguir necesitas crear cuenta con numero'
-                  )
-                ) {
-                  handleStartConvertAnonymous()
-                }
-              }}
+              color="secondary"
+              title="Descargar Volante"
+              onPress={handleDownloadPDF}
             />
           </View>
-        ) : null}
+        ) : (
+          <>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                textAlign: 'center',
+                justifyContent: 'space-around',
+                height: '15%',
+              }}
+            >
+              <Button
+                styles={{
+                  marginLeft: '0.5em',
+                  marginRight: '0.5em',
+                  width: '30%',
+                  marginVertical: '0',
+                  height: '105%',
+                  backgroundColor: 'rgb(70, 130, 180)',
+                }}
+                textStyles={{ width: '105%' }}
+                title="Seguir novedades y problemas"
+                onPress={() => {
+                  if (
+                    window.confirm(
+                      'Para seguir necesitas crear cuenta con numero'
+                    )
+                  ) {
+                    handleStartConvertAnonymous()
+                  }
+                }}
+              />
+              <Button
+                styles={{
+                  marginLeft: '0.5em',
+                  marginRight: '0.5em',
+                  width: '50%',
+                  marginVertical: '0',
+                  height: '105%',
+                }}
+                color="primary"
+                title="Reportar Problema"
+                onPress={() => {
+                  navigation.navigate(routes.QUILTRO_REPORT, {
+                    quiltro: quiltroDetails,
+                  })
+                }}
+              />
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                textAlign: 'center',
+                justifyContent: 'space-around',
+                width: '96%',
+                left: '2%',
+              }}
+            >
+              <Button
+                color="secondary"
+                title="Consultar Adopción"
+                onPress={() => {
+                  if (
+                    window.confirm(
+                      'Para seguir necesitas crear cuenta con numero'
+                    )
+                  ) {
+                    handleStartConvertAnonymous()
+                  }
+                }}
+              />
+            </View>
+          </>
+        )}
         {quiltro.lastReportedProblem ? (
           <View
             style={{

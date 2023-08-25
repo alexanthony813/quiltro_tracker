@@ -98,6 +98,10 @@ export const getEvents = async () => {
   return await fetch(`${settings.apiUrl}/events`)
 }
 
+export const getQuiltroPdf = async (quiltroId) => {
+  return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}/flyer`)
+}
+
 export const getUserQuiltros = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/quiltros`)
 }
