@@ -3,6 +3,7 @@
 
 
 Demo here: https://www.youtube.com/watch?v=HSD7SpSLJ4o
+Trello here: https://trello.com/b/JKABN1I4/quiltros
 React Native frontend deployed here: https://quiltro-44098.web.app/
 Node/Express backend deployed here: https://quiltro-637d7.web.app/
 Here is the API repo https://github.com/alexanthony813/amigos_perdidos_api
