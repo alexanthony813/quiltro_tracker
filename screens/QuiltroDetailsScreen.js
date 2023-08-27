@@ -4,11 +4,15 @@ import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import Button from '../components/Button'
-import { saveNewStatusEvent } from '../api'
 import routes from '../navigation/routes'
 import { useNavigation } from '@react-navigation/native'
 import QuiltroDetails from '../components/QuiltroDetails'
-import { getQuiltroDetails, getQuiltroPdf } from '../api/index'
+import {
+  getQuiltroDetails,
+  getQuiltroPdf,
+  saveStatusEvent,
+  subscribeUserToQuiltro,
+} from '../api/index'
 import useApi from '../hooks/useApi'
 import useAuth from '../contexts/auth/useAuth'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
@@ -21,7 +25,12 @@ function QuiltroDetailsScreen({ route }) {
   const { quiltroId } = quiltro
   const navigation = useNavigation()
   const { user, setUser } = useAuth()
-  const { setOnboardingUser } = useOnboarding()
+  const { uid } = user
+  const { setOnboardingUser, setPendingAdoptionInquiryQuiltro } =
+    useOnboarding()
+  const [isFollowingQuiltro, setIsFollowingQuiltro] = useState(false)
+  const [hasInquiredAboutAdoption, setHasInquiredAboutAdoption] =
+    useState(false)
   const [isNoProblem, setIsNoProblem] = useState(false)
   const {
     data: quiltroDetails,
@@ -31,12 +40,59 @@ function QuiltroDetailsScreen({ route }) {
   } = useApi(getQuiltroDetails)
   useEffect(() => {
     loadQuiltroDetails(quiltroId)
-  }, [JSON.stringify(quiltroDetails)])
+    if (user.quiltroIds && user.quiltroIds.indexOf(quiltroId) >= -1) {
+      setIsFollowingQuiltro(true)
+    }
+    if (
+      user.adoptionInquiryIds &&
+      user.adoptionInquiryIds.indexOf(quiltroId) >= -1
+    ) {
+      setHasInquiredAboutAdoption(true)
+    }
+  }, [
+    JSON.stringify(quiltroDetails),
+    isFollowingQuiltro,
+    setHasInquiredAboutAdoption,
+  ])
 
-  const handleStartConvertAnonymous = () => {
-    setOnboardingUser(user)
-    setUser(null)
-    setQuiltro(quiltroDetails)
+  const handleInquireAdoption = async () => {
+    if (user.isAnonymous) {
+      if (window.confirm('Para seguir necesitas crear cuenta con numero')) {
+        setOnboardingUser(user)
+        setUser(null)
+        setPendingAdoptionInquiryQuiltro(quiltroDetails)
+        setQuiltro(quiltroDetails)
+      }
+    } else {
+      const statusEvent = {}
+      statusEvent.quiltroId = quiltro.quiltroId
+      const from = uid
+      statusEvent.status = 'adoption_inquiry'
+      statusEvent.details = {
+        body: `Usuari@ con numero ${user.phoneNumber} quiere hablar contigo sobre adoptar ${quiltro.name}`,
+        from,
+      }
+      const savedStatusEventResponse = await saveStatusEvent(statusEvent)
+      if (savedStatusEventResponse.ok) {
+        setHasInquiredAboutAdoption(true)
+        setIsFollowingQuiltro(true)
+      }
+    }
+  }
+
+  const handleFollow = async () => {
+    if (user.isAnonymous) {
+      if (window.confirm('Para seguir necesitas crear cuenta con numero')) {
+        setOnboardingUser(user)
+        setUser(null)
+        setQuiltro(quiltroDetails)
+      }
+    } else {
+      const subscribeResponse = await subscribeUserToQuiltro(uid, quiltroId)
+      if (subscribeResponse.ok) {
+        setIsFollowingQuiltro(true)
+      }
+    }
   }
 
   const handleDownloadPDF = async () => {
@@ -60,7 +116,7 @@ function QuiltroDetailsScreen({ route }) {
       body: `Se reportó que no hay problema`,
       from,
     }
-    saveNewStatusEvent({
+    await saveStatusEvent({
       ...statusEvent,
     })
     setIsNoProblem(true)
@@ -89,8 +145,6 @@ function QuiltroDetailsScreen({ route }) {
       </View>
       <View>
         <QuiltroDetails quiltro={quiltro} />
-        {/* todo break into separate component plz*/}
-        {/* <QuiltroActions /> */}
         {user.isAdmin ? (
           <View
             style={{
@@ -126,19 +180,18 @@ function QuiltroDetailsScreen({ route }) {
                   width: '30%',
                   marginVertical: '0',
                   height: '105%',
-                  backgroundColor: 'rgb(70, 130, 180)',
+                  backgroundColor: isFollowingQuiltro
+                    ? 'rgb(128, 128, 128)'
+                    : 'rgb(70, 130, 180)',
                 }}
                 textStyles={{ width: '105%' }}
-                title="Seguir novedades y problemas"
-                onPress={() => {
-                  if (
-                    window.confirm(
-                      'Para seguir necesitas crear cuenta con numero'
-                    )
-                  ) {
-                    handleStartConvertAnonymous()
-                  }
-                }}
+                title={
+                  isFollowingQuiltro
+                    ? 'Ya estas siguiendo'
+                    : 'Seguir novedades y problemas'
+                }
+                isDisabled={isFollowingQuiltro}
+                onPress={handleFollow}
               />
               <Button
                 styles={{
@@ -169,16 +222,13 @@ function QuiltroDetailsScreen({ route }) {
             >
               <Button
                 color="secondary"
-                title="Consultar Adopción"
-                onPress={() => {
-                  if (
-                    window.confirm(
-                      'Para seguir necesitas crear cuenta con numero'
-                    )
-                  ) {
-                    handleStartConvertAnonymous()
-                  }
-                }}
+                title={
+                  hasInquiredAboutAdoption
+                    ? 'Ya has consultado'
+                    : 'Consultar Adopción'
+                }
+                onPress={handleInquireAdoption}
+                isDisabled={hasInquiredAboutAdoption}
               />
             </View>
           </>

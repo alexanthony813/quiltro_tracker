@@ -10,7 +10,7 @@ import {
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
-import { convertAnonymousUser, subscribeUserToQuiltro } from '../api/index'
+import { convertAnonymousUser, saveStatusEvent, subscribeUserToQuiltro } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
 import useAuth from '../contexts/auth/useAuth'
@@ -19,7 +19,12 @@ function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
   const { quiltro, setQuiltro } = useQuiltro()
-  const { onboardingUser, setOnboardingUser } = useOnboarding()
+  const {
+    onboardingUser,
+    setOnboardingUser,
+    pendingAdoptionInquiryQuiltro,
+    setPendingAdoptionInquiryQuiltro,
+  } = useOnboarding()
   const { user, setUser } = useAuth()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
@@ -32,6 +37,19 @@ function RegisterScreen() {
       .then(setVerificationId)
   }
 
+  const sendAdoptionInquiry = async (user, quiltro) => {
+    const statusEvent = {}
+    statusEvent.quiltroId = quiltro.quiltroId
+    statusEvent.status = 'adoption_inquiry'
+    const { uid } = user
+    const from = uid
+    statusEvent.details = {
+      body: `Usuari@ con numero ${user.phoneNumber} quiere hablar contigo sobre adoptar ${quiltro.name}`,
+      from,
+    }
+    return await saveStatusEvent(statusEvent)
+  }
+
   const confirmCode = () => {
     const credential = PhoneAuthProvider.credential(verificationId, code)
     if (onboardingUser) {
@@ -42,11 +60,15 @@ function RegisterScreen() {
           const updatedUser = await convertResponse.json()
           const { uid } = updatedUser
           const { quiltroId } = quiltro
-          const subscribeResponse = await subscribeUserToQuiltro(uid, quiltroId)
-          if (subscribeResponse.ok) {
-            setOnboardingUser(null)
-            setUser(updatedUser)
+
+          if (pendingAdoptionInquiryQuiltro) {
+            await sendAdoptionInquiry(updatedUser, quiltro)
+            setPendingAdoptionInquiryQuiltro(null)
+          } else { // subscribe happens automatically with adoption inquiry
+            await subscribeUserToQuiltro(uid, quiltroId)
           }
+          setOnboardingUser(null)
+          setUser(updatedUser)
         }
       })
     } else {

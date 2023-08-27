@@ -9,8 +9,9 @@ import BackButton from '../components/BackButton'
 function MisQuiltrosHeader({ quiltro }) {
   const { user } = useAuth()
   const navigation = useNavigation()
+  const defaultText = user.isAdmin ? `Mis Perros` : `Mis Perros Seguidos`
   const headerText =
-    quiltro && quiltro.name ? `Mi ${quiltro.name}` : `Mis Perros Seguidos`
+    quiltro && quiltro.name ? `Mi ${quiltro.name}` : defaultText
   return (
     <View className="mx-1">
       <View className="flex-row justify-between items-center ml-5 ">

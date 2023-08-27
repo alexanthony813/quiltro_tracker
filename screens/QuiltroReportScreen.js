@@ -5,7 +5,7 @@ import Text from '../components/Text'
 import { View, ActivityIndicator } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewStatusEvent } from '../api'
+import { saveStatusEvent } from '../api'
 import routes from '../navigation/routes'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
@@ -59,11 +59,11 @@ function QuiltroReportScreen({ route }) {
       from,
     }
 
-    const savedStatusEvent = await saveNewStatusEvent({
-      ...statusEvent,
-    })
+    const savedStatusEventResponse = await saveStatusEvent(
+      statusEvent
+    )
 
-    if (savedStatusEvent.ok) {
+    if (savedStatusEventResponse.ok) {
       setIsSubmitting(false)
       navigation.navigate(routes.QUILTRO_DETAILS, {
         quiltro,
