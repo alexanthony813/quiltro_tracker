@@ -1,6 +1,5 @@
 
-![Quiltro Tracker Espangolo](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/b8bfb1bc-13ba-40f0-9091-2b581f66a95b?raw=true)
-
+![Quiltro Tracker Espangolo](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/9e485364-043d-4ec8-8b85-f52fe640a62e?raw=true)
 
 Demo here: https://www.youtube.com/watch?v=HSD7SpSLJ4o
 Trello here: https://trello.com/b/JKABN1I4/quiltros
