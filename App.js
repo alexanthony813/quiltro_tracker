@@ -18,7 +18,7 @@ import firebase from 'firebase/compat/app'
 
 import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
 
-export let firebaseApp 
+export let firebaseApp
 if (firebase && !firebase.apps.length) {
   firebaseApp = firebase.initializeApp(firebaseConfig)
 }
@@ -28,6 +28,8 @@ export default function App() {
   const [quiltro, setQuiltro] = useState(null)
   const [user, setUser] = useState(null)
   const [onboardingUser, setOnboardingUser] = useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
+  const [pendingAdoptionInquiryQuiltro, setPendingAdoptionInquiryQuiltro] =
+    useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
   const [error, setError] = useState(null)
   const [isRegisteringUser, setIsRegisteringUser] = useState(false)
 
@@ -62,7 +64,7 @@ export default function App() {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl
         if (path) {
-          const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO fix to use hook
+          const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO use hook
           const loadedQuiltro = await loadedQuiltroResponse.json()
           setQuiltro(loadedQuiltro)
           signInAnonymously(auth)
@@ -79,11 +81,20 @@ export default function App() {
     <QuiltroContext.Provider value={{ quiltro, setQuiltro }}>
       <AuthContext.Provider value={{ user, setUser }}>
         <OnboardingContext.Provider
-          value={{ onboardingUser, setOnboardingUser }}
+          value={{
+            onboardingUser,
+            setOnboardingUser,
+            pendingAdoptionInquiryQuiltro,
+            setPendingAdoptionInquiryQuiltro,
+          }}
         >
           <NavigationContainer ref={navigationRef} theme={navigationTheme}>
             <TailwindProvider>
-              {user ? <AppNavigator user={user} quiltro={quiltro} /> : <AuthNavigator />}
+              {user ? (
+                <AppNavigator user={user} quiltro={quiltro} />
+              ) : (
+                <AuthNavigator />
+              )}
             </TailwindProvider>
           </NavigationContainer>
         </OnboardingContext.Provider>
