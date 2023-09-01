@@ -1,4 +1,4 @@
-
+![IMG_0861](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/f037872a-a4b9-4615-9ff7-517680869852)
 ![Quiltro Tracker Espangolo](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/9e485364-043d-4ec8-8b85-f52fe640a62e?raw=true)
 
 Demo: https://youtu.be/WCPtwA_igzw
@@ -10,6 +10,9 @@ React Native frontend: https://quiltro-44098.web.app/64eced304e479cd61c12c040
 Node/Express backend: https://quiltro-637d7.web.app/
 
 API repo https://github.com/alexanthony813/amigos_perdidos_api
+
+![IMG_0861](https://github.com/alexanthony813/quiltro_tracker/assets/84674340/5d025edd-cccd-4451-aa53-73759a5d4375?raw=true)
+
 
 Chile, al menos en lo que he visto durante mi tiempo en Santiago y Valparaíso, tiene una maravillosa y única cultura de construir casitas para perros callejeros y cuidar de ellos como comunidad. Durante mi tiempo como voluntario en un refugio de perros en Santiago, aprendí que esta cultura está creciendo junto con una cultura de mascotas más vibrante. Quería hacer algo fuera de mi tiempo en ese refugio para proporcionar una herramienta a las personas que gestionan estas casitas.
 
