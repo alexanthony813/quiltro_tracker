@@ -14,6 +14,7 @@ import {
   convertAnonymousUser,
   saveStatusEvent,
   subscribeUserToQuiltro,
+  saveAnalyticsEvent,
 } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
@@ -30,7 +31,7 @@ function RegisterScreen() {
     pendingAdoptionInquiryQuiltro,
     setPendingAdoptionInquiryQuiltro,
   } = useOnboarding()
-  const { setUser } = useAuth()
+  const { user, setUser } = useAuth()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
   const [phoneNumberValidationError, setPhoneNumberValidationError] =
@@ -47,9 +48,27 @@ function RegisterScreen() {
         .then(setVerificationId)
         .then(() => {
           setPhoneNumberValidationError(null)
+          saveAnalyticsEvent({
+            status: 'send_verification',
+            details: {
+              phoneNumber,
+              succeeded: true,
+              onboardingUser,
+              user,
+            },
+          })
         })
     } catch (error) {
       setPhoneNumberValidationError(error.message)
+      saveAnalyticsEvent({
+        status: 'send_verification',
+        details: {
+          phoneNumber,
+          succeeded: false,
+          onboardingUser,
+          user,
+        },
+      })
     }
   }
 
