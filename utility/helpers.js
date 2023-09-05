@@ -41,3 +41,17 @@ export const timeSince = (time) => {
   }
   return Math.floor(seconds) + ' segundos'
 }
+
+export const formatPhoneNumber = (phoneNumber) => {
+  // 56921314000
+  // 12813308004
+  if (phoneNumber.length === 9) {
+    return `+56${phoneNumber}`
+  } else if (phoneNumber.length === 11) {
+    return `+${phoneNumber}`
+  } else if (phoneNumber.length === 12) {
+    return phoneNumber
+  } else {
+    throw new Error(`${phoneNumber} no parece ser un número válido.`)
+  }
+}
