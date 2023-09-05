@@ -10,31 +10,47 @@ import {
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
-import { convertAnonymousUser, saveStatusEvent, subscribeUserToQuiltro } from '../api/index'
+import {
+  convertAnonymousUser,
+  saveStatusEvent,
+  subscribeUserToQuiltro,
+} from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
 import useAuth from '../contexts/auth/useAuth'
+import { formatPhoneNumber } from '../utility/helpers'
 
 function RegisterScreen() {
   const recaptchaVerifierRef = useRef(null)
   const auth = getAuth(firebaseApp)
-  const { quiltro, setQuiltro } = useQuiltro()
+  const { quiltro } = useQuiltro()
   const {
     onboardingUser,
     setOnboardingUser,
     pendingAdoptionInquiryQuiltro,
     setPendingAdoptionInquiryQuiltro,
   } = useOnboarding()
-  const { user, setUser } = useAuth()
+  const { setUser } = useAuth()
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('')
+  const [phoneNumberValidationError, setPhoneNumberValidationError] =
+    useState(null)
   const [verificationId, setVerificationId] = useState(null)
 
   const sendVerification = () => {
     const phoneProvider = new PhoneAuthProvider(auth)
-    phoneProvider
-      .verifyPhoneNumber(phoneNumber, recaptchaVerifierRef.current)
-      .then(setVerificationId)
+    try {
+      const formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+
+      phoneProvider
+        .verifyPhoneNumber(formattedPhoneNumber, recaptchaVerifierRef.current)
+        .then(setVerificationId)
+        .then(() => {
+          setPhoneNumberValidationError(null)
+        })
+    } catch (error) {
+      setPhoneNumberValidationError(error.message)
+    }
   }
 
   const sendAdoptionInquiry = async (user, quiltro) => {
@@ -64,7 +80,8 @@ function RegisterScreen() {
           if (pendingAdoptionInquiryQuiltro) {
             await sendAdoptionInquiry(updatedUser, quiltro)
             setPendingAdoptionInquiryQuiltro(null)
-          } else { // subscribe happens automatically with adoption inquiry
+          } else {
+            // subscribe happens automatically with adoption inquiry
             await subscribeUserToQuiltro(uid, quiltroId)
           }
           setOnboardingUser(null)
@@ -117,13 +134,26 @@ function RegisterScreen() {
             >
               Iniciar sesión
             </Text>
+            {phoneNumberValidationError ? (
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 'x-large',
+                  marginLeft: '1em',
+                  textDecoration: 'underline',
+                  textDecorationColor: 'red',
+                }}
+              >
+                {phoneNumberValidationError}
+              </Text>
+            ) : null}
             <TextInput
-              placeholder="Numero con codigo del pais"
+              placeholder="Ingresa tu Número Chileno"
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
               autoCompleteType="tel"
               style={{
-                paddingTop: 40,
+                paddingTop: 5,
                 paddingBottom: 20,
                 paddingHorizontal: 20,
                 fontSize: 24,
