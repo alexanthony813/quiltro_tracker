@@ -6,6 +6,8 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
   linkWithCredential,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth'
 import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
@@ -108,17 +110,21 @@ function RegisterScreen() {
         }
       })
     } else {
-      signInWithCredential(auth, credential)
-        .then((user) => {
-          console.dir('code confirmed')
+      setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+          signInWithCredential(auth, credential)
+            .then((user) => {
+              console.dir('code confirmed')
+            })
+            .catch((error) => {
+              console.error(error)
+            })
         })
         .catch((error) => {
-          // show error
           console.error(error)
         })
     }
   }
-
   return (
     <Screen>
       <ImageBackground

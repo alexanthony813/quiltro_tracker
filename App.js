@@ -13,7 +13,13 @@ import OnboardingContext from './contexts/onboarding/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltroDetails, registerUser } from './api'
 
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInAnonymously,
+  setPersistence,
+  browserLocalPersistence,
+} from 'firebase/auth'
 import firebase from 'firebase/compat/app'
 
 import firebaseConfig from './firebaseConfig' // Import the Firebase configuration
@@ -31,7 +37,6 @@ export default function App() {
   const [pendingAdoptionInquiryQuiltro, setPendingAdoptionInquiryQuiltro] =
     useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
   const [error, setError] = useState(null)
-  const [isRegisteringUser, setIsRegisteringUser] = useState(false)
 
   const {
     data: loadedQuiltro,
@@ -50,12 +55,9 @@ export default function App() {
         auth = getAuth(firebaseApp)
         onAuthStateChanged(auth, async (firebaseUser) => {
           if (firebaseUser) {
-            if (!user && !isRegisteringUser && !onboardingUser) {
-              setIsRegisteringUser(true)
-              const registerUserResponse = await registerUser(firebaseUser) // returns 201 with user if exists
-              const registerUserResponseJson = await registerUserResponse.json()
-              setUser(registerUserResponseJson)
-            }
+            const registerUserResponse = await registerUser(firebaseUser) // returns 201 with user if exists
+            const registerUserResponseJson = await registerUserResponse.json()
+            setUser(registerUserResponseJson)
           } else {
             setUser(null)
           }
@@ -67,7 +69,17 @@ export default function App() {
           const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO use hook
           const loadedQuiltro = await loadedQuiltroResponse.json()
           setQuiltro(loadedQuiltro)
-          signInAnonymously(auth)
+          if (!user) {
+            setPersistence(auth, browserLocalPersistence)
+              .then(() => {
+                if (!auth.currentUser) {
+                  signInAnonymously(auth)
+                }
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+          }
         }
       } catch (err) {
         console.dir(err)
