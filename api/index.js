@@ -29,6 +29,21 @@ export const saveNewRequestedItems = async (quiltroId, requestedItems) => {
   return response
 }
 
+export const saveAnalyticsEvent = async (analyticsEvent) => {
+  const response = await fetch(
+    `${settings.apiUrl}/analytics`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(analyticsEvent),
+    }
+  )
+  return response
+}
+
 export const saveStatusEvent = async (statusEvent) => {
   const response = await fetch(
     `${settings.apiUrl}/quiltros/${statusEvent.quiltroId}/event`,

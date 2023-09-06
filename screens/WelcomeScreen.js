@@ -1,8 +1,6 @@
 import { ImageBackground, View, Text } from 'react-native'
-import { getAuth, signInAnonymously } from 'firebase/auth'
 import Button from '../components/Button'
 import routes from '../navigation/routes'
-import { firebaseApp } from '../App'
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -40,11 +38,9 @@ function WelcomeScreen({ navigation }) {
           }}
         >
           <Button
-            title="Login Anónimamente"
-            onPress={() => {
-              const auth = getAuth(firebaseApp)
-              signInAnonymously(auth)
-            }}
+            title="Iniciar Sesión"
+            onPress={() => navigation.navigate(routes.REGISTER)}
+
           />
           <Button
             title="Registrar como Administrador"

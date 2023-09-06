@@ -23,7 +23,7 @@ function MisQuiltrosHeader({ quiltro }) {
             }}
           />
         ) : null}
-        <View>
+        <View className="text-center">
           <Text className="font-bold text-2xl -mx-1.5">{headerText}</Text>
         </View>
         <View className="flex-row space-x-2 p-3 items-end">

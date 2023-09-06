@@ -12,6 +12,7 @@ import {
   getQuiltroPdf,
   saveStatusEvent,
   subscribeUserToQuiltro,
+  saveAnalyticsEvent,
 } from '../api/index'
 import useApi from '../hooks/useApi'
 import useAuth from '../contexts/auth/useAuth'
@@ -56,6 +57,13 @@ function QuiltroDetailsScreen({ route }) {
   ])
 
   const handleInquireAdoption = async () => {
+    saveAnalyticsEvent({
+      status: 'adoption_inquiry',
+      details: {
+        uid,
+        quiltroId,
+      },
+    })
     if (user.isAnonymous) {
       if (window.confirm('Para seguir necesitas crear cuenta con numero')) {
         setOnboardingUser(user)
@@ -81,6 +89,13 @@ function QuiltroDetailsScreen({ route }) {
   }
 
   const handleFollow = async () => {
+    saveAnalyticsEvent({
+      status: 'follow_quiltro',
+      details: {
+        uid,
+        quiltroId,
+      },
+    })
     if (user.isAnonymous) {
       if (window.confirm('Para seguir necesitas crear cuenta con numero')) {
         setOnboardingUser(user)
@@ -108,6 +123,13 @@ function QuiltroDetailsScreen({ route }) {
   }
 
   const recordNoProblemHandler = async () => {
+    saveAnalyticsEvent({
+      status: 'report_no_problem',
+      details: {
+        quiltroId,
+        uid,
+      },
+    })
     const statusEvent = {}
     statusEvent.status = 'problem_denied'
     statusEvent.quiltroId = quiltro.quiltroId
@@ -124,7 +146,7 @@ function QuiltroDetailsScreen({ route }) {
 
   return (
     <Screen>
-      <MisQuiltrosHeader quiltro={quiltroDetails} />
+      {user.isAnonymous ? null : <MisQuiltrosHeader quiltro={quiltroDetails} />}
       {/* TODO why is this using preview? image not loading immediately */}
       <View
         style={{
@@ -204,6 +226,13 @@ function QuiltroDetailsScreen({ route }) {
                 color="primary"
                 title="Reportar Problema"
                 onPress={() => {
+                  saveAnalyticsEvent({
+                    status: 'report_problem',
+                    details: {
+                      quiltroId,
+                      uid,
+                    },
+                  })
                   navigation.navigate(routes.QUILTRO_REPORT, {
                     quiltro: quiltroDetails,
                   })
