@@ -22,7 +22,8 @@ function QuiltroDetails({ quiltro }) {
         <Text style={{ fontWeight: 'bold', color: 'red' }}>
           {'NO ME DES: '}
         </Text>
-        CEBOLLAS, NUECES, CHOCOLAT, PALTA
+        {/* maybe should make this dynamic again, gotten requests to change... */}
+        Comida Chatarra, Huesos, Cebollas, Chocolat
       </Text>
     </View>
   )

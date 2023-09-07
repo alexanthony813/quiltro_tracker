@@ -17,6 +17,7 @@ import {
   saveStatusEvent,
   subscribeUserToQuiltro,
   saveAnalyticsEvent,
+  registerUser,
 } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
@@ -92,19 +93,20 @@ function RegisterScreen() {
     if (onboardingUser) {
       linkWithCredential(auth.currentUser, credential).then(async (auth) => {
         const { user } = auth
+        const { uid } = user
+        const { quiltroId } = quiltro
+
+        if (pendingAdoptionInquiryQuiltro) {
+          await sendAdoptionInquiry(user, quiltro)
+          setPendingAdoptionInquiryQuiltro(null)
+        } else {
+          // subscribe happens automatically with adoption inquiry
+          await subscribeUserToQuiltro(uid, quiltroId)
+        }
+
         const convertResponse = await convertAnonymousUser(user)
         if (convertResponse.ok) {
           const updatedUser = await convertResponse.json()
-          const { uid } = updatedUser
-          const { quiltroId } = quiltro
-
-          if (pendingAdoptionInquiryQuiltro) {
-            await sendAdoptionInquiry(updatedUser, quiltro)
-            setPendingAdoptionInquiryQuiltro(null)
-          } else {
-            // subscribe happens automatically with adoption inquiry
-            await subscribeUserToQuiltro(uid, quiltroId)
-          }
           setOnboardingUser(null)
           setUser(updatedUser)
         }
@@ -113,8 +115,8 @@ function RegisterScreen() {
       setPersistence(auth, browserLocalPersistence)
         .then(() => {
           signInWithCredential(auth, credential)
-            .then((user) => {
-              console.dir('code confirmed')
+            .then(async (user) => {
+              console.dir(user)
             })
             .catch((error) => {
               console.error(error)
