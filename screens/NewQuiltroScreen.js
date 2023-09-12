@@ -3,16 +3,19 @@ import { Text, View, ActivityIndicator } from 'react-native'
 import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import { saveNewQuiltro, saveNewRequestedItems, getUserQuiltros } from '../api'
+import {
+  saveQuiltro,
+  getUserQuiltros,
+  saveAnalyticsEvent,
+  putToS3,
+} from '../api'
 import Button from '../components/Button'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
 import { Form, FormField, FormTextArea, FormSwitch } from '../components/forms'
 import * as ImageManipulator from 'expo-image-manipulator'
-import NewRequestedItemModal from '../components/NewRequestedItemModal'
 import useAuth from '../contexts/auth/useAuth'
 import SubmitButton from '../components/forms/SubmitButton'
-import QuiltroRequestList from '../components/QuiltroRequestList'
 import { useNavigation } from '@react-navigation/native'
 import routes from '../navigation/routes'
 
@@ -20,65 +23,66 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).label('Nombre'),
   favoriteFoods: Yup.string().label('Comidas favoritas'),
   allergies: Yup.string().label('Alergias'),
-  // location: Yup.string().label('Ubicación'), // casita location, good to record but unnecessary to show on profile
   description: Yup.string().label('Descripción'),
   isAdoptable: Yup.boolean().label('Adoptable'),
 })
 
-function NewQuiltroScreen({ route }) {
+function NewQuiltroScreen() {
   const { user } = useAuth()
   const navigation = useNavigation()
   const [imageUpload, setImageUpload] = useState(null)
   const [isImageUploading, setIsImageUploading] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isQuiltroSubmitting, setIsQuiltroSubmitting] = useState(false)
-  const [requestedItems, setRequestedItems] = useState([])
   const [displayName, setDisplayName] = useState(null)
 
   useEffect(() => {}, [isModalVisible])
 
-  const appendRequestedItem = (newRequestedItem) => {
-    const newRequestedItems = requestedItems.slice()
-    newRequestedItems.push(newRequestedItem)
-    setRequestedItems(newRequestedItems)
-  }
-
   const handleSubmit = async (quiltro, { resetForm }) => {
-    setIsQuiltroSubmitting(true)
-    const presignedUrlRequest = await getPresignedUrl()
-    const presignedUrlJSON = await presignedUrlRequest.json()
-    const presignedUrl = presignedUrlJSON.url
-    const rawBase64 = imageUpload.base64
-    var buffer = Buffer.from(
-      rawBase64.replace(/^data:image\/\w+;base64,/, ''),
-      'base64'
-    )
-    const s3Result = await fetch(presignedUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'image/jpeg',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Encoding': 'base64',
-      },
-      body: buffer,
-    })
-    if (s3Result.status !== 200) {
-      console.dir('ERROR') // TODO add better error handle in here
-    }
-    quiltro.photoUrl = presignedUrl.split('?')[0]
-    quiltro.uid = user.uid
+    try {
+      setIsQuiltroSubmitting(true)
+      const presignedUrlRequest = await getPresignedUrl()
+      const presignedUrlJSON = await presignedUrlRequest.json()
+      const presignedUrl = presignedUrlJSON.url
+      const rawBase64 = imageUpload.base64
+      var buffer = Buffer.from(
+        rawBase64.replace(/^data:image\/\w+;base64,/, ''),
+        'base64'
+      )
+      const s3Result = await putToS3({ presignedUrl, buffer })
 
-    const savedQuiltroResponse = await saveNewQuiltro({
-      ...quiltro,
-    })
+      if (s3Result.status !== 200) {
+        saveAnalyticsEvent({
+          status: 's3_upload',
+          details: {
+            s3Result,
+            user,
+            succeeded: false,
+          },
+        })
+      }
+      quiltro.photoUrl = presignedUrl.split('?')[0]
+      const { uid } = user
+      quiltro.uid = uid
 
-    if (savedQuiltroResponse.ok) {
-      const quiltro = await savedQuiltroResponse.json()
-      const { quiltroId } = quiltro
-      await saveNewRequestedItems(quiltroId, requestedItems) //TODO check this response
-      setIsQuiltroSubmitting(false)
-      getUserQuiltros()
-      navigation.navigate(routes.QUILTRO_LIST)
+      const savedQuiltroResponse = await saveQuiltro({
+        ...quiltro,
+      })
+
+      if (savedQuiltroResponse.ok) {
+        await savedQuiltroResponse.json()
+        setIsQuiltroSubmitting(false)
+        navigation.navigate(routes.QUILTRO_LIST)
+      }
+    } catch (error) {
+      saveAnalyticsEvent({
+        status: 'submit_new_quiltro',
+        details: {
+          error,
+          succeeded: false,
+          user,
+        },
+      })
     }
   }
 
@@ -208,9 +212,6 @@ function NewQuiltroScreen({ route }) {
           <ActivityIndicator animating={isQuiltroSubmitting} size="small" />
         </View>
         {imageUpload && <Text>Imagen Cargada</Text>}
-        {requestedItems ? (
-          <QuiltroRequestList requestedItems={requestedItems} />
-        ) : null}
       </View>
     </Screen>
   )

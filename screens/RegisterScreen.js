@@ -17,7 +17,6 @@ import {
   saveStatusEvent,
   subscribeUserToQuiltro,
   saveAnalyticsEvent,
-  registerUser,
 } from '../api/index'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
@@ -41,26 +40,26 @@ function RegisterScreen() {
     useState(null)
   const [verificationId, setVerificationId] = useState(null)
 
-  const sendVerification = () => {
+  const sendVerification = async () => {
     const phoneProvider = new PhoneAuthProvider(auth)
     try {
       const formattedPhoneNumber = formatPhoneNumber(phoneNumber)
 
-      phoneProvider
-        .verifyPhoneNumber(formattedPhoneNumber, recaptchaVerifierRef.current)
-        .then(setVerificationId)
-        .then(() => {
-          setPhoneNumberValidationError(null)
-          saveAnalyticsEvent({
-            status: 'send_verification',
-            details: {
-              phoneNumber,
-              succeeded: true,
-              onboardingUser,
-              user,
-            },
-          })
-        })
+      const phoneProviderResult = await phoneProvider.verifyPhoneNumber(
+        formattedPhoneNumber,
+        recaptchaVerifierRef.current
+      )
+      setVerificationId(phoneProviderResult)
+      setPhoneNumberValidationError(null)
+      saveAnalyticsEvent({
+        status: 'send_verification',
+        details: {
+          phoneNumber,
+          succeeded: true,
+          onboardingUser,
+          user,
+        },
+      })
     } catch (error) {
       setPhoneNumberValidationError(error.message)
       saveAnalyticsEvent({
@@ -88,52 +87,43 @@ function RegisterScreen() {
     return await saveStatusEvent(statusEvent)
   }
 
-  const confirmCode = () => {
-
+  const confirmCode = async () => {
     try {
       const credential = PhoneAuthProvider.credential(verificationId, code)
       if (onboardingUser) {
-        linkWithCredential(auth.currentUser, credential).then(async (auth) => {
-          const { user } = auth
-          const { uid } = user
-          const { quiltroId } = quiltro
-  
-          if (pendingAdoptionInquiryQuiltro) {
-            await sendAdoptionInquiry(user, quiltro)
-            setPendingAdoptionInquiryQuiltro(null)
-          } else {
-            // subscribe happens automatically with adoption inquiry
-            await subscribeUserToQuiltro(uid, quiltroId)
-          }
-  
-          const convertResponse = await convertAnonymousUser(user)
-          if (convertResponse.ok) {
-            const updatedUser = await convertResponse.json()
-            setOnboardingUser(null)
-            setUser(updatedUser)
-          }
-        })
+        const { currentUser } = auth
+        await linkWithCredential(
+          currentUser,
+          credential
+        )
+        const { uid } = currentUser
+        const { quiltroId } = quiltro
+
+        if (pendingAdoptionInquiryQuiltro) {
+          await sendAdoptionInquiry(currentUser, quiltro)
+          setPendingAdoptionInquiryQuiltro(null)
+        } else {
+          // subscribe happens automatically with adoption inquiry
+          await subscribeUserToQuiltro(uid, quiltroId)
+        }
+
+        const convertResponse = await convertAnonymousUser(currentUser)
+        if (convertResponse.ok) {
+          const updatedUser = await convertResponse.json()
+          setOnboardingUser(null)
+          setUser(updatedUser)
+        }
       } else {
-        setPersistence(auth, browserLocalPersistence)
-          .then(() => {
-            signInWithCredential(auth, credential)
-              .then(async (user) => {
-                console.dir(user)
-              })
-              .catch((error) => {
-                console.error(error)
-              })
-          })
-          .catch((error) => {
-            console.error(error)
-          })
+        await setPersistence(auth, browserLocalPersistence)
+        await signInWithCredential(auth, credential)
       }
     } catch (error) {
       saveAnalyticsEvent({
         status: 'confirm_code',
         details: {
-          phoneNumber,
+          error,
           succeeded: false,
+          phoneNumber,
           onboardingUser,
           user,
         },

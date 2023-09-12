@@ -1,6 +1,6 @@
 import settings from '../config/settings'
 
-export const saveNewQuiltro = async (quiltro) => {
+export const saveQuiltro = async (quiltro) => {
   const response = await fetch(`${settings.apiUrl}/quiltros`, {
     method: 'POST',
     headers: {
@@ -30,17 +30,14 @@ export const saveNewRequestedItems = async (quiltroId, requestedItems) => {
 }
 
 export const saveAnalyticsEvent = async (analyticsEvent) => {
-  const response = await fetch(
-    `${settings.apiUrl}/analytics`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(analyticsEvent),
-    }
-  )
+  const response = await fetch(`${settings.apiUrl}/analytics`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(analyticsEvent),
+  })
   return response
 }
 
@@ -104,6 +101,18 @@ export const getPresignedUrl = async () => {
   return await fetch(`${settings.apiUrl}/s3`)
 }
 
+export const putToS3 = async ({ presignedUrl, buffer }) => {
+  return await fetch(presignedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'image/jpeg',
+      'Access-Control-Allow-Origin': '*',
+      'Content-Encoding': 'base64',
+    },
+    body: buffer,
+  })
+}
+
 export const getQuiltros = async () => {
   return await fetch(`${settings.apiUrl}/quiltros`)
 }
@@ -124,7 +133,7 @@ export const getUserQuiltros = async ({ uid }) => {
   return await fetch(`${settings.apiUrl}/users/${uid}/quiltros`)
 }
 
-export const getQuiltroDetails = async (quiltroId) => {
+export const getQuiltroDetails = async ({ quiltroId }) => {
   return await fetch(`${settings.apiUrl}/quiltros/${quiltroId}`)
 }
 

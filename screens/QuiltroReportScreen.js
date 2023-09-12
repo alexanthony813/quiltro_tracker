@@ -8,7 +8,7 @@ import { Buffer } from 'buffer'
 import { saveStatusEvent } from '../api'
 import routes from '../navigation/routes'
 import * as Yup from 'yup'
-import { getPresignedUrl } from '../api'
+import { getPresignedUrl, putToS3 } from '../api'
 import { Form, FormField, SubmitButton } from '../components/forms'
 import { useNavigation } from '@react-navigation/native'
 import * as ImageManipulator from 'expo-image-manipulator'
@@ -26,47 +26,56 @@ function QuiltroReportScreen({ route }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigation = useNavigation()
   const handleSubmit = async (statusEvent) => {
-    setIsSubmitting(true)
-    if (imageUpload) {
-      const presignedUrlRequest = await getPresignedUrl()
-      const presignedUrlJSON = await presignedUrlRequest.json()
-      const presignedUrl = presignedUrlJSON.url
-      statusEvent.photoUrl = presignedUrl.split('?')[0]
-      const rawBase64 = imageUpload.base64
-      var buffer = Buffer.from(
-        rawBase64.replace(/^data:image\/\w+;base64,/, ''),
-        'base64'
-      )
-      const s3Result = await fetch(presignedUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'image/jpeg',
-          'Access-Control-Allow-Origin': '*',
-          'Content-Encoding': 'base64',
-        },
-        body: buffer,
-      })
-      if (s3Result.status !== 200) {
-        console.dir('ERROR') // TODO add better error handle up in here
+    try {
+      setIsSubmitting(true)
+      if (imageUpload) {
+        const presignedUrlRequest = await getPresignedUrl()
+        const presignedUrlJSON = await presignedUrlRequest.json()
+        const presignedUrl = presignedUrlJSON.url
+        statusEvent.photoUrl = presignedUrl.split('?')[0]
+        const rawBase64 = imageUpload.base64
+        var buffer = Buffer.from(
+          rawBase64.replace(/^data:image\/\w+;base64,/, ''),
+          'base64'
+        )
+        const s3Result = await putToS3({ presignedUrl, buffer })
+
+        if (s3Result.status !== 200) {
+          saveAnalyticsEvent({
+            status: 's3_upload',
+            details: {
+              s3Result,
+              user,
+              succeeded: false,
+            },
+          })
+        }
       }
-    }
-    statusEvent.quiltroId = quiltro.quiltroId
-    statusEvent.status = 'problem_reported'
-    const from = user.uid
-    const { body } = statusEvent
-    statusEvent.details = {
-      body,
-      from,
-    }
+      statusEvent.quiltroId = quiltro.quiltroId
+      statusEvent.status = 'problem_reported'
+      const from = user.uid
+      const { body } = statusEvent
+      statusEvent.details = {
+        body,
+        from,
+      }
 
-    const savedStatusEventResponse = await saveStatusEvent(
-      statusEvent
-    )
+      const savedStatusEventResponse = await saveStatusEvent(statusEvent)
 
-    if (savedStatusEventResponse.ok) {
-      setIsSubmitting(false)
-      navigation.navigate(routes.QUILTRO_DETAILS, {
-        quiltro,
+      if (savedStatusEventResponse.ok) {
+        setIsSubmitting(false)
+        navigation.navigate(routes.QUILTRO_DETAILS, {
+          quiltro,
+        })
+      }
+    } catch (error) {
+      saveAnalyticsEvent({
+        status: 'report_problem',
+        details: {
+          error,
+          succeeded: false,
+          user,
+        },
       })
     }
   }
