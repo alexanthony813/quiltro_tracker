@@ -89,44 +89,58 @@ function RegisterScreen() {
   }
 
   const confirmCode = () => {
-    const credential = PhoneAuthProvider.credential(verificationId, code)
-    if (onboardingUser) {
-      linkWithCredential(auth.currentUser, credential).then(async (auth) => {
-        const { user } = auth
-        const { uid } = user
-        const { quiltroId } = quiltro
 
-        if (pendingAdoptionInquiryQuiltro) {
-          await sendAdoptionInquiry(user, quiltro)
-          setPendingAdoptionInquiryQuiltro(null)
-        } else {
-          // subscribe happens automatically with adoption inquiry
-          await subscribeUserToQuiltro(uid, quiltroId)
-        }
-
-        const convertResponse = await convertAnonymousUser(user)
-        if (convertResponse.ok) {
-          const updatedUser = await convertResponse.json()
-          setOnboardingUser(null)
-          setUser(updatedUser)
-        }
+    try {
+      const credential = PhoneAuthProvider.credential(verificationId, code)
+      if (onboardingUser) {
+        linkWithCredential(auth.currentUser, credential).then(async (auth) => {
+          const { user } = auth
+          const { uid } = user
+          const { quiltroId } = quiltro
+  
+          if (pendingAdoptionInquiryQuiltro) {
+            await sendAdoptionInquiry(user, quiltro)
+            setPendingAdoptionInquiryQuiltro(null)
+          } else {
+            // subscribe happens automatically with adoption inquiry
+            await subscribeUserToQuiltro(uid, quiltroId)
+          }
+  
+          const convertResponse = await convertAnonymousUser(user)
+          if (convertResponse.ok) {
+            const updatedUser = await convertResponse.json()
+            setOnboardingUser(null)
+            setUser(updatedUser)
+          }
+        })
+      } else {
+        setPersistence(auth, browserLocalPersistence)
+          .then(() => {
+            signInWithCredential(auth, credential)
+              .then(async (user) => {
+                console.dir(user)
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      }
+    } catch (error) {
+      saveAnalyticsEvent({
+        status: 'confirm_code',
+        details: {
+          phoneNumber,
+          succeeded: false,
+          onboardingUser,
+          user,
+        },
       })
-    } else {
-      setPersistence(auth, browserLocalPersistence)
-        .then(() => {
-          signInWithCredential(auth, credential)
-            .then(async (user) => {
-              console.dir(user)
-            })
-            .catch((error) => {
-              console.error(error)
-            })
-        })
-        .catch((error) => {
-          console.error(error)
-        })
     }
   }
+
   return (
     <Screen>
       <ImageBackground
