@@ -21,16 +21,9 @@ function SettingsScreen() {
         <ListItem
           title="Cerrar Sesión"
           IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
-          onPress={() => {
+          onPress={async () => {
             const auth = getAuth(firebaseApp)
-
-            signOut(auth)
-              .then((success) => {
-                console.dir(success)
-              })
-              .catch((error) => {
-                console.dir(error)
-              })
+            await signOut(auth)
           }}
         />
       </View>

@@ -14,15 +14,15 @@ import {
   subscribeUserToQuiltro,
   saveAnalyticsEvent,
 } from '../api/index'
-import useApi from '../hooks/useApi'
 import useAuth from '../contexts/auth/useAuth'
 import useOnboarding from '../contexts/onboarding/useOnboarding'
 import useQuiltro from '../contexts/quiltro/useQuiltro'
 import { timeSince } from '../utility/helpers'
 
-function QuiltroDetailsScreen({ route }) {
-  const { quiltro } = route.params
-  const { setQuiltro } = useQuiltro()
+function QuiltroDetailsScreen({}) {
+  const { quiltro, setQuiltro } = useQuiltro()
+  console.dir(quiltro)
+  console.dir(quiltro.quiltroId)
   const { quiltroId } = quiltro
   const navigation = useNavigation()
   const { user, setUser } = useAuth()
@@ -33,23 +33,28 @@ function QuiltroDetailsScreen({ route }) {
   const [hasInquiredAboutAdoption, setHasInquiredAboutAdoption] =
     useState(false)
   const [isNoProblem, setIsNoProblem] = useState(false)
-  const {
-    data: quiltroDetails,
-    error,
-    isLoading,
-    request: loadQuiltroDetails,
-  } = useApi(getQuiltroDetails)
+  const [quiltroDetails, setQuiltroDetails] = useState(null)
+
   useEffect(() => {
-    loadQuiltroDetails(quiltroId)
-    if (user.quiltroIds && user.quiltroIds.indexOf(quiltroId) >= -1) {
-      setIsFollowingQuiltro(true)
+    async function asyncHelper() {
+      if (quiltro) {
+        setQuiltroDetails(quiltro)
+      } else {
+        const quiltroDetailsResponse = await getQuiltroDetails({ quiltroId })
+        const quiltroDetails = await quiltroDetailsResponse.json()
+        setQuiltroDetails(quiltroDetails)
+      }
+      if (user.quiltroIds && user.quiltroIds.indexOf(quiltroId) >= -1) {
+        setIsFollowingQuiltro(true)
+      }
+      if (
+        user.adoptionInquiryIds &&
+        user.adoptionInquiryIds.indexOf(quiltroId) >= -1
+      ) {
+        setHasInquiredAboutAdoption(true)
+      }
     }
-    if (
-      user.adoptionInquiryIds &&
-      user.adoptionInquiryIds.indexOf(quiltroId) >= -1
-    ) {
-      setHasInquiredAboutAdoption(true)
-    }
+    asyncHelper()
   }, [
     JSON.stringify(quiltroDetails),
     isFollowingQuiltro,
@@ -160,9 +165,9 @@ function QuiltroDetailsScreen({ route }) {
             height: 240,
             marginVertical: '0.25em',
           }}
-          preview={{ uri: quiltroDetails.photoUrl }}
+          preview={{ uri: quiltroDetails && quiltroDetails.photoUrl }}
           tint="light"
-          uri={quiltroDetails.photoUrl}
+          uri={quiltroDetails && quiltroDetails.photoUrl}
         />
       </View>
       <View>

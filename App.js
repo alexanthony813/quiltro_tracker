@@ -3,7 +3,6 @@ import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
-import useApi from './hooks/useApi'
 import { parseInitialURLAsync } from 'expo-linking'
 import AppNavigator from './navigation/AppNavigator'
 import AuthNavigator from './navigation/AuthNavigator'
@@ -12,7 +11,7 @@ import QuiltroContext from './contexts/quiltro/context'
 import OnboardingContext from './contexts/onboarding/context'
 import { navigationRef } from './navigation/rootNavigation'
 import { getQuiltroDetails, registerUser } from './api'
-
+import { saveAnalyticsEvent } from './api/index'
 import {
   getAuth,
   onAuthStateChanged,
@@ -38,13 +37,6 @@ export default function App() {
     useState(null) // createSwitchNavigator is gone...have to use a context when converting anon to account
   const [error, setError] = useState(null)
 
-  const {
-    data: loadedQuiltro,
-    error: quiltroFetchError,
-    isLoading,
-    request: loadQuiltro,
-  } = useApi(getQuiltroDetails)
-
   if (error) {
     console.error(error.message)
   }
@@ -55,10 +47,12 @@ export default function App() {
         auth = getAuth(firebaseApp)
         onAuthStateChanged(auth, async (firebaseUser) => {
           if (firebaseUser) {
+            // only happens for anonymous user
             const registerUserResponse = await registerUser(firebaseUser) // returns 201 with user if exists
             const registerUserResponseJson = await registerUserResponse.json()
             setUser(registerUserResponseJson)
           } else {
+            // only happens on logout
             setUser(null)
           }
         })
@@ -66,24 +60,29 @@ export default function App() {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl
         if (path) {
-          const loadedQuiltroResponse = await getQuiltroDetails(path) // TODO use hook
+          const loadedQuiltroResponse = await getQuiltroDetails({
+            quiltroId: path,
+          })
           const loadedQuiltro = await loadedQuiltroResponse.json()
           setQuiltro(loadedQuiltro)
           if (!user) {
-            setPersistence(auth, browserLocalPersistence)
-              .then(() => {
-                if (!auth.currentUser) {
-                  signInAnonymously(auth)
-                }
-              })
-              .catch((error) => {
-                console.error(error)
-              })
+            await setPersistence(
+              auth,
+              browserLocalPersistence
+            )
+            if (!auth.currentUser) {
+              signInAnonymously(auth)
+            }
           }
         }
       } catch (err) {
         console.dir(err)
-        setError(quiltroFetchError)
+        saveAnalyticsEvent({
+          status: 'render_app',
+          details: {
+            err,
+          },
+        })
       }
     }
     asyncHelper()

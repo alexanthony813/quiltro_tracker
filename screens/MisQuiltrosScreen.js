@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   View,
   Image,
@@ -11,28 +11,30 @@ import {
 import { getUserQuiltros } from '../api/index'
 
 import Screen from '../components/Screen'
-import useApi from '../hooks/useApi'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import QuiltroDetails from '../components/QuiltroDetails'
 import { PlusCircleIcon } from 'react-native-heroicons/outline'
 import routes from '../navigation/routes'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
+import useQuiltro from '../contexts/quiltro/useQuiltro'
 
 function MisQuiltrosScreen({}) {
   const { user } = useAuth()
+  const { setQuiltro } = useQuiltro()
   const navigation = useNavigation()
   const isFocused = useIsFocused()
   const { uid, isAdmin } = user
-  const {
-    data: quiltros,
-    error,
-    isLoading,
-    request: loadQuiltros,
-  } = useApi(getUserQuiltros)
+  const [quiltros, setQuiltros] = useState(null)
 
   useEffect(() => {
-    loadQuiltros({ uid })
+    async function asyncHelper() {
+      const quiltrosResponse = await getUserQuiltros({ uid })
+      const quiltros = await quiltrosResponse.json()
+      console.dir(quiltros[0].quiltroId)
+      setQuiltros(quiltros)
+    }
+    asyncHelper()
   }, [JSON.stringify(quiltros), isFocused])
 
   return (
@@ -55,9 +57,8 @@ function MisQuiltrosScreen({}) {
                 marginBottom: 30,
               }}
               onPress={(e) => {
-                navigation.navigate(routes.QUILTRO, {
-                  quiltro,
-                })
+                setQuiltro(quiltro)
+                navigation.navigate(routes.QUILTRO)
               }}
             >
               <Image
@@ -93,8 +94,8 @@ function MisQuiltrosScreen({}) {
               </Text>
             ) : (
               <Text className={'text-center text-xl font-bold italic'}>
-                Necesitas seguir mas perros en las casitas! Escanear un codigo QR para
-                empezar
+                Necesitas seguir mas perros en las casitas! Escanear un codigo
+                QR para empezar
               </Text>
             )}
           </View>
