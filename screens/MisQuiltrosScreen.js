@@ -31,7 +31,6 @@ function MisQuiltrosScreen({}) {
     async function asyncHelper() {
       const quiltrosResponse = await getUserQuiltros({ uid })
       const quiltros = await quiltrosResponse.json()
-      console.dir(quiltros[0].quiltroId)
       setQuiltros(quiltros)
     }
     asyncHelper()

@@ -60,6 +60,12 @@ export default function App() {
         const parsedUrl = await parseInitialURLAsync()
         const { path } = parsedUrl
         if (path) {
+          saveAnalyticsEvent({
+            status: 'qr_scan',
+            details: {
+              path,
+            },
+          })
           const loadedQuiltroResponse = await getQuiltroDetails({
             quiltroId: path,
           })
@@ -76,7 +82,6 @@ export default function App() {
           }
         }
       } catch (err) {
-        console.dir(err)
         saveAnalyticsEvent({
           status: 'render_app',
           details: {

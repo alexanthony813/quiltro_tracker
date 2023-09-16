@@ -21,8 +21,6 @@ import { timeSince } from '../utility/helpers'
 
 function QuiltroDetailsScreen({}) {
   const { quiltro, setQuiltro } = useQuiltro()
-  console.dir(quiltro)
-  console.dir(quiltro.quiltroId)
   const { quiltroId } = quiltro
   const navigation = useNavigation()
   const { user, setUser } = useAuth()
@@ -53,6 +51,12 @@ function QuiltroDetailsScreen({}) {
       ) {
         setHasInquiredAboutAdoption(true)
       }
+      saveAnalyticsEvent({
+        status: 'quiltro_details_rendered',
+        details: {
+          quiltroId,
+        },
+      })
     }
     asyncHelper()
   }, [
