@@ -1,7 +1,7 @@
 import Constants from 'expo-constants'
 
-const baseUrl = 'http://localhost:3000'
-// const baseUrl = 'https://quiltro-637d7.web.app'
+// const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://quiltro-637d7.web.app'
 
 const settings = {
   dev: {
