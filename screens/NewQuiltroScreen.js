@@ -3,12 +3,7 @@ import { Text, View, ActivityIndicator } from 'react-native'
 import Screen from '../components/Screen'
 import * as ImagePicker from 'expo-image-picker'
 import { Buffer } from 'buffer'
-import {
-  saveQuiltro,
-  getUserQuiltros,
-  saveAnalyticsEvent,
-  putToS3,
-} from '../api'
+import { saveQuiltro, saveAnalyticsEvent, putToS3 } from '../api'
 import Button from '../components/Button'
 import * as Yup from 'yup'
 import { getPresignedUrl } from '../api'
@@ -202,9 +197,12 @@ function NewQuiltroScreen() {
                   marginLeft: '0.5em',
                   marginRight: '0.5em',
                   width: '30%',
+                  padding: '0.25rem 1rem',
+                  borderRadius: '0.375rem',
+                  color: 'white',
+                  transition: 'background-color 0.3s',
                 }}
                 isDisabled={!imageUpload}
-                className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
                 title="Guardar"
               />
             </View>

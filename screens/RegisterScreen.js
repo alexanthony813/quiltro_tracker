@@ -1,6 +1,12 @@
 import { useState, useRef } from 'react'
 import Screen from '../components/Screen'
-import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native'
 import {
   getAuth,
   PhoneAuthProvider,
@@ -9,7 +15,6 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth'
-import { TextInput } from 'react-native-gesture-handler'
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha'
 import { firebaseApp } from '../App'
 import {
@@ -92,10 +97,7 @@ function RegisterScreen() {
       const credential = PhoneAuthProvider.credential(verificationId, code)
       if (onboardingUser) {
         const { currentUser } = auth
-        await linkWithCredential(
-          currentUser,
-          credential
-        )
+        await linkWithCredential(currentUser, credential)
         const { uid } = currentUser
         const { quiltroId } = quiltro
 
@@ -140,7 +142,7 @@ function RegisterScreen() {
           justifyContent: 'flex-end',
           alignItems: 'center',
         }}
-        source={require('../assets/background.jpeg')}
+        source={require('../assets/background.jpg')}
       >
         <View
           style={{
@@ -191,6 +193,7 @@ function RegisterScreen() {
                 borderBottomColor: '#fff',
                 marginBottom: 20,
                 textAlign: 'center',
+                width: '100%',
                 color: '#fff',
               }}
             />
@@ -224,9 +227,10 @@ function RegisterScreen() {
                 paddingHorizontal: 20,
                 fontSize: 24,
                 borderBottomColor: '#fff',
-                color: '#fff',
+                width: '100%',
                 marginBottom: 20,
                 textAlign: 'center',
+                color: '#fff',
               }}
             />
             <TouchableOpacity
@@ -243,6 +247,7 @@ function RegisterScreen() {
                 style={{
                   textAlign: 'center',
                   fontWeight: 'bold',
+                  color: '#fff',
                 }}
               >
                 Confirmar Verificación
