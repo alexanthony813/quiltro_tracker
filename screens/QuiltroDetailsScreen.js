@@ -55,6 +55,7 @@ function QuiltroDetailsScreen({}) {
         status: 'quiltro_details_rendered',
         details: {
           quiltroId,
+          uid
         },
       })
     }
