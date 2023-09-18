@@ -11,7 +11,7 @@ function WelcomeScreen({ navigation }) {
         justifyContent: 'flex-end',
         alignItems: 'center',
       }}
-      source={require('../assets/background.jpeg')}
+      source={require('../assets/background.jpg')}
     >
       <View
         style={{

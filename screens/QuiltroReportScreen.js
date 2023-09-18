@@ -130,7 +130,12 @@ function QuiltroReportScreen({ route }) {
           >
             <FormField maxLength={255} name="body" placeholder="Mensaje" />
             <ActivityIndicator animating={isImageUploading} size="small" />
-            <View className="flex justify-between">
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
               <Button
                 onPress={handleImageUpload}
                 color="secondary"
@@ -138,7 +143,12 @@ function QuiltroReportScreen({ route }) {
                 isDisabled={imageUpload}
               />
               <SubmitButton
-                className="py-1 px-4 rounded-md bg-blue-500 hover:bg-blue-700 text-white"
+                style={{
+                  padding: '0.25rem 1rem',
+                  borderRadius: '0.375rem',
+                  color: 'white',
+                  transition: 'background-color 0.3s',
+                }}
                 title="Guardar"
                 isDisabled={!imageUpload}
               />

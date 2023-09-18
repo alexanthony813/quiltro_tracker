@@ -13,7 +13,7 @@ import { getUserQuiltros } from '../api/index'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
 import QuiltroDetails from '../components/QuiltroDetails'
-import { PlusCircleIcon } from 'react-native-heroicons/outline'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import routes from '../navigation/routes'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import useAuth from '../contexts/auth/useAuth'
@@ -42,7 +42,11 @@ function MisQuiltrosScreen({}) {
       {quiltros && quiltros.length ? (
         <FlatList
           data={quiltros}
-          className="align-center"
+          contentContainerStyle={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(quiltro) => quiltro.quiltroId.toString()}
           renderItem={({ item: quiltro }) => (
@@ -72,10 +76,29 @@ function MisQuiltrosScreen({}) {
       ) : null}
 
       {!quiltros || !quiltros.length ? (
-        <View className="flex h-full">
-          <View className={'flex flex-1 justify-center quiltros-center'}>
+        <View
+          style={{
+            display: 'flex',
+            height: '100%',
+          }}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             {isAdmin ? (
-              <Text className={'text-center text-xl font-bold italic'}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: '1.25rem',
+                  fontWeight: 'bold',
+                  fontStyle: 'italic',
+                }}
+              >
                 No has agregado tus perros, usa el botón
                 <Pressable
                   onPress={() => {
@@ -87,12 +110,23 @@ function MisQuiltrosScreen({}) {
                     paddingRight: '0.2em',
                   }}
                 >
-                  <PlusCircleIcon color="#00CCBB" />
+                  <MaterialCommunityIcons
+                    name="plus-circle"
+                    size={30}
+                    color="#00CCBB"
+                  />
                 </Pressable>
                 para crear anuncio
               </Text>
             ) : (
-              <Text className={'text-center text-xl font-bold italic'}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: '1.25rem', // Assuming 1.25 times the base font size for text-xl
+                  fontWeight: 'bold',
+                  fontStyle: 'italic',
+                }}
+              >
                 Necesitas seguir mas perros en las casitas! Escanear un codigo
                 QR para empezar
               </Text>

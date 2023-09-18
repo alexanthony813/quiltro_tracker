@@ -1,6 +1,6 @@
 import { View, Pressable } from 'react-native'
 import Text from './Text'
-import { PlusCircleIcon } from 'react-native-heroicons/outline'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import routes from '../navigation/routes'
 import useAuth from '../contexts/auth/useAuth'
@@ -13,8 +13,16 @@ function MisQuiltrosHeader({ quiltro }) {
   const headerText =
     quiltro && quiltro.name ? `Mi ${quiltro.name}` : defaultText
   return (
-    <View className="mx-1">
-      <View className="flex-row justify-between items-center ml-5 ">
+    <View style={{ marginLeft: '0.25rem', marginRight: '0.25rem' }}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginLeft: '1.25rem',
+        }}
+      >
         {navigation.canGoBack() ? (
           <BackButton
             title="←"
@@ -23,17 +31,37 @@ function MisQuiltrosHeader({ quiltro }) {
             }}
           />
         ) : null}
-        <View className="text-center">
-          <Text className="font-bold text-2xl -mx-1.5">{headerText}</Text>
+        <View style={{ textAlign: 'center' }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: '2rem',
+              marginLeft: '-0.375rem',
+            }}
+          >
+            {headerText}
+          </Text>
         </View>
-        <View className="flex-row space-x-2 p-3 items-end">
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '0.5rem',
+            padding: '0.75rem',
+            alignItems: 'flex-end',
+          }}
+        >
           {user.isAdmin && !quiltro ? (
             <Pressable
               onPress={() => {
                 navigation.navigate(routes.NEW_QUILTRO)
               }}
             >
-              <PlusCircleIcon color="#00CCBB" />
+              <MaterialCommunityIcons
+                name="plus-circle"
+                size={30}
+                color="#00CCBB"
+              />
             </Pressable>
           ) : null}
         </View>

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { TailwindProvider } from 'tailwindcss-react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import 'setimmediate'
 import navigationTheme from './navigation/navigationTheme'
@@ -72,10 +71,7 @@ export default function App() {
           const loadedQuiltro = await loadedQuiltroResponse.json()
           setQuiltro(loadedQuiltro)
           if (!user) {
-            await setPersistence(
-              auth,
-              browserLocalPersistence
-            )
+            await setPersistence(auth, browserLocalPersistence)
             if (!auth.currentUser) {
               signInAnonymously(auth)
             }
@@ -105,13 +101,11 @@ export default function App() {
           }}
         >
           <NavigationContainer ref={navigationRef} theme={navigationTheme}>
-            <TailwindProvider>
-              {user ? (
-                <AppNavigator user={user} quiltro={quiltro} />
-              ) : (
-                <AuthNavigator />
-              )}
-            </TailwindProvider>
+            {user ? (
+              <AppNavigator user={user} quiltro={quiltro} />
+            ) : (
+              <AuthNavigator />
+            )}
           </NavigationContainer>
         </OnboardingContext.Provider>
       </AuthContext.Provider>

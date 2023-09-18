@@ -1,7 +1,7 @@
 import { View } from 'react-native'
-import { ListItem } from '../components/lists'
+import ListItem from '../components/ListItem'
 import colors from '../config/colors'
-import Icon from '../components/Icon'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import Screen from '../components/Screen'
 import { signOut, getAuth } from 'firebase/auth'
 import useAuth from '../contexts/auth/useAuth'
@@ -11,16 +11,22 @@ function SettingsScreen() {
   const { user } = useAuth()
   const { phoneNumber } = user
   return (
-    <Screen style={{
-      backgroundColor: colors.light,
-    }}>
-      <View style={{
-    marginVertical: 20,
-  }}>
+    <Screen
+      style={{
+        backgroundColor: colors.light,
+      }}
+    >
+      <View
+        style={{
+          marginVertical: 20,
+        }}
+      >
         <ListItem title={phoneNumber || 'Anonimo'} />
         <ListItem
           title="Cerrar Sesión"
-          IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+          IconComponent={
+            <MaterialCommunityIcons name="logout" size={30} color="#ffe66d" />
+          }
           onPress={async () => {
             const auth = getAuth(firebaseApp)
             await signOut(auth)
