@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { View, ScrollView, TouchableOpacity, Text } from 'react-native'
 import { Image } from 'react-native-expo-image-cache'
 import Screen from '../components/Screen'
 import MisQuiltrosHeader from '../components/MisQuiltrosHeader'
@@ -42,12 +42,12 @@ function QuiltroDetailsScreen({}) {
         const quiltroDetails = await quiltroDetailsResponse.json()
         setQuiltroDetails(quiltroDetails)
       }
-      if (user.quiltroIds && user.quiltroIds.indexOf(quiltroId) >= -1) {
+      if (user.quiltroIds && user.quiltroIds.indexOf(quiltroId) > -1) {
         setIsFollowingQuiltro(true)
       }
       if (
         user.adoptionInquiryIds &&
-        user.adoptionInquiryIds.indexOf(quiltroId) >= -1
+        user.adoptionInquiryIds.indexOf(quiltroId) > -1
       ) {
         setHasInquiredAboutAdoption(true)
       }
@@ -55,7 +55,7 @@ function QuiltroDetailsScreen({}) {
         status: 'quiltro_details_rendered',
         details: {
           quiltroId,
-          uid
+          uid,
         },
       })
     }
@@ -175,80 +175,14 @@ function QuiltroDetailsScreen({}) {
           uri={quiltroDetails && quiltroDetails.photoUrl}
         />
       </View>
-      <View>
-        <QuiltroDetails quiltro={quiltro} />
-        {user.isAdmin ? (
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              textAlign: 'center',
-              justifyContent: 'space-around',
-              width: '96%',
-              left: '2%',
-            }}
-          >
-            <Button
-              color="secondary"
-              title="Descargar Volante"
-              onPress={handleDownloadPDF}
-            />
-          </View>
-        ) : (
-          <>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                textAlign: 'center',
-                justifyContent: 'space-around',
-                height: '15%',
-              }}
-            >
-              <Button
-                styles={{
-                  marginLeft: '0.5em',
-                  marginRight: '0.5em',
-                  width: '30%',
-                  marginVertical: '0',
-                  height: '105%',
-                  backgroundColor: isFollowingQuiltro
-                    ? 'rgb(128, 128, 128)'
-                    : 'rgb(70, 130, 180)',
-                }}
-                textStyles={{ width: '105%' }}
-                title={
-                  isFollowingQuiltro
-                    ? 'Ya estas siguiendo'
-                    : 'Seguir novedades y problemas'
-                }
-                isDisabled={isFollowingQuiltro}
-                onPress={handleFollow}
-              />
-              <Button
-                styles={{
-                  marginLeft: '0.5em',
-                  marginRight: '0.5em',
-                  width: '50%',
-                  marginVertical: '0',
-                  height: '105%',
-                }}
-                color="primary"
-                title="Reportar Problema"
-                onPress={() => {
-                  saveAnalyticsEvent({
-                    status: 'report_problem',
-                    details: {
-                      quiltroId,
-                      uid,
-                    },
-                  })
-                  navigation.navigate(routes.QUILTRO_REPORT, {
-                    quiltro: quiltroDetails,
-                  })
-                }}
-              />
-            </View>
+      <ScrollView>
+        <View
+          style={{
+            height: '125%',
+          }}
+        >
+          <QuiltroDetails quiltro={quiltro} />
+          {quiltro.uid === user.uid ? (
             <View
               style={{
                 display: 'flex',
@@ -261,79 +195,152 @@ function QuiltroDetailsScreen({}) {
             >
               <Button
                 color="secondary"
-                title={
-                  hasInquiredAboutAdoption
-                    ? 'Ya has consultado'
-                    : 'Consultar Adopción'
-                }
-                onPress={handleInquireAdoption}
-                isDisabled={hasInquiredAboutAdoption}
+                title="Descargar Volante"
+                onPress={handleDownloadPDF}
               />
             </View>
-          </>
-        )}
-        {quiltro.lastReportedProblem ? (
-          <View
-            style={{
-              paddingLeft: '1em',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            {isNoProblem ? (
-              <Text>Gracias por tu respuesta!</Text>
-            ) : (
-              <>
-                <Text>
-                  Ves algo? Se reportó problema hace{' '}
-                  {timeSince(quiltro.lastReportedProblem.time)}
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    borderRadius: 5,
-                    marginVertical: 5,
+          ) : (
+            <>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  textAlign: 'center',
+                  justifyContent: 'space-around',
+                  height: '15%',
+                }}
+              >
+                <Button
+                  styles={{
+                    marginLeft: '0.5em',
+                    marginRight: '0.5em',
+                    width: '30%',
+                    marginVertical: '0',
+                    height: '105%',
+                    backgroundColor: isFollowingQuiltro
+                      ? 'rgb(128, 128, 128)'
+                      : 'rgb(70, 130, 180)',
                   }}
+                  textStyles={{ width: '105%' }}
+                  title={
+                    isFollowingQuiltro
+                      ? 'Ya estas siguiendo'
+                      : 'Seguir novedades y problemas'
+                  }
+                  isDisabled={isFollowingQuiltro}
+                  onPress={handleFollow}
+                />
+                <Button
+                  styles={{
+                    marginLeft: '0.5em',
+                    marginRight: '0.5em',
+                    width: '50%',
+                    marginVertical: '0',
+                    height: '105%',
+                  }}
+                  color="primary"
+                  title="Reportar Problema"
                   onPress={() => {
+                    saveAnalyticsEvent({
+                      status: 'report_problem',
+                      details: {
+                        quiltroId,
+                        uid,
+                      },
+                    })
                     navigation.navigate(routes.QUILTRO_REPORT, {
                       quiltro: quiltroDetails,
                     })
                   }}
-                >
-                  <Text
+                />
+              </View>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  textAlign: 'center',
+                  justifyContent: 'space-around',
+                  width: '96%',
+                  left: '2%',
+                }}
+              >
+                <Button
+                  color="secondary"
+                  title={
+                    hasInquiredAboutAdoption
+                      ? 'Ya has consultado'
+                      : 'Consultar Adopción'
+                  }
+                  onPress={handleInquireAdoption}
+                  isDisabled={hasInquiredAboutAdoption}
+                />
+              </View>
+            </>
+          )}
+          {quiltro.lastReportedProblem ? (
+            <View
+              style={{
+                paddingLeft: '1em',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              {isNoProblem ? (
+                <Text>Gracias por tu respuesta!</Text>
+              ) : (
+                <>
+                  <Text>
+                    Ves algo? Se reportó problema hace{' '}
+                    {timeSince(quiltro.lastReportedProblem.time)}
+                  </Text>
+                  <TouchableOpacity
                     style={{
-                      textDecorationLine: 'underline',
-                      color: 'blue',
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      borderRadius: 5,
+                      marginVertical: 5,
+                    }}
+                    onPress={() => {
+                      navigation.navigate(routes.QUILTRO_REPORT, {
+                        quiltro: quiltroDetails,
+                      })
                     }}
                   >
-                    Sí
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    borderRadius: 5,
-                    marginVertical: 5,
-                  }}
-                  onPress={recordNoProblemHandler}
-                >
-                  <Text
+                    <Text
+                      style={{
+                        textDecorationLine: 'underline',
+                        color: 'blue',
+                      }}
+                    >
+                      Sí
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     style={{
-                      textDecorationLine: 'underline',
-                      color: 'blue',
+                      paddingVertical: 5,
+                      paddingHorizontal: 10,
+                      borderRadius: 5,
+                      marginVertical: 5,
                     }}
+                    onPress={recordNoProblemHandler}
                   >
-                    No
-                  </Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        ) : null}
-      </View>
+                    <Text
+                      style={{
+                        textDecorationLine: 'underline',
+                        color: 'blue',
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          ) : null}
+        </View>
+      </ScrollView>
+      {/* </ScrollView> */}
     </Screen>
   )
 }
