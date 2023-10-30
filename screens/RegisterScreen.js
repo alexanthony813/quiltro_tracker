@@ -48,7 +48,7 @@ function RegisterScreen() {
   const sendVerification = async () => {
     const phoneProvider = new PhoneAuthProvider(auth)
     try {
-      const formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+      const formattedPhoneNumber = formatPhoneNumber(phoneNumber.trim())
 
       const phoneProviderResult = await phoneProvider.verifyPhoneNumber(
         formattedPhoneNumber,
